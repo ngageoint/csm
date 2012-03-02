@@ -10,23 +10,32 @@
 //
 //    LIMITATIONS:       None
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
+//
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   -------
+//     01-Jul-2003   LMT      Initial version.
+//     02-Mar-2012   SCM      Added csm namespace.
 //
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __CSMMISC_H
 #define __CSMMISC_H
+
 #ifdef _WIN32
 # ifdef CSM_LIBRARY
-# define CSM_EXPORT_API __declspec(dllexport)
+#  define CSM_EXPORT_API __declspec(dllexport)
 # else
-# define CSM_EXPORT_API __declspec(dllimport)
+#  define CSM_EXPORT_API __declspec(dllimport)
 # endif
 #else
-# define CSM_EXPORT_API
+#  define CSM_EXPORT_API
 #endif
+
+namespace csm
+{
    // The getVersion() and getCSMVersion() methods should use CURRENT_CSM_VERSION to
    // return the CSM API version that the sensor model/plugin was written to.
    // The CSM 3.00 API is specified by version equal to 3000.
@@ -35,17 +44,14 @@
    static const int MAX_NAME_LENGTH = 40;
    static const int MAX_FUNCTION_NAME_LENGTH = 80;
    static const int MAX_MESSAGE_LENGTH = 512;
-class CSM_EXPORT_API CSMMisc
-{
-   public:
-//--------------------------------------------------------------------------
-// Enumeratons
-//--------------------------------------------------------------------------
+
    enum Param_CharType
-{       NONE,
-       FICTITIOUS,
-       REAL,
-       EXACT    };
+   {
+      NONE,
+      FICTITIOUS,
+      REAL,
+      EXACT
+   };
 //>
 // This enumeration lists the possible parameter or characteristic
 //  types as follows.
@@ -58,6 +64,8 @@ class CSM_EXPORT_API CSMMisc
 //  EXACT      - Parameter value has been specified and is assumed to
 //               have no uncertainty.
 //<
-};
+
+} // namespace csm
+
 #endif
 
