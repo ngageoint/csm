@@ -19,7 +19,7 @@
 //     01-Jul-2003   LMT      Initial version.
 //     06-Feb-2004   KRW      Incorporates changes approved by 
 //                            January and February 2004 CCB.
-//     12-Mar-2012   SCM      Refactored interfaces.
+//     02-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //

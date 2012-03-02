@@ -21,7 +21,7 @@
 //                             January and February configuration
 //                             control board.
 //     01-Oct-2004   KRW      October 2004 CCB
-//     12-Mar-2012   SCM      Refactored interfaces.
+//     02-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //

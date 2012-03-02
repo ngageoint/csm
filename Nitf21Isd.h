@@ -22,7 +22,7 @@
 //                             Configuration control board.
 //     01-Nov-2004   KRW      October 2004 CCB
 //     08-Jan-2005   KRW      Multi Image/Frame ? Administrative changes
-//     12-Mar-2012   SCM      Refactored interfaces.
+//     02-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //

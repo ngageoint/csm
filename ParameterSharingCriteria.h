@@ -16,7 +16,7 @@
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     16 Sep 2010   Gene Rose  Initial version.
-//     12-Mar-2012   SCM      Refactored interfaces.
+//     02-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //
