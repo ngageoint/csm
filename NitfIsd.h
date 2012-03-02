@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   csm_ISDNITF20.h
+//    FILENAME:   CSMISDNITF20.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -13,121 +13,124 @@
 //
 //    LIMITATIONS:       None
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
-//                       06-Feb-2004   KRW      Incorporated changes approved by
-//                                               January and February configuration
-//                                               control board.
-//                       01-Oct-2004   KRW      October 2004 CCB
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   ------- 
+//     01-Jul-2003   LMT      Initial version.
+//     06-Feb-2004   KRW      Incorporated changes approved by
+//                             January and February configuration
+//                             control board.
+//     01-Oct-2004   KRW      October 2004 CCB
+//     12-Mar-2012   SCM      Refactored interfaces.
+//
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __csm_ISDNITF20_H
 #define __csm_ISDNITF20_H
+
 #include "CSMImageSupportData.h"
 #include "CSMMisc.h"
-class CSM_EXPORT_API des
+
+namespace csm {
+
+class CSM_EXPORT_API Des
 {
-  public:
-   des()
-      {
-        desShLength   = 0;
-        desSh         = NULL;
-        desDataLength = 0;
-        desData       = NULL;
-      }
-   ~des()
-      {
-        clear();
-      }
-   void setDES
-      (
-        int   des_sh_length,
-        char *des_sh,
-        int   des_data_length,
-        char *des_data )
-      {
-        int i;
-        clear();
-        desShLength = des_sh_length;
-        desSh       = new char[desShLength+1];
-        for( i = 0; i < desShLength; i++ )
-           desSh[i] = des_sh[i];
-        desSh[desShLength] = '\0'; // in case NULL termination is needed
-        desDataLength = des_data_length;
-        desData       = new char[desDataLength+1];
-        for( i = 0; i < desDataLength; i++ )
-           desData[i] = des_data[i];
-        desData[desDataLength] = '\0';  // in case NULL termination is needed
-      }
-   void clear()
-      {
-        delete [] desSh;
-        delete [] desData;
-        desShLength   = 0;
-        desDataLength = 0;
-      }
-   int    desShLength;
-   char  *desSh;
-   long   desDataLength;
-   char  *desData;
+public:
+   Des() : subHeader(), data() {}
+   Des(const std::string& aSubHeader, const std::string& aData)
+      : subHeader(aSubHeader), data(aData) {}
+   ~Des() {}
+
+   void clear() { subHeader = data = ""; }
+
+   std::string subHeader;
+   std::string data;
 };
-class CSM_EXPORT_API tre
+
+class CSM_EXPORT_API Tre
 {
-  public:
-   tre() { record = NULL; length = 0; name[0] = '\0'; }
-   ~tre() { delete [] record; }
-   void setTRE( char *tre) // tre includes TRE name, length and data
-      {
-        int i;
-        char lengthString[6];
-        clear();
-        for( i = 0; i < 6; i++ )
-           name[i] = tre[i];
-        // in case, NULL termination is needed
-        name[6]     = '\0';
-        for( i = 6; i < 11; i++ )
-           lengthString[i-6] = tre[i];
-        // in case, NULL termination is needed
-        lengthString[5]     = '\0';
-        length = atoi(lengthString);
-        record = new char[length+1];
-        for( i = 11; i < length+11; i++ )
-           record[i-11] = tre[i];
-        // in case, NULL termination is needed
-        record[length] = '\0';
-      }
-   void clear()
-      { delete [] record; length = 0; name[0] = '\0'; }
-   char *record;
-   char name[7];
-   int   length;
+public:
+   Tre() : name(), length(0), data() {}
+   explicit Tre(const std::string& treData)
+      : name(), length(0), data() { setTRE(treData); }
+   Tre(const std::string& aName, unsigned int aLength, const std::string& aData)
+      : name(aName), length(aLength), data(aData) {}
+   ~Tre() {}
+
+   // treData includes TRE name, length and data
+   void setTRE(const std::string& treData)
+   {
+      if (treData.length() < 11) return;
+      name = treData.substr(0, 6);
+      length = atoi(treData.substr(6, 5).c_str());
+      data = treData.substr(11);
+   }
+
+   void clear() { name = ""; length = 0; data = ""; }
+
+   std::string name;
+      //> This contains the 6 character TRE name.
+      //<
+   unsigned int length;
+      //> This contains the tag length, which will be data.length() + 11.
+      //<
+   std::string data;
+      //> This contains the TRE data.
+      //<
 };
-class CSM_EXPORT_API image
+
+class CSM_EXPORT_API Image
 {
-  public:
-   image() { numTREs = 0; imageTREs = NULL; }
-   ~image() { delete [] imageTREs; }
-   std::string imageSubHeader;
-   tre    *imageTREs;
-   int     numTREs;
+public:
+   Image() : subHeader(), imageTREs() {}
+   Image(const std::string& aSubHeader, const std::vector<Tre>& tres)
+      : subHeader(aSubHeader), imageTREs(tres) {}
+   ~Image() {}
+
+   std::string      subHeader;
+      //> This string contains the entire image subheader, including a copy of
+      //  the TRE data.
+      //<
+   std::vector<Tre> imageTREs;
 };
-class CSM_EXPORT_API NITF_2_0_ISD : public csm_ISD
+
+// this is an intermediary class -- do not construct
+class CSM_EXPORT_API NitfIsd : public Isd
 {
-  public:
-   NITF_2_0_ISD()
-      { _format = "NITF2.0"; numTREs = 0; numImages = 0;
-      fileTREs = NULL; images = NULL; numDESs = 0; fileDESs = NULL; }
-   ~NITF_2_0_ISD()
-      { delete [] images; delete [] fileTREs; delete[] fileDESs; }
-   std::string filename; // full path filename of NITF file. This is an optional field.
+public:
+   virtual ~NitfIsd() {}
+
+   std::string filename;
+      //> full path filename of NITF file. This is an optional field.
+      //<
+
    std::string fileHeader;
-   int     numTREs;
-   tre    *fileTREs;
-   int     numDESs;
-   des     *fileDESs;
-   int     numImages;
-   image *images;
+      //> This string contains the full file header text, including a copy of
+      //  the file level TRE data.
+      //<
+
+   std::vector<Tre> fileTREs;
+   std::vector<Des> fileDESs;
+   std::vector<Image> images;
+
+protected:
+   nitf_isd(const std::string& format)
+      : isd(format),filename(),fileHeader(),fileTREs(),fileDESs(),images() {}
+
+   nitf_isd(const std::string& format)
+      : isd(format),filename(),fileHeader(),fileTREs(),fileDESs(),images() {}
 };
+
+class CSM_EXPORT_API Nitf20Isd : public NitfIsd
+{
+public:
+   Nitf20Isd() : NitfIsd("NITF2.0") {}
+   virtual ~Nitf20Isd() {}
+};
+
+} // namespace csm
+
 #endif
 

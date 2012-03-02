@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   csm_ISDFilename.h
+//    FILENAME:   CSMISDFilename.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -13,30 +13,41 @@
 //    full path name of the file.
 //
 //    LIMITATIONS:       None
+// 
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   ------- 
+//     01-Jul-2003   LMT      Initial version.
+//     06-Feb-2004   KRW      Incorporates changes approved by
+//                            January and February 2004
+//                            Configuration control board.
+//     12-Mar-2012   SCM      Refactored interfaces.
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
-//                       06-Feb-2004   KRW      Incorporates changes approved by
-//                                                January and February 2004
-//                                                Configuration control board.
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __csm_ISDFILENAME_H
 #define __csm_ISDFILENAME_H
+
 #include "CSMImageSupportData.h"
-#include <string>
 #include "CSMMisc.h"
-#ifdef _WIN32
-#pragma warning( disable : 4291 )
-#pragma warning( disable : 4251 )
-#endif
-class CSM_EXPORT_API filenameISD : public csm_ISD
+
+#include <string>
+
+namespace csm {
+
+class CSM_EXPORT_API FilenameIsd : public Isd
 {
 public:
-   filenameISD() { _format = "FILENAME"; }
-   ~filenameISD() { }
-   std::string _filename;
+   explicit FilenameIsd(const std::string& fn = "")
+      : isd("FILENAME"), theFilename(fn) {}
+   virtual ~FilenameIsd() {}
+
+   std::string theFilename;
 };
+
+} // namespace csm
+
 #endif
 

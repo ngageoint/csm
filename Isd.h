@@ -12,31 +12,43 @@
 //
 //    LIMITATIONS:       None
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
-//                       06-Feb-2004   KRW      Incorporates changes approved by
-//                                               January and February 2004
-//                                               Configuration control board.
+//    SOFTWARE HISTORY:
+//
+//     Date          Author   Comment   
+//     -----------   ------   ------- 
+//     01-Jul-2003   LMT      Initial version.
+//     06-Feb-2004   KRW      Incorporates changes approved by 
+//                            January and February 2004 CCB.
+//     12-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __CSMIMAGESUPORTDATA_H
 #define __CSMIMAGESUPORTDATA_H
+
 #include <string>
+
 #include "CSMMisc.h"
-#ifdef _WIN32
-#pragma warning( disable : 4291 )
-#pragma warning( disable : 4251 )
-#endif
-class CSM_EXPORT_API csm_ISD
+
+namespace csm {
+
+class CSM_EXPORT_API Isd
 {
 public:
-   csm_ISD() { _format = "UNKNOWN"; }
-   virtual   ~csm_ISD(){ _format.erase(); }
-   void getFormat( std::string &format ) const { format = _format; }
+   Isd() : theFormat("UNKNOWN") {}
+   virtual ~Isd() {}
+
+   const string& format() const { return theFormat; }
+
 protected:
-   std::string _format;
+   explicit Isd(const string& format) : theFormat(format) {}
+
+   std::string theFormat;
 };
+
+} // namespace csm
+
 #endif
 

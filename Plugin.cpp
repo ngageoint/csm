@@ -13,12 +13,18 @@
 //    Refer to CSMPlugin.h for more information.
 //
 //#############################################################################
+
 #define CSM_LIBRARY
+
+#include "CSMPlugin.h"
+#include "CSMWarning.h"
+#include "CSMError.h"
+
 #include <algorithm>
 #include <iostream>
+
 #ifdef _WIN32          //exports the symbols to be used (KJR)
 # include <windows.h>
-# include "CSMPlugin.h"
 # include "CSMSensorModel.h"
 # include "CSMISDFilename.h"
 # include "CSMISDByteStream.h"
@@ -27,44 +33,55 @@
 #else
 # include <pthread.h>
 #endif
-#include "CSMPlugin.h"
-#include "CSMWarning.h"
-#include "CSMError.h"
-//***************************************************************************
-CSMPlugin::CSMPluginList* CSMPlugin::theList = NULL;
-CSMPlugin::Impl*          CSMPlugin::theImpl = NULL;
-//***************************************************************************
-// CSMPlugin::Impl
-//***************************************************************************
-class CSMPlugin::Impl
+
+namespace csm {
+
+Plugin::PluginList* Plugin::theList = NULL;
+Plugin::Impl*       Plugin::theImpl = NULL;
+
+//*****************************************************************************
+// Plugin::Impl
+//*****************************************************************************
+class Plugin::Impl
 {
 public:
-   //---
-   // Modifiers
-   //---
+   Impl() : mutex() { initializeMutex(); }
+
+   void lockList(void);
+      // pre: The list is unlocked.
+      // post: The list has been locked.
+   void unlockList(void);
+      // pre: The list is locked.
+      // post: The list has been unlocked.
+
+   class Locker
+   {
+   public:
+      Locker(Impl* impl) : theImpl(impl) { if (theImpl) theImpl->lockList(); }
+      ~Locker() { if (theImpl) theImpl->unlockList(); }
+
+   private:
+      Impl* theImpl;
+   };
+
+private:
    void initializeMutex();
       // pre: None.
       // post: The mutex has been initialized.
-   CSMWarning * lockList(void);
-      // pre: The list is unlocked.
-      // post: The list has been locked.
-   CSMWarning * unlockList(void);
-      // pre: The list is locked.
-      // post: The list has been unlocked.
-   //---
-   // Data Members
-   //---
+
 #ifdef _WIN32
    typedef HANDLE          Mutex;
 #else
    typedef pthread_mutex_t Mutex;
 #endif
+
    Mutex mutex;
 };
-//***************************************************************************
-// CSMPlugin::Impl::initializeMutex
-//***************************************************************************
-void CSMPlugin::Impl::initializeMutex()
+
+//*****************************************************************************
+// Plugin::Impl::initializeMutex
+//*****************************************************************************
+void Plugin::Impl::initializeMutex()
 {
 #ifdef _WIN32
    mutex = CreateMutex(NULL, FALSE, NULL); // TBD: handle errors
@@ -72,182 +89,114 @@ void CSMPlugin::Impl::initializeMutex()
    pthread_mutex_init(&mutex, NULL); // TBD: handle errors
 #endif
 }
-//***************************************************************************
-// CSMPlugin::Impl::lockList
-//***************************************************************************
-CSMWarning *CSMPlugin::Impl::lockList(void)
+
+//*****************************************************************************
+// Plugin::Impl::lockList
+//*****************************************************************************
+void Plugin::Impl::lockList(void)
 {
 #ifdef _WIN32
-  WaitForSingleObject(mutex, INFINITE);
+   WaitForSingleObject(mutex, INFINITE);
 #else
    pthread_mutex_lock(&mutex); // TBD: handle error returns
 #endif
-   return NULL;
 }
-//***************************************************************************
-// CSMPlugin::Impl::unlockList
-//***************************************************************************
-CSMWarning *CSMPlugin::Impl::unlockList(void)
+
+//*****************************************************************************
+// Plugin::Impl::unlockList
+//*****************************************************************************
+void Plugin::Impl::unlockList(void)
 {
 #ifdef _WIN32
    ReleaseMutex(mutex); // TBD: handle errors
 #else
    pthread_mutex_unlock(&mutex); // TBD: handle error returns
 #endif
-   return NULL;
 }
-//***************************************************************************
-// CSMPlugin::getList
-//***************************************************************************
-CSMWarning * CSMPlugin::getList(CSMPluginList*& aCSMPluginList) throw (CSMError)
+
+//*****************************************************************************
+// Plugin::getList
+//*****************************************************************************
+const PluginList& Plugin::getList()
 {
-   aCSMPluginList = theList;
-   return NULL;
+   // create the list if it hasn't already been made
+   if (!theList) theList = new PluginList();
+
+   return *theList;
 }
-//***************************************************************************
-// CSMPlugin::findPlugin
-//***************************************************************************
-CSMWarning *CSMPlugin::findPlugin(const std:: string& pluginName,
-                           CSMPlugin*& aCSMPlugin) throw (CSMError)
+
+//*****************************************************************************
+// Plugin::findPlugin
+//*****************************************************************************
+const Plugin* Plugin::findPlugin(const std:: string& pluginName,
+                                 WarningList* warnings = NULL)
 {
-  CSMWarning* csmWarn = NULL;
-  CSMPlugin::CSMPluginList* models = NULL;
-  theImpl->lockList();
-  try {
-    csmWarn = CSMPlugin::getList(models);
-  }
-  catch (CSMError *err) {
-     std::cout << err->getError() << '\n';
-     std::cout << err->getMessage() << '\n';
-   }
-   catch (...) {
-     std::cout << "&&&&& UNKNOWN error thrown by getList\n";
-   }
-  if (!models)
-     return csmWarn;
-  bool found = false;
-  for (CSMPluginList::const_iterator i = models->begin();
-       i != models->end();
-       ++i)
-  {
-    std::string apluginName;
-    try {
-      csmWarn = (*i)->getPluginName(apluginName);
-    }
-    catch (CSMError *err) {
-      std::cout << err->getError() << '\n';
-      std::cout << err->getMessage() << '\n';
-    }
-    catch (...) {
-      std::cout << "&&&&& UNKNOWN error thrown by getPluginName\n";
-    }
-    if (std::string(apluginName) == std::string(pluginName))
+   Impl::Locker locker(impl());
+
+   const PluginList& plugins = getList();
+
+   bool found = false;
+   for (PluginList::const_iterator i = plugins->begin();
+        i != plugins->end(); ++i)
+   {
+      if (pluginName == (*i)->getPluginName())
       {
-       aCSMPlugin = const_cast < CSMPlugin* > (*i);
-       found = true;
-       break;
+         return *i;
       }
-  }
-  try {
-    csmWarn = theImpl->unlockList();
-  }
-  catch (...) {
-    std::cout << "&&&&& ERROR thrown by unlockList\n";
-  }
-  if (!found)
-  {
-    if(!csmWarn)
-       csmWarn = new CSMWarning();
-    csmWarn->setCSMWarning (CSMWarning::DATA_NOT_AVAILABLE,
-                       "No matching plugin found\n",
-                       "CSMPlugin::findPlugin");
-  }
-  return csmWarn;
+   }
+
+   // plugin not found
+   if (warnings)
+   {
+      warnings->push_back(CSMWarning(CSMWarning::DATA_NOT_AVAILABLE,
+                                     "No matching plugin found",
+                                     "Plugin::findPlugin"));
+   }
+
+   return NULL;
 }
-//***************************************************************************
-// CSMPlugin::removePlugin
-//***************************************************************************
-CSMWarning *CSMPlugin::removePlugin(const std::string& pluginName) throw (CSMError)
+
+//*****************************************************************************
+// Plugin::removePlugin
+//*****************************************************************************
+void Plugin::removePlugin(const std::string& pluginName,
+                          WarningList* warnings = NULL)
 {
-   CSMWarning *csmWarn = NULL;
-   CSMPlugin* pluginPtr = NULL;
-   CSMError csmErr;
+   const Plugin* pluginPtr = findPlugin(pluginName, warnings);
    std::string myName("removePlugin");
-   try {
-     csmWarn = findPlugin(pluginName, pluginPtr);
-   }
-   catch (CSMError *err) {
-     std::cout << err->getError() << '\n';
-     std::cout << err->getMessage() << '\n';
-   }
-   catch (...) {
-     std::cout << "&&&&& UNKNOWN error thrown by findPlugin\n";
-   }
-   if (pluginPtr !=NULL)
+
+   if (pluginPtr != NULL)
    {
-      try {
-        csmWarn = theImpl->lockList();
-      }
-      catch (...) {
-        std::cout << "&&&&& ERROR thrown by lockList\n";
-      }
+      Impl::Locker locker(impl());
+
       // find and remove pointer-to-plugin from theList
-      CSMPluginList::iterator pos = std::find(theList->begin(),
-                                        theList->end(),
-                                        pluginPtr);
-      if (theList->end() != pos)
+      PluginList::iterator pos = std::find(theList->begin(),
+                                           theList->end(),
+                                           pluginPtr);
+      if (theList->end() == pos)
       {
-       theList->erase(pos);
+         throw CSMError(CSMError::BOUNDS,
+                        "Plugin Name \"" + pluginName + "\" not found",
+                        "Plugin::removePlugin");
       }
-      else
-      {
-       std::cout << "CSMPlugin::removePlugin: Plugin " << pluginName
-                << " not found" << std::endl;
-       // THROW A NOT FOUND EXCEPTION
-       csmErr.setCSMError (
-                         CSMError::UNKNOWN_ERROR,
-                         "Plugin Name Not Found",
-                         myName);
-       throw csmErr;
-      }
-      try {
-       csmWarn = theImpl->unlockList();
-      }
-      catch (...) {
-        std::cout << "&&&&& ERROR thrown by unlockList\n";
-      }
+
+      theList->erase(pos);
    }
-   else
-   {
-     std::cout << "CSMPlugin::removePlugin: Plugin " << pluginName
-              << " not found" << std::endl;
-     // THROW A NOT FOUND EXCEPTION
-     csmErr.setCSMError (
-                      CSMError::UNKNOWN_ERROR,
-                      "Plugin Name Not Found",
-                      myName);
-     throw csmErr;
-   }
-   return csmWarn;
-} // removePlugin
-//***************************************************************************
-// CSMPlugin::CSMPlugin
-//***************************************************************************
-CSMPlugin::CSMPlugin()
+
+   // if not found, then there's nothing to remove
+}
+
+//*****************************************************************************
+// Plugin::Plugin
+//*****************************************************************************
+Plugin::Plugin()
 {
    //---
    // If the list of registered sensor model factories does not exist yet, then
    // create it.
    //---
-   if (!theList)
-   {
-      theList = new CSMPluginList;
-   }
-   if (!theImpl)
-   {
-      theImpl = new Impl;
-      theImpl->initializeMutex();
-   }
+   if (!theList) theList = new PluginList();
+
    //---
    // If the list of registered sensor model factories exists now (i.e., no
    // error occurred while creating it), then register the plugin factory in
@@ -255,25 +204,21 @@ CSMPlugin::CSMPlugin()
    //    The pointer points to the static instance of the derived sensor
    // model plugin.
    //---
-  if (theList)
-  {
-    CSMWarning *csmWarn = NULL;
-    try {
-      csmWarn = theImpl->lockList();
-    }
-    catch (...) {
-      std::cout << "&&&&& ERROR thrown by lockList\n";
-    }
-    if (csmWarn == NULL)
-      {
-         theList->push_back(this);
-       try {
-          csmWarn = theImpl->unlockList();
-       }
-       catch (...) {
-          std::cout << "&&&&& ERROR thrown by unlockList\n";
-       }
-      }
-  }
+   if (theList)
+   {
+      Impl::Locker locker(impl());
+
+      theList->push_back(this);
+   }
 }
 
+//*****************************************************************************
+// Plugin::impl
+//*****************************************************************************
+Plugin::Impl* Plugin::impl()
+{
+   // make the singleton if it hasn't already been made
+   if (!theImpl) theImpl = new Impl();
+
+   return theImpl;
+}

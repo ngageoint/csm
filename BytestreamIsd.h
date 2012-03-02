@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   csm_ISDByteStream.h
+//    FILENAME:   CSMISDByteStream.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -13,30 +13,39 @@
 //
 //    LIMITATIONS:       None
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
-//                       06-Feb-2004   KRW      Incorporates changes approved by
-//                                                January and February 2004
-//                                               Configuration control board.
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   ------- 
+//     01-Jul-2003   LMT      Initial version.
+//     06-Feb-2004   KRW      Incorporates changes approved by
+//                            January and February 2004
+//                            Configuration control board.
+//     12-Mar-2012   SCM      Refactored interfaces.
+//
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __csm_ISDBYTESTREAM_H
 #define __csm_ISDBYTESTREAM_H
+
 #include "CSMImageSupportData.h"
-#include <string>
 #include "CSMMisc.h"
-#ifdef _WIN32
-#pragma warning( disable : 4291 )
-#pragma warning( disable : 4251 )
-#endif
-class CSM_EXPORT_API bytestreamISD : public csm_ISD
+#include <string>
+
+namespace csm {
+
+class CSM_EXPORT_API BytestreamIsd : public Isd
 {
 public:
-   bytestreamISD() { _format = "BYTESTREAM"; }
-   bytestreamISD(std::string filename);
-   ~bytestreamISD() {_format.erase(); _isd.erase();}
-   std::string _isd;
+   explicit BytestreamIsd(const string& data)
+      : isd("BYTESTREAM"), theData(data) {}
+   virtual ~BytestreamIsd() {}
+
+   std::string theData;
 };
+
+} // namespace csm
+
 #endif
 

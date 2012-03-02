@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   csm_ISDNITF21.h
+//    FILENAME:   CSMISDNITF21.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -13,38 +13,36 @@
 //
 //    LIMITATIONS:       None
 //
-//                       Date          Author   Comment
-//    SOFTWARE HISTORY: 01-Jul-2003    LMT      Initial version.
-//                       06-Feb-2004   KRW      Incorporates changes approved by
-//                                               January and February 2004
-//                                               Configuration control board.
-//                       01-Nov-2004   KRW      October 2004 CCB
-//                        08-Jan-2005  KRW      Multi Image/Frame ? Administrative changes
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   -------
+//     01-Jul-2003   LMT      Initial version.
+//     06-Feb-2004   KRW      Incorporates changes approved by
+//                             January and February 2004
+//                             Configuration control board.
+//     01-Nov-2004   KRW      October 2004 CCB
+//     08-Jan-2005   KRW      Multi Image/Frame ? Administrative changes
+//     12-Mar-2012   SCM      Refactored interfaces.
 //
 //    NOTES:
 //
 //#############################################################################
+
 #ifndef __CSM_ISDNITF21_H
 #define __CSM_ISDNITF21_H
-#include "CSMImageSupportData.h"
+
 #include "CSMISDNITF20.h"
-#include "CSMMisc.h"
-class CSM_EXPORT_API NITF_2_1_ISD : public csm_ISD
+
+namespace csm {
+
+class CSM_EXPORT_API Nitf21Isd : public NitfIsd
 {
-  public:
-  NITF_2_1_ISD()
-    { _format = "NITF2.1"; numTREs = 0; numImages = 0;
-    fileTREs = NULL; images = NULL; numDESs = 0; fileDESs = NULL; }
-  ~NITF_2_1_ISD()
-    { delete [] images; delete [] fileTREs; delete [] fileDESs;}
-  std::string filename; // full path filename of NITF file. This is an optional field.
-  std::string fileHeader;
-  int     numTREs;
-  tre    *fileTREs;
-  int    numDESs;
-  des    *fileDESs;
-  int     numImages;
-  image *images;
+public:
+   Nitf21Isd() : NitfIsd("NITF2.1") {}
+   virtual ~Nitf21Isd() {}
 };
+
+} // namespace csm
+
 #endif
 
