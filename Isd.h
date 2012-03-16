@@ -40,10 +40,10 @@ public:
    Isd() : theFormat("UNKNOWN") {}
    virtual ~Isd() {}
 
-   const string& format() const { return theFormat; }
+   const std::string& format() const { return theFormat; }
 
 protected:
-   explicit Isd(const string& format) : theFormat(format) {}
+   explicit Isd(const std::string& format) : theFormat(format) {}
 
    std::string theFormat;
 };

@@ -93,7 +93,7 @@ public:
    //--------------------------------------------------------------------------
    // Plugin Interface
    //--------------------------------------------------------------------------
-   virtual string getPluginName() const = 0;
+   virtual std::string getPluginName() const = 0;
       //> This method returns the character std::string that identifies the
       //  plugin.
       //<
@@ -101,8 +101,8 @@ public:
    //---
    // CSM Plugin Descriptors
    //---
-   virtual string getManufacturer() const = 0;
-   virtual string getReleaseDate() const = 0;
+   virtual std::string getManufacturer() const = 0;
+   virtual std::string getReleaseDate() const = 0;
    virtual int getCSMVersion() const = 0;
       //> This method returns the CSM API version that the plug-in was written
       //  to.
@@ -112,7 +112,7 @@ public:
    // Sensor Model Availability
    //---
    virtual int getNSensorModels() const = 0;
-   virtual string getSensorModelName(int sensor_model_index) const = 0;
+   virtual std::string getSensorModelName(int sensor_model_index) const = 0;
 
    //---
    // Sensor Model Descriptors
@@ -139,7 +139,7 @@ public:
       const std::string& sensor_model_name,
       WarningList* warnings = NULL) const = 0;
 
-   virtual string getSensorModelNameFromSensorModelState(
+   virtual std::string getSensorModelNameFromSensorModelState(
       const std::string& sensor_model_state,
       WarningList* warnings = NULL) const = 0;
 
@@ -150,7 +150,7 @@ public:
       const Isd& image_support_data,
       const std::string& sensor_model_name,
       WarningList* warnings = NULL) const = 0;
-   virtual string convertISDToSensorModelState(
+   virtual std::string convertISDToSensorModelState(
       const Isd& image_support_data,
       const std::string& sensor_model_name,
       WarningList* warnings = NULL) const = 0;

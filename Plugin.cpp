@@ -36,8 +36,8 @@
 
 namespace csm {
 
-Plugin::PluginList* Plugin::theList = NULL;
-Plugin::Impl*       Plugin::theImpl = NULL;
+PluginList*   Plugin::theList = NULL;
+Plugin::Impl* Plugin::theImpl = NULL;
 
 //*****************************************************************************
 // Plugin::Impl
@@ -136,8 +136,8 @@ const Plugin* Plugin::findPlugin(const std:: string& pluginName,
    const PluginList& plugins = getList();
 
    bool found = false;
-   for (PluginList::const_iterator i = plugins->begin();
-        i != plugins->end(); ++i)
+   for (PluginList::const_iterator i = plugins.begin();
+        i != plugins.end(); ++i)
    {
       if (pluginName == (*i)->getPluginName())
       {
@@ -148,9 +148,9 @@ const Plugin* Plugin::findPlugin(const std:: string& pluginName,
    // plugin not found
    if (warnings)
    {
-      warnings->push_back(CSMWarning(CSMWarning::DATA_NOT_AVAILABLE,
-                                     "No matching plugin found",
-                                     "Plugin::findPlugin"));
+      warnings->push_back(Warning(Warning::DATA_NOT_AVAILABLE,
+                                  "No matching plugin found",
+                                  "Plugin::findPlugin"));
    }
 
    return NULL;
@@ -175,9 +175,9 @@ void Plugin::removePlugin(const std::string& pluginName,
                                            pluginPtr);
       if (theList->end() == pos)
       {
-         throw CSMError(CSMError::BOUNDS,
-                        "Plugin Name \"" + pluginName + "\" not found",
-                        "Plugin::removePlugin");
+         throw Error(Error::BOUNDS,
+                     "Plugin Name \"" + pluginName + "\" not found",
+                     "Plugin::removePlugin");
       }
 
       theList->erase(pos);
@@ -222,3 +222,5 @@ Plugin::Impl* Plugin::impl()
 
    return theImpl;
 }
+
+} // namespace csm

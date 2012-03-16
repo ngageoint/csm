@@ -61,7 +61,7 @@ public:
          const std::string& aMessage,
          const std::string& aFunction)
       : theError(aErrorType), theMessage(aMessage), theFunction(aFunction) {}
-   virtual ~Error() {}
+   virtual ~Error() throw () {}
 
    ErrorType          getError() const    { return theError; }
    const std::string& getMessage() const  { return theMessage; }

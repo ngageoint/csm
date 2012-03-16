@@ -94,7 +94,7 @@ namespace csm
    public:
       double x;
       double y;
-      double z
+      double z;
 
       EcefCoord(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
    };
