@@ -65,6 +65,13 @@ namespace csm
 //               have no uncertainty.
 //<
 
+   //***
+   // STRUCT: ImageCoord
+   //> The ImageCoord class represents a 2 dimensional point in image space.
+   //  Usually, it represents an abolute point location, but some uses on the
+   //  SensorModel interface use it as a size (location vector).
+   //<
+   //***
    struct ImageCoord
    {
    public:
@@ -74,6 +81,14 @@ namespace csm
       ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
+   //***
+   // STRUCT: EcefCoord
+   //> The EcefCoord class represents a 3 dimensional location in Earth
+   //  Centered Earth Fixed space.  Usually, it will represent an abolute
+   //  point, but some uses of this class in the SensorModel class call for it
+   //  to represent an ECEF location vector or an ECEF velocity vector.
+   //<
+   //***
    struct EcefCoord
    {
    public:
