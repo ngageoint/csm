@@ -26,7 +26,7 @@
 
 #include "CSMMisc.h"
 #include "CSMWarning.h"
-#include <vector>
+#include "CSMSensorTypeAndMode.h"
 #include <string>
 
 namespace csm {
@@ -37,6 +37,9 @@ public:
    Model() {}
    virtual ~Model() {}
 
+   //---
+   // Basic model information
+   //---
    virtual int getVersion() const = 0;
       //> This method returns the version of the CSM that the sensor model
       //  complies with.
@@ -57,6 +60,9 @@ public:
       //  model would produce different pedigrees for each case.
       //<
 
+   //---
+   // Basic collection information
+   //---
    virtual std::srting getImageIdentifier() const = 0;
       //> This method returns the unique identifier to indicate the imaging
       //  operation associated with this sensor model.
@@ -88,6 +94,10 @@ public:
       //> This method returns a unique identifer that uniquely identifies
       //  a collection activity by a sensor platform. This ID will vary
       //  depending on the sensor type and platform.
+      //<
+   virtual SensorTypeAndMode getSensorTypeAndMode() const = 0;
+      //> This method returns a flag to indicate whether or not a sensor
+      // ...
       //<
 
    virtual EcefCoord getReferencePoint() const = 0;

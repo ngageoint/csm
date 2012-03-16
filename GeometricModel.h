@@ -55,7 +55,7 @@
 #include "CSMMisc.h"
 #include "CSMWarning.h"
 #include "CSMParameterSharing.h"
-#include "CSMSensorTypeAndMode.h"
+#include "CSMModel.h"
 #include <vector>
 #include <string>
 
@@ -132,6 +132,137 @@ public:
       //  locus vector and does not refer to the locus's orientation. For an
       //  explanation of the remote imaging locus, see the section at the
       //  beginning of this document.
+      //<
+
+   //---
+   // Monoscopic Mensuration
+   //---
+   virtual std::pair<double,double> getValidHeightRange() const = 0;
+      //> The validHeightsRange() method returns the minimum and maximum
+      //  heights that describe the range of validity of the model. For
+      //  example, the model may not be valid at heights above the heights
+      //  of the sensor for physical models.
+      //
+      //  The minimum height is returned as the first element of the pair and
+      //  the maximum height is returned as the second element of the pair.
+      //<
+   virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
+      //> The validImageRange() method returns the minimum and maximum
+      //  values for image position (line and sample) that describe the
+      //  range of validity of the model. This range may not always match
+      //  the physical size of the image. This method is used in
+      //  conjunction with getValidHeightRange() to determine the full
+      //  range of applicability of the sensor model.
+      //
+      //  The minimum coordinate is returned as the first element of the pair
+      //  and the maximum coordinate is returned as the second element of the
+      //  pair.
+      //<
+   virtual EcefCoord getIlluminationDirection(const EcefCoord& gndPt) const = 0;
+      //> The getIlluminationDirection() method calculates the direction of
+      //  illumination at the given ground position x, y, z.
+      //<
+
+   //---
+   // Time and Trajectory
+   //---
+   virtual std::string getTrajectoryIdentifier() const = 0;
+      //> This method returns a unique identifer to indicate which
+      //  trajectory was used to acquire the image. This ID is unique for
+      //  each sensor type on an individual path.
+      //<
+   virtual std::string getReferenceDateAndTime() const = 0;
+      //> This method returns the time in seconds at which the specified
+      //  pixel was imaged. The time provide is relative to the reference
+      //  date and time given by the getReferenceDateAndTime() method and
+      //  can be used to represent time offsets within the trajectory
+      //  associated with the given image.
+      //<
+   virtual double getImageTime(const ImageCoord& pt) const = 0;
+      //> The getImageTime() method returns the time in seconds at which
+      //  the pixel specified by line and sample was imaged. The time
+      //  provided is relative to the reference date and time given by
+      //  getReferenceDateAndTime.
+      //<
+   virtual EcefCoord getSensorPosition(const ImageCoord& pt) const = 0;
+      //> The getSensorPosition() method returns the position of
+      //  the physical sensor at the given position in the image.
+      //<
+   virtual EcefCoord getSensorPosition(const double& time) const = 0;
+      //> The getSensorPosition() method returns the position of
+      //  the physical sensor at the given time of imaging.
+      //<
+   virtual EcefCoord getSensorVelocity(const ImageCoord& pt) const = 0;
+      //> The getSensorVelocity() method returns the velocity
+      //  of the physical sensor at the given position in the image.
+      //
+      //  The values returned in the EcefCoord represent velocity rather than
+      //  position.
+      //<
+   virtual EcefCoord getSensorVelocity(const double& time) const = 0;
+      //> The getSensorVelocity() method returns the velocity
+      //  of the physical sensor at the given time of imaging.
+      //
+      //  The values returned in the EcefCoord represent velocity rather than
+      //  position.
+      //<
+
+   //---
+   // Sensor Model Parameters
+   //---
+   virtual int getNumParameters() const = 0;
+      //> This method returns the number of sensor model parameters.
+      //<
+   virtual std::string getParameterName(int index) const = 0;
+      //> This method returns the name for the sensor model parameter
+      //  indicated by the given index.
+      //
+      //  If the index is out of range, a CSMError may be thrown.
+      //<
+   virtual bool isParameterShareable(int index) const = 0;
+      //> This method returns a flag to indicate whether or not a sensor
+      //  model parameter adjustments are shareable across images for the
+      //  sensor model adjustable parameter referenced by index.
+      //<
+   virtual std::vector<ParameterSharingCriteria>& getParameterSharingCriteria(
+                int index) const = 0;
+      //> This method returns characteristics to indicate how
+      //  the sensor model adjustable parameter referenced by index
+      //  may be shareable accross images.
+      //<
+
+   virtual double getOriginalParameterValue(int index) const = 0;
+      //> The getOriginalParameterValue() method returns the value of the
+      //  adjustable parameter given by index.
+      //<
+   virtual double getCurrentParameterValue(int index) const = 0;
+      //> The getCurrentParameterValue() method returns the value
+      //  of the adjustable parameter given by index.
+      //<
+   virtual void setCurrentParameterValue(int index, double value) = 0;
+      //> The setCurrentParameterValue() method is used to set the
+      //  value of the adjustable parameter indicated by index.
+      //<
+   virtual void setOriginalParameterValue(int index, double value) = 0;
+      //> The setOriginalParameterValue() method is used to set the original
+      //  parameter value of the indexed parameter.
+      //<
+
+   virtual ParamType getOriginalParameterType(int index) const = 0;
+      //> The getOriginalParameterType() method returns the original
+      //  type of the parameter given by index.
+      //<
+   virtual ParamType getCurrentParameterType(int index) const = 0;
+      //> The getCurrentParameterType() method returns the current
+      //  type of the parameter given by index.
+      //<
+   virtual void setOriginalParameterType(int index, ParamType pType) = 0;
+      //> The setOriginalParameterType() method sets the original
+      //  type of the parameter for the given by index.
+      //<
+   virtual void setCurrentParameterType(int index, ParamType pType) = 0;
+      //> The setCurrentParameterType() method sets the current
+      //  type of the parameter for the given by index.
       //<
 
    //---
@@ -245,131 +376,6 @@ public:
       //<
 
    //---
-   // Time and Trajectory
-   //---
-   virtual std::string getTrajectoryIdentifier() const = 0;
-      //> This method returns a unique identifer to indicate which
-      //  trajectory was used to acquire the image. This ID is unique for
-      //  each sensor type on an individual path.
-      //<
-   virtual std::string getReferenceDateAndTime() const = 0;
-      //> This method returns the time in seconds at which the specified
-      //  pixel was imaged. The time provide is relative to the reference
-      //  date and time given by the getReferenceDateAndTime() method and
-      //  can be used to represent time offsets within the trajectory
-      //  associated with the given image.
-      //<
-   virtual double getImageTime(const ImageCoord& pt) const = 0;
-      //> The getImageTime() method returns the time in seconds at which
-      //  the pixel specified by line and sample was imaged. The time
-      //  provided is relative to the reference date and time given by
-      //  getReferenceDateAndTime.
-      //<
-   virtual EcefCoord getSensorPosition(const ImageCoord& pt) const = 0;
-      //> The getSensorPosition() method returns the position of
-      //  the physical sensor at the given position in the image.
-      //<
-   virtual EcefCoord getSensorPosition(const double& time) const = 0;
-      //> The getSensorPosition() method returns the position of
-      //  the physical sensor at the given time of imaging.
-      //<
-   virtual EcefCoord getSensorVelocity(const ImageCoord& pt) const = 0;
-      //> The getSensorVelocity() method returns the velocity
-      //  of the physical sensor at the given position in the image.
-      //<
-   virtual EcefCoord getSensorVelocity(const double& time) const = 0;
-      //> The getSensorVelocity() method returns the velocity
-      //  of the physical sensor at the given time of imaging.
-      //<
-
-   //---
-   // Sensor Model Parameters
-   //---
-   virtual int getNumParameters() const = 0;
-      //> This method returns the number of sensor model parameters.
-      //<
-   virtual std::string getParameterName(int index) const = 0;
-      //> This method returns the name for the sensor model parameter
-      //  indicated by the given index.
-      //
-      //  If the index is out of range, a CSMError may be thrown.
-      //<
-   virtual bool isParameterShareable(int index) const = 0;
-      //> This method returns a flag to indicate whether or not a sensor
-      //  model parameter adjustments are shareable across images for the
-      //  sensor model adjustable parameter referenced by index.
-      //<
-   virtual std::vector<ParameterSharingCriteria>& getParameterSharingCriteria(
-                int index) const = 0;
-      //> This method returns characteristics to indicate how
-      //  the sensor model adjustable parameter referenced by index
-      //  may be shareable accross images.
-      //<
-   virtual double getCurrentParameterValue(int index) const = 0;
-      //> The getCurrentParameterValue() method returns the value
-      //  of the adjustable parameter given by index.
-      //<
-   virtual void setCurrentParameterValue(int index, double value) = 0;
-      //> The setCurrentParameterValue() method is used to set the
-      //  value of the adjustable parameter indicated by index.
-      //<
-
-   virtual double getOriginalParameterValue(int index) const = 0;
-      //> The getOriginalParameterValue() method returns the value of the
-      //  adjustable parameter given by index.
-      //<
-   virtual void setOriginalParameterValue(int index, double value) = 0;
-      //> The setOriginalParameterValue() method is used to set the original
-      //  parameter value of the indexed parameter.
-      //<
-   virtual Param_CharType getOriginalParameterType(int index) const = 0;
-      //> The getOriginalParameterType() method returns the original
-      //  type of the parameter given by index.
-      //<
-   virtual Param_CharType getCurrentParameterType(int index) const = 0;
-      //> The getCurrentParameterType() method returns the current
-      //  type of the parameter given by index.
-      //<
-   virtual void setOriginalParameterType(int index, Param_CharType pType) = 0;
-      //> The setOriginalParameterType() method sets the original
-      //  type of the parameter for the given by index.
-      //<
-   virtual void setCurrentParameterType(int index, Param_CharType pType) = 0;
-      //> The setCurrentParameterType() method sets the current
-      //  type of the parameter for the given by index.
-      //<
-
-
-   //---
-   // Monoscopic Mensuration
-   //---
-   virtual std::pair<double,double> getValidHeightRange() const = 0;
-      //> The validHeightsRange() method returns the minimum and maximum
-      //  heights that describe the range of validity of the model. For
-      //  example, the model may not be valid at heights above the heights
-      //  of the sensor for physical models.
-      //
-      //  The minimum height is returned as the first element of the pair and
-      //  the maximum height is returned as the second element of the pair.
-      //<
-   virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
-      //> The validImageRange() method returns the minimum and maximum
-      //  values for image position (line and sample) that describe the
-      //  range of validity of the model. This range may not always match
-      //  the physical size of the image. This method is used in
-      //  conjunction with getValidHeightRange() to determine the full
-      //  range of applicability of the sensor model.
-      //
-      //  The minimum coordinate is returned as the first element of the pair
-      //  and the maximum coordinate is returned as the second element of the
-      //  pair.
-      //<
-   virtual EcefCoord getIlluminationDirection(const EcefCoord& gndPt) const = 0;
-      //> The getIlluminationDirection() method calculates the direction of
-      //  illumination at the given ground position x, y, z.
-      //<
-
-   //---
    // Error Correction
    //---
    virtual int getNumGeometricCorrectionSwitches() const = 0;
@@ -382,7 +388,7 @@ public:
       //<
    virtual void setCurrentGeometricCorrectionSwitch(int index,
                                                     bool value,
-                                                    Param_CharType pType) = 0;
+                                                    ParamType pType) = 0;
       //> The setCurrentGeometricCorrectionSwitch() is
       //  used to set the switch of the geometric correction
       //  indicated by index.
@@ -441,11 +447,6 @@ public:
       //  a 2x2 matrix, returned as a 4 element vector. The unmodeled cross
       //  covariance is added to any values that may already be in the cross
       //  covariance matrix.
-      //<
-
-   virtual SensorTypeAndMode getSensorTypeAndMode() const = 0;
-      //> This method returns a flag to indicate whether or not a sensor
-      // ...
       //<
 
 #ifdef TESTAPIVERSION
