@@ -1,0 +1,6 @@
+include Makefile
+
+CC=g++
+COPTS=-fPIC -O2 -m32
+LDOPTS=-shared -Wl,-soname,$(LIBRARY)
+INSTDIR=$(PWD)/linux

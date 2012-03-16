@@ -1,0 +1,31 @@
+include Makefile
+
+CC=mscc
+LD=mslink
+CDEBUGFLAGS=-O2
+COPTS=/nologo $(CDEBUGFLAGS) /Zm800 /MD /GR /W1 /EHa $(DEFINES)
+DEFINES=-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE -D_SECURE_SCL=0
+LDOPTS=/TP /nologo /GR -DWIN32 /GX
+LIBNAME=tsmapi
+LIBRARY=$(LIBNAME).dll
+
+INSTDIR=$(PWD)/win32
+
+%.o: %.cpp
+	$(CC) -c $(COPTS) $< -Fo$@
+
+%.o: %.cc
+	$(CC) -c $(COPTS) $< -Fo$@
+
+$(LIBRARY): $(OBJS)
+	objects_to_def -dir . -proj $(@:%.dll=%) > $(@:%.dll=%.ldf)
+	$(LD) $(COPTS) $(LDOPTS) /DEF:$(@:%.dll=%.ldf) -o $@ $^
+
+all: $(LIBRARY)
+
+install::
+	$(RM) $(INSTDIR)/lib/$(LIBNAME).so
+	$(CP) $(LIBRARY:%.dll=%.lib) $(INSTDIR)/lib
+
+clean::
+	$(RM) $(LIBRARY).manifest $(LIBRARY:%.dll=%.ldf) $(LIBRARY:%.dll=%.lib) $(LIBRARY:%.dll=%.exp)
