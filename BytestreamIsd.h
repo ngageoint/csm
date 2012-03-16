@@ -38,8 +38,8 @@ namespace csm {
 class CSM_EXPORT_API BytestreamIsd : public Isd
 {
 public:
-   explicit BytestreamIsd(const string& data)
-      : isd("BYTESTREAM"), theData(data) {}
+   explicit BytestreamIsd(const std::string& data)
+      : Isd("BYTESTREAM"), theData(data) {}
    virtual ~BytestreamIsd() {}
 
    std::string theData;

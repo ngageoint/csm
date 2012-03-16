@@ -25,7 +25,7 @@
 #ifndef __CSMPARAMETERSHARING_H
 #define __CSMPARAMETERSHARING_H
 
-#include "TSMMisc.h"
+#include "CSMMisc.h"
 
 namespace csm {
 

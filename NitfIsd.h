@@ -33,6 +33,9 @@
 #include "CSMImageSupportData.h"
 #include "CSMMisc.h"
 
+#include <vector>
+#include <string>
+
 namespace csm {
 
 class CSM_EXPORT_API Des
@@ -116,11 +119,8 @@ public:
    std::vector<Image> images;
 
 protected:
-   nitf_isd(const std::string& format)
-      : isd(format),filename(),fileHeader(),fileTREs(),fileDESs(),images() {}
-
-   nitf_isd(const std::string& format)
-      : isd(format),filename(),fileHeader(),fileTREs(),fileDESs(),images() {}
+   NitfIsd(const std::string& format)
+      : Isd(format),filename(),fileHeader(),fileTREs(),fileDESs(),images() {}
 };
 
 class CSM_EXPORT_API Nitf20Isd : public NitfIsd

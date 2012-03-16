@@ -63,7 +63,7 @@ public:
    //---
    // Basic collection information
    //---
-   virtual std::srting getImageIdentifier() const = 0;
+   virtual std::string getImageIdentifier() const = 0;
       //> This method returns the unique identifier to indicate the imaging
       //  operation associated with this sensor model.
       //

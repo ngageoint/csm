@@ -79,8 +79,8 @@ public:
       //<
 
    virtual ImageCoord groundToImage(const EcefCoord& groundPt,
-                                    const vector<double> groundCovariance,
-                                    vector<double>& imageCovariance,
+                                    const std::vector<double> groundCovariance,
+                                    std::vector<double>& imageCovariance,
                                     const double& desired_precision = 0.001,
                                     double* achieved_precision = NULL,
                                     WarningList* warnings = NULL) const = 0;
@@ -97,8 +97,8 @@ public:
       //  space to a ground point.
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
-                                   const vector<double> imageCovariance,
-                                   vector<double>& groundCovariance,
+                                   const std::vector<double> imageCovariance,
+                                   std::vector<double>& groundCovariance,
                                    const double& desired_precision = 0.001,
                                    double* achieved_precision = NULL,
                                    WarningList* warnings = NULL) const = 0;
@@ -107,7 +107,7 @@ public:
       //  the image and ground coordinates.
       //<
 
-   virtual vector<double> imageToProximateImagingLocus(
+   virtual std::vector<double> imageToProximateImagingLocus(
       const ImageCoord& imagePt,
       const EcefCoord& groundPt,
       const double& desired_precision = 0.001,
@@ -120,7 +120,7 @@ public:
       //  origin and does not refer to the locus's orientation.
       //<
 
-   virtual vector<double> imageToRemoteImagingLocus(
+   virtual std::vector<double> imageToRemoteImagingLocus(
       const ImageCoord& imagePt,
       const EcefCoord& groundPt,
       const double& desired_precision = 0.001,
@@ -283,7 +283,7 @@ public:
    //---
    // Uncertainty Propagation
    //---
-   virtual vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
+   virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
       //> The computeGroundPartials method calculates the partial
       //  derivatives (partials) of image position (both line and sample)
       //  with respect to ground coordinates at the given ground
@@ -413,10 +413,10 @@ public:
       //  geometric correction switch given by index.
       //<
 
-   virtual vector<vector<double> > getCurrentCrossCovarianceMatrix(
+   virtual std::vector<std::vector<double> > getCurrentCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          vector<const SensorModel*> SMs,
-          const vector<ImageCoord>& smImagePts) const = 0;
+          std::vector<const SensorModel*> SMs,
+          const std::vector<ImageCoord>& smImagePts) const = 0;
       //> The getCurrentCovarianceMatrix() function returns a matrix
       //  containing all elements of the error cross covariance matrix
       //  between the instantiated sensor model and a specified second
@@ -429,10 +429,10 @@ public:
       //  getCurrentParameterCovariance() and getUnmodeledError().
       //<
 
-   virtual vector<vector<double> > getOriginalCrossCovarianceMatrix(
+   virtual std::vector<std::vector<double> > getOriginalCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          vector<const SensorModel*> SMs,
-          const vector<ImageCoord>& smImagePts) const = 0;
+          std::vector<const SensorModel*> SMs,
+          const std::vector<ImageCoord>& smImagePts) const = 0;
       //> The getOriginalCovarianceMatrix() function returns a matrix
       //  containing all elements of the error cross covariance matrix
       //  between the instantiated sensor model and a specified second
@@ -444,7 +444,7 @@ public:
       //  getOriginalParameterCovariance() and getUnmodeledError().
       //<
 
-   virtual vector<double> getUnmodeledError(const ImageCoord& pt) const = 0;
+   virtual std::vector<double> getUnmodeledError(const ImageCoord& pt) const = 0;
       //> The getUnmodeledError() function gives a sensor specific
       //  error for the given input image point. The error is reported
       //  as the four terms of a 2x2 covariance mensuration error
@@ -453,7 +453,7 @@ public:
       //  space for inclusion in error propagation. The extra error is added to
       //  the mensuration error that may already be in the matrix.
       //<
-   virtual vector<double> getUnmodeledCrossCovariance(
+   virtual std::vector<double> getUnmodeledCrossCovariance(
                 const ImageCoord& pt1,
                 const ImageCoord& pt2) const = 0;
       //> The getUnmodeledCrossCovariance function gives the cross
@@ -476,5 +476,8 @@ public:
       //<
 #endif
 };
+
+} // namespace csm
+
 #endif
 
