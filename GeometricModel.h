@@ -55,53 +55,11 @@
 #include "CSMMisc.h"
 #include "CSMWarning.h"
 #include "CSMParameterSharing.h"
+#include "CSMSensorTypeAndMode.h"
 #include <vector>
 #include <string>
 
 namespace csm {
-
-class SensorTypeAndMode
-{
-public:
-   SensorTypeAndMode() : theSensorType(), theSensorMode() {}
-   SensorTypeAndMode(const std::string sensorType,
-                     const std::string sensorMode)
-      : theSensorType(sensorType), theSensorMode(sensorMode) {}
-
-   const std::string& type() const {return theSensorType;}
-   const std::string& mode() const {return theSensorMode;}
-
-private:
-   std::string theSensorType;
-   std::string theSensorMode;
-};
-
-#define TYPE_UNK "UNKNOWN"
-#define TYPE_EO "EO"
-#define TYPE_IR "IR"
-#define TYPE_MWIR "MWIR"
-#define TYPE_LWIR "LWIR"
-#define TYPE_SAR "SAR"
-#define TYPE_EOIRSC "EO_IR_SPECIAL_CASE"
-#define MODE_FRAME "FRAME"
-#define MODE_PULSE "PULSE"
-#define MODE_PB "PUSHBROOM"
-#define MODE_WB "WHISKBROOM"
-#define MODE_SPOT "SPOT"
-#define MODE_STRIP "STRIP"
-#define MODE_SCAN "SCAN"
-#define MODE_VIDEO "VIDEO"
-#define MODE_BODY_POINTING "BODY_POINTING"
-  static const CSMSensorTypeAndMode EO_FRAME(TYPE_EO, MODE_FRAME);
-  static const CSMSensorTypeAndMode EO_PUSHBROOM(TYPE_EO, MODE_PB); //EO_ -> EO,
-  static const CSMSensorTypeAndMode EO_WHISKBROOM(TYPE_EO, MODE_WB); //EO_ -> EO,
-  static const CSMSensorTypeAndMode EO_VIDEO(TYPE_EO, MODE_VIDEO);
-  static const CSMSensorTypeAndMode MWIR_FRAME(TYPE_MWIR, MODE_FRAME);
-  static const CSMSensorTypeAndMode LWIR_WHISKBROOM(TYPE_LWIR, MODE_WB);
-  static const CSMSensorTypeAndMode SAR_SPOT(TYPE_SAR, MODE_SPOT);
-  static const CSMSensorTypeAndMode SAR_STRIP(TYPE_SAR, MODE_STRIP);
-  static const CSMSensorTypeAndMode SAR_SCAN(TYPE_SAR, MODE_SCAN);
-  static const CSMSensorTypeAndMode BODY_POINTING(TYPE_EO, MODE_BODY_POINTING);
 
 class CSM_EXPORT_API SensorModel : public Model
 {
