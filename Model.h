@@ -109,13 +109,6 @@ public:
       //  of the image.
       //<
 
-   virtual ImageCoord getImageSize() const = 0;
-      //> This method returns the number of lines and samples in the imaging
-      //  operation.
-      //
-      //  TODO: should this be on the base class???
-      //<
-
    //---
    // Sensor Model State
    //---
