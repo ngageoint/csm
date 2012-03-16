@@ -129,7 +129,7 @@ const PluginList& Plugin::getList()
 // Plugin::findPlugin
 //*****************************************************************************
 const Plugin* Plugin::findPlugin(const std:: string& pluginName,
-                                 WarningList* warnings = NULL)
+                                 WarningList* warnings)
 {
    Impl::Locker locker(impl());
 
@@ -160,7 +160,7 @@ const Plugin* Plugin::findPlugin(const std:: string& pluginName,
 // Plugin::removePlugin
 //*****************************************************************************
 void Plugin::removePlugin(const std::string& pluginName,
-                          WarningList* warnings = NULL)
+                          WarningList* warnings)
 {
    const Plugin* pluginPtr = findPlugin(pluginName, warnings);
    std::string myName("removePlugin");
