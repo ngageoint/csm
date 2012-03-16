@@ -137,6 +137,19 @@ public:
    //---
    // Monoscopic Mensuration
    //---
+   virtual ImageCoord getImageStart() const = 0;
+      //> This method returns the starting coordinate in image space of the
+      //  imaging operation.  If this is unknown, this may return (0,0).
+      //<
+   virtual ImageCoord getImageSize() const = 0;
+      //> This method returns the number of lines and samples in the imaging
+      //  operation.  If this is unknown, the method may return (0,0).
+      //
+      //  Here the returned image coordinate represents the size of the image
+      //  as an image space vector, not the maximum image coordinate.  Use
+      //  getValidHeightRange() to get the valid range of image coordinates for
+      //  this model.
+      //<
    virtual std::pair<double,double> getValidHeightRange() const = 0;
       //> The validHeightsRange() method returns the minimum and maximum
       //  heights that describe the range of validity of the model. For
@@ -150,9 +163,9 @@ public:
       //> The validImageRange() method returns the minimum and maximum
       //  values for image position (line and sample) that describe the
       //  range of validity of the model. This range may not always match
-      //  the physical size of the image. This method is used in
-      //  conjunction with getValidHeightRange() to determine the full
-      //  range of applicability of the sensor model.
+      //  the physical size of the image as returned by getImageSize(). This
+      //  method is used in conjunction with getValidHeightRange() to determine
+      //  the full range of applicability of the sensor model.
       //
       //  The minimum coordinate is returned as the first element of the pair
       //  and the maximum coordinate is returned as the second element of the
