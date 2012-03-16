@@ -31,8 +31,8 @@ install::
 	$(MKDIR) -p $(INSTDIR)/lib
 	$(CP) $(LIBRARY) $(INSTDIR)/lib
 	$(RM) $(INSTDIR)/lib/$(LIBNAME).so && $(LN) $(LIBRARY) $(INSTDIR)/lib/$(LIBNAME).so
-	$(MKDIR) -p $(INSTDIR)/include/tsm
-	$(CP) $(HEADERS) $(INSTDIR)/include/tsm
+	$(MKDIR) -p $(INSTDIR)/include/csm
+	$(CP) $(HEADERS) $(INSTDIR)/include/csm
 
 clean::
 	$(RM) $(OBJS) $(LIBRARY) *~
