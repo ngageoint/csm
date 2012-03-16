@@ -45,7 +45,7 @@ namespace csm
    static const int MAX_FUNCTION_NAME_LENGTH = 80;
    static const int MAX_MESSAGE_LENGTH = 512;
 
-   enum Param_CharType
+   enum ParamType
    {
       NONE,
       FICTITIOUS,
@@ -64,6 +64,25 @@ namespace csm
 //  EXACT      - Parameter value has been specified and is assumed to
 //               have no uncertainty.
 //<
+
+   struct ImageCoord
+   {
+   public:
+      double line;
+      double samp;
+
+      ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
+   };
+
+   struct EcefCoord
+   {
+   public:
+      double x;
+      double y;
+      double z
+
+      EcefCoord(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
+   };
 
 } // namespace csm
 
