@@ -70,7 +70,7 @@ public:
    //---
    // Core Photogrammetry
    //---
-   virtual ImageCoord groundToImage(const GroundCoord& ground,
+   virtual ImageCoord groundToImage(const EcefCoord& groundPt,
                                     const double& desired_precision = 0.001,
                                     double* achieved_precision = NULL,
                                     WarningList* warnings = NULL) const = 0;
@@ -78,38 +78,38 @@ public:
       //  space (ECEF) to line and sample (pixels) in image space.
       //<
 
-   virtual ImageCoord groundToImage(const GroundCoord& ground,
+   virtual ImageCoord groundToImage(const EcefCoord& groundPt,
                                     const vector<double> groundCovariance,
                                     vector<double>& imageCovariance,
                                     const double& desired_precision = 0.001,
                                     double* achieved_precision = NULL,
                                     WarningList* warnings = NULL) const = 0;
       //> This method converts a given ground point into line and sample
-      // (pixels) in image space and returns accuracy information
-      // associated with the image and ground coordinates.
+      //  (pixels) in image space and returns accuracy information
+      //  associated with the image and ground coordinates.
       //<
-   virtual GroundCoord imageToGround(const ImageCoord& image,
-                                     double height,
-                                     const double& desired_precision = 0.001,
-                                     double* achieved_precision = NULL,
-                                     WarningList* warnings = NULL) const = 0;
+   virtual EcefCoord imageToGround(const ImageCoord& imagePt,
+                                   double height,
+                                   const double& desired_precision = 0.001,
+                                   double* achieved_precision = NULL,
+                                   WarningList* warnings = NULL) const = 0;
       //> This method converts a given line and sample (pixels) in image
-      // space to a ground point.
+      //  space to a ground point.
       //<
-   virtual GroundCoord imageToGround(const ImageCoord& image,
-                                     const vector<double> imageCovariance,
-                                     vector<double>& groundCovariance,
-                                     const double& desired_precision = 0.001,
-                                     double* achieved_precision = NULL,
-                                     WarningList* warnings = NULL) const = 0;
+   virtual EcefCoord imageToGround(const ImageCoord& imagePt,
+                                   const vector<double> imageCovariance,
+                                   vector<double>& groundCovariance,
+                                   const double& desired_precision = 0.001,
+                                   double* achieved_precision = NULL,
+                                   WarningList* warnings = NULL) const = 0;
       //> This method converts a given line and sample (pixels) in //image space
-      // to a ground point and returns accuracy information associated with
-      // the image and ground coordinates.
+      //  to a ground point and returns accuracy information associated with
+      //  the image and ground coordinates.
       //<
 
    virtual vector<double> imageToProximateImagingLocus(
-      const ImageCoord& image,
-      const GroundCoord& ground,
+      const ImageCoord& imagePt,
+      const EcefCoord& groundPt,
       const double& desired_precision = 0.001,
       double* achieved_precision = NULL,
       WarningList* warnings = NULL) const = 0;
@@ -121,8 +121,8 @@ public:
       //<
 
    virtual vector<double> imageToRemoteImagingLocus(
-      const ImageCoord& image,
-      const GroundCoord& ground,
+      const ImageCoord& imagePt,
+      const EcefCoord& groundPt,
       const double& desired_precision = 0.001,
       double* achieved_precision = NULL,
       WarningList* warnings = NULL) const = 0;
@@ -161,6 +161,8 @@ public:
    virtual EcefCoord getIlluminationDirection(const EcefCoord& gndPt) const = 0;
       //> The getIlluminationDirection() method calculates the direction of
       //  illumination at the given ground position x, y, z.
+      //
+      //  The returned EcefCoord represents a vector, not an absolution position.
       //<
 
    //---
@@ -268,7 +270,7 @@ public:
    //---
    // Uncertainty Propagation
    //---
-   virtual vector<double> computeGroundPartials(const GroundCoord& ground) = 0;
+   virtual vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
       //> The computeGroundPartials method calculates the partial
       //  derivatives (partials) of image position (both line and sample)
       //  with respect to ground coordinates at the given ground
@@ -354,7 +356,7 @@ public:
                                               int index2,
                                               double covariance) = 0;
       //> The setCurrentParameterCovariance() method is
-      // used to set the covariance value of the specified parameter pair.
+      //  used to set the covariance value of the specified parameter pair.
       //<
 
    virtual double getOriginalParameterCovariance(int index1,
