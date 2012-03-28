@@ -71,7 +71,7 @@ public:
    // Core Photogrammetry
    //---
    virtual ImageCoord groundToImage(const EcefCoord& groundPt,
-                                    const double& desired_precision = 0.001,
+                                    double desired_precision = 0.001,
                                     double* achieved_precision = NULL,
                                     WarningList* warnings = NULL) const = 0;
       //> The groundToImage() method converts x, y and z (meters) in ground
@@ -81,7 +81,7 @@ public:
    virtual ImageCoord groundToImage(const EcefCoord& groundPt,
                                     const std::vector<double> groundCovariance,
                                     std::vector<double>& imageCovariance,
-                                    const double& desired_precision = 0.001,
+                                    double desired_precision = 0.001,
                                     double* achieved_precision = NULL,
                                     WarningList* warnings = NULL) const = 0;
       //> This method converts a given ground point into line and sample
@@ -90,16 +90,17 @@ public:
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
                                    double height,
-                                   const double& desired_precision = 0.001,
+                                   double desired_precision = 0.001,
                                    double* achieved_precision = NULL,
                                    WarningList* warnings = NULL) const = 0;
       //> This method converts a given line and sample (pixels) in image
       //  space to a ground point.
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
+                                   double height,
                                    const std::vector<double> imageCovariance,
                                    std::vector<double>& groundCovariance,
-                                   const double& desired_precision = 0.001,
+                                   double desired_precision = 0.001,
                                    double* achieved_precision = NULL,
                                    WarningList* warnings = NULL) const = 0;
       //> This method converts a given line and sample (pixels) in //image space
@@ -110,7 +111,7 @@ public:
    virtual std::vector<double> imageToProximateImagingLocus(
       const ImageCoord& imagePt,
       const EcefCoord& groundPt,
-      const double& desired_precision = 0.001,
+      double desired_precision = 0.001,
       double* achieved_precision = NULL,
       WarningList* warnings = NULL) const = 0;
       //> The imageToProximateImagingLocus() method computes a proximate
@@ -123,7 +124,7 @@ public:
    virtual std::vector<double> imageToRemoteImagingLocus(
       const ImageCoord& imagePt,
       const EcefCoord& groundPt,
-      const double& desired_precision = 0.001,
+      double desired_precision = 0.001,
       double* achieved_precision = NULL,
       WarningList* warnings = NULL) const = 0;
       //> The imageToRemoteImagingLocus() method computes locus, a vector
@@ -203,7 +204,7 @@ public:
       //> The getSensorPosition() method returns the position of
       //  the physical sensor at the given position in the image.
       //<
-   virtual EcefCoord getSensorPosition(const double& time) const = 0;
+   virtual EcefCoord getSensorPosition(double time) const = 0;
       //> The getSensorPosition() method returns the position of
       //  the physical sensor at the given time of imaging.
       //<
@@ -214,7 +215,7 @@ public:
       //  The values returned in the EcefCoord represent velocity rather than
       //  position.
       //<
-   virtual EcefCoord getSensorVelocity(const double& time) const = 0;
+   virtual EcefCoord getSensorVelocity(double time) const = 0;
       //> The getSensorVelocity() method returns the velocity
       //  of the physical sensor at the given time of imaging.
       //
@@ -303,7 +304,7 @@ public:
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const EcefCoord& groundPt,
-                const double& desired_precision = 0.001,
+                double desired_precision = 0.001,
                 double* achieved_precision = NULL,
                 WarningList* warnings = NULL) = 0;
 
@@ -311,7 +312,7 @@ public:
                 int index,
                 const ImageCoord& imagePt,
                 const EcefCoord& groundPt,
-                const double& desired_precision = 0.001,
+                double desired_precision = 0.001,
                 double* achieved_precision = NULL,
                 WarningList* warnings = NULL) = 0;
       //> The computeSensorPartials() method calculates the partial
@@ -339,13 +340,13 @@ public:
 
    virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const EcefCoord& groundPt,
-                const double& desired_precision = 0.001,
+                double desired_precision = 0.001,
                 double* achieved_precision = NULL,
                 WarningList* warnings = NULL) = 0;
    virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const ImageCoord& imagePt,
                 const EcefCoord& groundPt,
-                const double& desired_precision = 0.001,
+                double desired_precision = 0.001,
                 double* achieved_precision = NULL,
                 WarningList* warnings = NULL) = 0;
       //> The computeAllSensorPartials() function calculates the
@@ -415,33 +416,40 @@ public:
 
    virtual std::vector<std::vector<double> > getCurrentCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          std::vector<const SensorModel*> SMs,
-          const std::vector<ImageCoord>& smImagePts) const = 0;
-      //> The getCurrentCovarianceMatrix() function returns a matrix
-      //  containing all elements of the error cross covariance matrix
-      //  between the instantiated sensor model and a specified second
-      //  sensor model (SM2). This data supplies the data to compute
-      //  cross covariance between images. Images may be correlated
-      //  because they are taken by the same sensor or from sensors on
-      //  the same platform. Images may also be correlated due to post
-      //  processing of the sensor models. The data returned here may
-      //  need to be supplemented with the single image covariance from
-      //  getCurrentParameterCovariance() and getUnmodeledError().
+          const SensorModel* comparisonModel,
+          const ImageCoord&  comparisonModelImagePt) const = 0;
+      //> The getCurrentCovarianceMatrix() function returns a matrix containing
+      //  all elements of the error cross covariance matrix between the
+      //  instantiated sensor model and a specified second sensor model
+      //  (comparisonModel) at the two given image points.  The convariance is
+      //  computed using the current model parameter values.
+      //
+      //  Images may be correlated because they are taken by the same sensor or
+      //  from sensors on the same platform. Images may also be correlated due
+      //  to post processing of the sensor models.
+      //
+      //  The data returned here may need to be supplemented with the single
+      //  image covariance from getCurrentParameterCovariance() and
+      //  getUnmodeledError().
       //<
 
    virtual std::vector<std::vector<double> > getOriginalCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          std::vector<const SensorModel*> SMs,
-          const std::vector<ImageCoord>& smImagePts) const = 0;
-      //> The getOriginalCovarianceMatrix() function returns a matrix
-      //  containing all elements of the error cross covariance matrix
-      //  between the instantiated sensor model and a specified second
-      //  sensor model (SM2). Images may be correlated because they
-      //  are taken by the same sensor or from sensors on the same
-      //  platform. Images may also be correlated due to post
-      //  processing of the sensor models. The data returned here may
-      //  need to be supplemented with the single image covariance from
-      //  getOriginalParameterCovariance() and getUnmodeledError().
+          const SensorModel* comparisonModel,
+          const ImageCoord&  comparisonModelImagePt) const = 0;
+      //> The getCurrentCovarianceMatrix() function returns a matrix containing
+      //  all elements of the error cross covariance matrix between the
+      //  instantiated sensor model and a specified second sensor model
+      //  (comparisonModel) at the two given image points.  The convariance is
+      //  computed using the original model parameter values.
+      //
+      //  Images may be correlated because they are taken by the same sensor or
+      //  from sensors on the same platform. Images may also be correlated due
+      //  to post processing of the sensor models.
+      //
+      //  The data returned here may need to be supplemented with the single
+      //  image covariance from getCurrentParameterCovariance() and
+      //  getUnmodeledError().
       //<
 
    virtual std::vector<double> getUnmodeledError(const ImageCoord& pt) const = 0;
