@@ -142,14 +142,13 @@ public:
       //> This method returns the starting coordinate in image space of the
       //  imaging operation.  If this is unknown, this may return (0,0).
       //<
-   virtual ImageCoord getImageSize() const = 0;
+   virtual ImageVector getImageSize() const = 0;
       //> This method returns the number of lines and samples in the imaging
       //  operation.  If this is unknown, the method may return (0,0).
       //
-      //  Here the returned image coordinate represents the size of the image
-      //  as an image space vector, not the maximum image coordinate.  Use
-      //  getValidHeightRange() to get the valid range of image coordinates for
-      //  this model.
+      //  Here the returned image vector represents the size of the image
+      //  as an image space vector.  Use getValidHeightRange() to get the valid
+      //  range of image coordinates for this model.
       //<
    virtual std::pair<double,double> getValidHeightRange() const = 0;
       //> The validHeightsRange() method returns the minimum and maximum
@@ -172,11 +171,9 @@ public:
       //  and the maximum coordinate is returned as the second element of the
       //  pair.
       //<
-   virtual EcefCoord getIlluminationDirection(const EcefCoord& gndPt) const = 0;
+   virtual EcefVector getIlluminationDirection(const EcefCoord& gndPt) const = 0;
       //> The getIlluminationDirection() method calculates the direction of
       //  illumination at the given ground position x, y, z.
-      //
-      //  The returned EcefCoord represents a vector, not an absolution position.
       //<
 
    //---
@@ -208,18 +205,18 @@ public:
       //> The getSensorPosition() method returns the position of
       //  the physical sensor at the given time of imaging.
       //<
-   virtual EcefCoord getSensorVelocity(const ImageCoord& pt) const = 0;
+   virtual EcefVector getSensorVelocity(const ImageCoord& pt) const = 0;
       //> The getSensorVelocity() method returns the velocity
       //  of the physical sensor at the given position in the image.
       //
-      //  The values returned in the EcefCoord represent velocity rather than
+      //  The values returned in the EcefVector represent velocity rather than
       //  position.
       //<
-   virtual EcefCoord getSensorVelocity(double time) const = 0;
+   virtual EcefVector getSensorVelocity(double time) const = 0;
       //> The getSensorVelocity() method returns the velocity
       //  of the physical sensor at the given time of imaging.
       //
-      //  The values returned in the EcefCoord represent velocity rather than
+      //  The values returned in the EcefVector represent velocity rather than
       //  position.
       //<
 
