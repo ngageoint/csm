@@ -82,6 +82,21 @@ namespace csm
    };
 
    //***
+   // STRUCT: ImageVector
+   //> The ImageCoord class represents a 2 dimensional vector in image space.
+   //  This can sometimes be used to represent the size of an image.
+   //<
+   //***
+   struct ImageVector
+   {
+   public:
+      double line;
+      double samp;
+
+      ImageVector(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
+   };
+
+   //***
    // STRUCT: EcefCoord
    //> The EcefCoord class represents a 3 dimensional location in Earth
    //  Centered Earth Fixed space.  Usually, it will represent an abolute
@@ -97,6 +112,23 @@ namespace csm
       double z;
 
       EcefCoord(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
+   };
+
+   //***
+   // STRUCT: EcefVector
+   //> The EcefVector class represents a 3 dimensional vector in Earth
+   //  Centered Earth Fixed space.  It can represent an ECEF location vector or
+   //  an ECEF velocity vector.
+   //<
+   //***
+   struct EcefVector
+   {
+   public:
+      double x;
+      double y;
+      double z;
+
+      EcefVector(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
    };
 
 } // namespace csm
