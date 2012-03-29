@@ -50,8 +50,7 @@ namespace csm {
 class CSM_EXPORT_API FourParameterCorrelationModel : public CovarianceModel
 {
 public:
-   FourParameterCorrelationModel(size_t numSMParams,
-                                    size_t numCPGroups);
+   FourParameterCorrelationModel(size_t numSMParams, size_t numCPGroups);
       //> Constructor.  The number of sensor model parameters and correlation
       //  parameter groups must be provided.
       //
