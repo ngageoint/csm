@@ -59,6 +59,8 @@ public:
       // * numCPGroups must be non-negative
       //<
 
+   virtual ~FourParameterCorrelationModel();
+
    size_t getNumSensorModelParameters() const;
       //> Returns the number of sensor model parameters. The returned value
       //  will be the same as the value of numSMParams passed to the

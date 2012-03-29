@@ -3,7 +3,7 @@
  * CSMFourParameterCorrelationModel class.  See the comments in the header file
  * for more information about the class interface.
  **/
-#define TSM_LIBRARY
+#define CSM_LIBRARY
 #include "CSMFourParameterCorrelationModel.h"
 #include "CSMError.h"
 
@@ -25,6 +25,10 @@ FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
 {
    // set the format string in the base class
    theFormat = "Four-parameter model (A, alpha, beta, tau)";
+}
+
+FourParameterCorrelationModel::~FourParameterCorrelationModel()
+{
 }
 
 size_t FourParameterCorrelationModel::getNumSensorModelParameters() const
