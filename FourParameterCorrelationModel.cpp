@@ -5,7 +5,7 @@
  **/
 #define TSM_LIBRARY
 #include "CSMFourParameterCorrelationModel.h"
-#include "TSMError.h"
+#include "CSMError.h"
 
 #ifdef IRIXN32
 #include "math.h"
@@ -15,102 +15,129 @@ using std::exp;
 using std::fabs;
 #endif
 
-CSMFourParameterCorrelationModel::CSMFourParameterCorrelationModel(int numSMParams, int numCPGroups) {
-	// make sure that the parameters are non-negative
-	if (numSMParams < 0)
-		throw TSMError(TSMError::BOUNDS, std::string("Number of sensor model parameters must be non-negative."), std::string("CSMFourParameterCorrelationModel::CSMFourParameterCorrelationModel"));
-	if (numCPGroups < 0)
-		throw TSMError(TSMError::BOUNDS, std::string("Number of correlation parameter groups must be non-negative."), std::string("CSMFourParameterCorrelationModel::CSMFourParameterCorrelationModel"));
+namespace csm {
 
-	// set the format string in the base class
-	_format = std::string("Four-parameter model (A, alpha, beta, tau)");
-
-	// initialize the vectors that will store the group mapping and correlation parameters
-	_groupMapping.resize(numSMParams, -1);
-	_corrParams.resize(numCPGroups);
+FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
+                                                             size_t numCPGroups)
+   :
+      theGroupMapping(numSMParams, -1),
+      theCorrParams(numSMParams)
+{
+   // set the format string in the base class
+   theFormat = "Four-parameter model (A, alpha, beta, tau)";
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::getNumSensorModelParameters(int& numSMParams) const {
-	// return the number of sensor model parameters by reference
-	numSMParams = static_cast<int>(_groupMapping.size());
-	return NULL;
+size_t FourParameterCorrelationModel::getNumSensorModelParameters() const
+{
+   return theGroupMapping.size();
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::getNumCorrelationParameterGroups(int& numCPGroups) const {
-	// return the number of correlation parameter groups by reference
-	numCPGroups = static_cast<int>(_corrParams.size());
-	return NULL;
+size_t FourParameterCorrelationModel::getNumCorrelationParameterGroups() const
+{
+   return theCorrParams.size();
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::getCorrelationParameterGroup(int smParamIndex, int& cpGroupIndex) const {
-	// make sure the index falls within the acceptable range
-	checkSensorModelParameterIndex(smParamIndex, std::string("CSMFourParameterCorrelationModel::getCorrelationParameterGroup"));
+int FourParameterCorrelationModel::getCorrelationParameterGroup(size_t smParamIndex) const
+{
+   // make sure the index falls within the acceptable range
+   checkSensorModelParameterIndex(smParamIndex, "getCorrelationParameterGroup");
 
-	// return the correlation parameter group index by reference
-	cpGroupIndex = _groupMapping[smParamIndex];
-	return NULL;
+   // return the correlation parameter group index by reference
+   return theGroupMapping[smParamIndex];
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::setCorrelationParameterGroup(int smParamIndex, int cpGroupIndex) {
-	// make sure the indices fall within the acceptable ranges
-	checkSensorModelParameterIndex(smParamIndex, std::string("CSMFourParameterCorrelationModel::setCorrelationParameterGroup"));
-	checkParameterGroupIndex(cpGroupIndex, std::string("CSMFourParameterCorrelationModel::setCorrelationParameterGroup"));
+void FourParameterCorrelationModel::setCorrelationParameterGroup(size_t smParamIndex,
+                                                                 size_t cpGroupIndex)
+{
+   // make sure the indices fall within the acceptable ranges
+   checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
+   checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
 
-	// set the group index for the given sensor model parameter
-	_groupMapping[smParamIndex] = cpGroupIndex;
-	return NULL;
+   // set the group index for the given sensor model parameter
+   theGroupMapping[smParamIndex] = cpGroupIndex;
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::setCorrelationGroupParameters(int cpGroupIndex, double a, double alpha, double beta, double tau) {
-	// make sure the index falls within the acceptable range
-	checkParameterGroupIndex(cpGroupIndex, std::string("CSMFourParameterCorrelationModel::setCorrelationGroupParameters"));
+void FourParameterCorrelationModel::setCorrelationGroupParameters(
+   size_t cpGroupIndex, double a, double alpha, double beta, double tau)
+{
+   static const char* const MODULE =
+      "csm::FourParameterCorrelationModel::setCorrelationGroupParameters";
 
-	// make sure the values of each correlation model parameter fall within acceptable ranges
-	if ((a < -1.0) || (a > 1.0))
-		throw TSMError(TSMError::BOUNDS, std::string("Correlation parameter A must be in the range [-1, 1]."), std::string("CSMFourParameterCorrelationModel::setCorrelationGroupParameters"));
-	if ((alpha < 0.0) || (alpha > 1.0))
-		throw TSMError(TSMError::BOUNDS, std::string("Correlation parameter alpha must be in the range [0, 1]."), std::string("CSMFourParameterCorrelationModel::setCorrelationGroupParameters"));
-	if (beta < 0.0)
-		throw TSMError(TSMError::BOUNDS, std::string("Correlation parameter beta must be non-negative."), std::string("CSMFourParameterCorrelationModel::setCorrelationGroupParameters"));
-	if (tau <= 0.0)
-		throw TSMError(TSMError::BOUNDS, std::string("Correlation parameter tau must be positive."), std::string("CSMFourParameterCorrelationModel::setCorrelationGroupParameters"));
+   // make sure the index falls within the acceptable range
+   checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
 
-	// store the correlation parameter values
-	_corrParams[cpGroupIndex] = CorrelationParameters(a, alpha, beta, tau);
-	return NULL;
+   // make sure the values of each correlation model parameter fall within acceptable ranges
+   if ((a < -1.0) || (a > 1.0))
+   {
+      throw Error(Error::BOUNDS,
+                  "Correlation parameter A must be in the range [-1, 1].",
+                  MODULE);
+   }
+
+   if ((alpha < 0.0) || (alpha > 1.0))
+   {
+      throw Error(Error::BOUNDS,
+                  "Correlation parameter alpha must be in the range [0, 1].",
+                  MODULE);
+   }
+
+   if (beta < 0.0)
+   {
+      throw Error(Error::BOUNDS,
+                  "Correlation parameter beta must be non-negative.",
+                  MODULE);
+   }
+
+   if (tau <= 0.0)
+   {
+      throw Error(Error::BOUNDS,
+                  "Correlation parameter tau must be positive.",
+                  MODULE);
+   }
+
+   // store the correlation parameter values
+   theCorrParams[cpGroupIndex] = CorrelationParameters(a, alpha, beta, tau);
 }
 
-TSMWarning* CSMFourParameterCorrelationModel::getCorrelationCoefficient(int cpGroupIndex, double deltaTime, double& corrCoeff) const {
-	// make sure the index falls within the acceptable range
-	checkParameterGroupIndex(cpGroupIndex, std::string("CSMFourParameterCorrelationModel::getCorrelationCoefficient"));
+double FourParameterCorrelationModel::getCorrelationCoefficient(
+   size_t cpGroupIndex, double deltaTime) const
+{
+   // make sure the index falls within the acceptable range
+   checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
 
-	// compute the value of the correlation coefficient
-	const CorrelationParameters& cp = _corrParams[cpGroupIndex];
-	corrCoeff = cp._alpha + cp._a * (1.0 - cp._alpha) * (1.0 + cp._beta) / (cp._beta + exp(fabs(deltaTime) / cp._tau));
+   // compute the value of the correlation coefficient
+   const CorrelationParameters& cp = theCorrParams[cpGroupIndex];
+   double corrCoeff = cp.theAlpha +
+                      (cp.theA * (1.0 - cp.theAlpha) * (1.0 + cp.theBeta) /
+                       (cp.theBeta + exp(fabs(deltaTime) / cp.theTau)));
 
-	// if necessary, clamp the coefficient value to the acceptable range
-	if (corrCoeff < -1.0)
-		corrCoeff = -1.0;
-	if (corrCoeff > 1.0)
-		corrCoeff = 1.0;
+   // if necessary, clamp the coefficient value to the acceptable range
+   if (corrCoeff < -1.0) return -1.0;
+   if (corrCoeff > 1.0)  return 1.0;
 
-	return NULL;
+   return corrCoeff;
 }
 
-void CSMFourParameterCorrelationModel::checkSensorModelParameterIndex(int smParamIndex, const std::string& functionName) const {
-	size_t i = static_cast<size_t>(smParamIndex);
-	if (i >= _groupMapping.size())
-		throw TSMError(TSMError::INDEX_OUT_OF_RANGE, std::string("Sensor model parameter index is out of range."), functionName);
+void FourParameterCorrelationModel::checkSensorModelParameterIndex(
+   size_t smParamIndex, const std::string& functionName) const
+{
+   if (smParamIndex >= theGroupMapping.size())
+   {
+      throw Error(Error::INDEX_OUT_OF_RANGE,
+                  "Sensor model parameter index is out of range.",
+                  "csm::FourParameterCorrelationModel::" + functionName);
+   }
 }
 
-void CSMFourParameterCorrelationModel::checkParameterGroupIndex(int groupIndex, const std::string& functionName) const {
-	size_t i = static_cast<size_t>(groupIndex);
-	if (i >= _corrParams.size())
-		throw TSMError(TSMError::INDEX_OUT_OF_RANGE, std::string("Correlation parameter group index is out of range."), functionName);
+void FourParameterCorrelationModel::checkParameterGroupIndex(
+   size_t groupIndex, const std::string& functionName) const
+{
+   if (groupIndex >= theCorrParams.size())
+   {
+      throw Error(Error::INDEX_OUT_OF_RANGE,
+                  "Correlation parameter group index is out of range.",
+                  "csm::FourParameterCorrelationModel::" + functionName);
+   }
 }
 
-CSMFourParameterCorrelationModel::CorrelationParameters::CorrelationParameters() : _a(0.0), _alpha(0.0), _beta(0.0), _tau(1.0) {
-}
-
-CSMFourParameterCorrelationModel::CorrelationParameters::CorrelationParameters(const double& a, const double& alpha, const double& beta, const double& tau) : _a(a), _alpha(alpha), _beta(beta), _tau(tau) {
-}
+} // namespace csm

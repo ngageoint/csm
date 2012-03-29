@@ -9,32 +9,36 @@
 //    Header for the covariance model used by the TSM.
 //
 //    LIMITATIONS:       None
-// 
-//                       Date          Author   Comment    
-//    SOFTWARE HISTORY:  
+//
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment   
+//     -----------   ------   -------
+//     29-Mar-2012   SCM      Refactored interface.
 //
 //    NOTES:
 //
 //#####################################################################
 
-#ifndef __TSMCOVARIANCE_MODEL_H
-#define __TSMCOVARIANCE_MODEL_H
+#ifndef __CSMCOVARIANCE_MODEL_H
+#define __CSMCOVARIANCE_MODEL_H
 
 #include <string>
-#include "TSMMisc.h"
+#include "CSMMisc.h"
 
-class TSM_EXPORT_API tsm_CovarianceModel
+namespace csm {
+
+class CSM_EXPORT_API CovarianceModel
 {
 public:
-   tsm_CovarianceModel ()         { _format = "UNKNOWN"; }
-   virtual ~tsm_CovarianceModel (){ _format.erase(); }
+   CovarianceModel() : theFormat("UNKNOWN") {}
+   virtual ~CovarianceModel() {}
 
-   void getFormat( std::string &format ) const { format = _format; }
+   const std::string& format() const { return theFormat; }
 
 protected:
-
-   std::string _format;
-
+   std::string theFormat;
 };
+
+} // namespace csm
 
 #endif
