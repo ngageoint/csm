@@ -61,6 +61,8 @@
 
 namespace csm {
 
+class CovarianceModel;
+
 class CSM_EXPORT_API SensorModel : public Model
 {
 public:
@@ -447,6 +449,13 @@ public:
       //  The data returned here may need to be supplemented with the single
       //  image covariance from getCurrentParameterCovariance() and
       //  getUnmodeledError().
+      //<
+
+   virtual CovarianceModel* getCovarianceModel() const = 0;
+      //> This method returns the covariance model for this sensor model.
+      //
+      //  A new object is created every time this method is called.  The client
+      //  is responsible for deallocating the object returned by this method.
       //<
 
    virtual std::vector<double> getUnmodeledError(const ImageCoord& pt) const = 0;
