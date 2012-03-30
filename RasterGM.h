@@ -59,6 +59,8 @@
 #include <vector>
 #include <string>
 
+#define CSM_SENSOR_MODEL_FAMILY "SensorModel"
+
 namespace csm {
 
 class CovarianceModel;
@@ -68,6 +70,8 @@ class CSM_EXPORT_API SensorModel : public Model
 public:
    SensorModel() {}
    virtual ~SensorModel() { }
+
+   virtual std::string getFamily() const { return CSM_SENSOR_MODEL_FAMILY; }
 
    //---
    // Core Photogrammetry
