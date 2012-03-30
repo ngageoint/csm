@@ -78,6 +78,7 @@ namespace csm
       double line;
       double samp;
 
+      ImageCoord() : line(0.0), samp(0.0) {}
       ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
@@ -93,6 +94,7 @@ namespace csm
       double line;
       double samp;
 
+      ImageVector() : line(0.0), samp(0.0) {}
       ImageVector(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
@@ -111,6 +113,7 @@ namespace csm
       double y;
       double z;
 
+      EcefCoord() : x(0.0), y(0.0), z(0.0) {}
       EcefCoord(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
    };
 
@@ -128,6 +131,7 @@ namespace csm
       double y;
       double z;
 
+      EcefVector() : x(0.0), y(0.0), z(0.0) {}
       EcefVector(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
    };
 
