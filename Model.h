@@ -40,6 +40,10 @@ public:
    //---
    // Basic model information
    //---
+   virtual std::string getFamily() const = 0;
+      //> This method returns the family of sensor model this object is.  This
+      //  is used to help determine what derived class this object is.
+      //<
    virtual int getVersion() const = 0;
       //> This method returns the version of the CSM that the sensor model
       //  complies with.
@@ -112,7 +116,7 @@ public:
    //---
    // Sensor Model State
    //---
-   virtual std::string getSensorModelState() const = 0;
+   virtual std::string getModelState() const = 0;
       //> This method returns the current state of the model in an
       //  intermediate form. This intermediate form can then processed,
       //  for example, by saving to file so that this model
