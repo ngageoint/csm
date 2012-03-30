@@ -7,7 +7,7 @@
 //    DESCRIPTION:
 //
 //    Header for abstract base class that is to provide a common interface from
-//    which all Tactical Sensor Model (CSM) plugin factories shall inherit.
+//    which all Community Sensor Model (CSM) plugin factories shall inherit.
 //
 //    LIMITATIONS:       None
 //
@@ -54,7 +54,7 @@
 
 namespace csm {
 
-class SensorModel;
+class Model;
 class Plugin;
 
 typedef std::list<const Plugin*> PluginList;
@@ -109,50 +109,50 @@ public:
       //<
 
    //---
-   // Sensor Model Availability
+   // Model Availability
    //---
-   virtual int getNSensorModels() const = 0;
-   virtual std::string getSensorModelName(int sensor_model_index) const = 0;
+   virtual size_t getNumModels() const = 0;
+   virtual std::string getModelName(size_t modelIndex) const = 0;
 
    //---
-   // Sensor Model Descriptors
+   // Model Descriptors
    //---
-   virtual int getSensorModelVersion(const std::string& sensor_model_name) const = 0;
+   virtual int getModelVersion(const std::string& modelName) const = 0;
 
    //---
-   // Sensor Model Construction
+   // Model Construction
    //---
-   virtual bool canSensorModelBeConstructedFromState(
-      const std::string& sensor_model_name,
-      const std::string& sensor_model_state,
+   virtual bool canModelBeConstructedFromState(
+      const std::string& modelName,
+      const std::string& modelState,
       WarningList* warnings = NULL) const = 0;
-   virtual bool canSensorModelBeConstructedFromISD(
-      const Isd& image_support_data,
-      const std::string& sensor_model_name,
-      WarningList* warnings = NULL) const = 0;
-
-   virtual SensorModel* constructSensorModelFromState(
-      const std::string& sensor_model_state,
-      WarningList* warnings = NULL) const = 0;
-   virtual SensorModel* constructSensorModelFromISD(
-      const Isd& image_support_data,
-      const std::string& sensor_model_name,
+   virtual bool canModelBeConstructedFromISD(
+      const Isd& imageSupportData,
+      const std::string& modelName,
       WarningList* warnings = NULL) const = 0;
 
-   virtual std::string getSensorModelNameFromSensorModelState(
-      const std::string& sensor_model_state,
+   virtual Model* constructModelFromState(
+      const std::string& modelState,
+      WarningList* warnings = NULL) const = 0;
+   virtual Model* constructModelFromISD(
+      const Isd& imageSupportData,
+      const std::string& modelName,
+      WarningList* warnings = NULL) const = 0;
+
+   virtual std::string getModelNameFromModelState(
+      const std::string& modelState,
       WarningList* warnings = NULL) const = 0;
 
    //---
    // Image Support Data Conversions
    //---
-   virtual bool canISDBeConvertedToSensorModelState(
-      const Isd& image_support_data,
-      const std::string& sensor_model_name,
+   virtual bool canISDBeConvertedToModelState(
+      const Isd& imageSupportData,
+      const std::string& modelName,
       WarningList* warnings = NULL) const = 0;
-   virtual std::string convertISDToSensorModelState(
-      const Isd& image_support_data,
-      const std::string& sensor_model_name,
+   virtual std::string convertISDToModelState(
+      const Isd& imageSupportData,
+      const std::string& modelName,
       WarningList* warnings = NULL) const = 0;
 
 protected:
