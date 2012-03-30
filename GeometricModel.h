@@ -99,8 +99,8 @@ public:
       //  space to a ground point.
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
-                                   double height,
                                    const std::vector<double> imageCovariance,
+                                   double height, double heightVariance,
                                    std::vector<double>& groundCovariance,
                                    double desired_precision = 0.001,
                                    double* achieved_precision = NULL,
@@ -125,7 +125,6 @@ public:
 
    virtual std::vector<double> imageToRemoteImagingLocus(
       const ImageCoord& imagePt,
-      const EcefCoord& groundPt,
       double desired_precision = 0.001,
       double* achieved_precision = NULL,
       WarningList* warnings = NULL) const = 0;
