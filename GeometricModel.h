@@ -85,7 +85,7 @@ public:
       //<
 
    virtual ImageCoord groundToImage(const EcefCoord& groundPt,
-                                    const std::vector<double> groundCovariance,
+                                    const std::vector<double>& groundCovariance,
                                     std::vector<double>& imageCovariance,
                                     double desired_precision = 0.001,
                                     double* achieved_precision = NULL,
@@ -103,7 +103,7 @@ public:
       //  space to a ground point.
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
-                                   const std::vector<double> imageCovariance,
+                                   const std::vector<double>& imageCovariance,
                                    double height, double heightVariance,
                                    std::vector<double>& groundCovariance,
                                    double desired_precision = 0.001,
@@ -416,10 +416,12 @@ public:
       //  geometric correction switch given by index.
       //<
 
-   virtual std::vector<std::vector<double> > getCurrentCrossCovarianceMatrix(
+   typedef std::vector<const SensorModel*> SensorModelList;
+   virtual std::vector<double> getCurrentCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          const SensorModel* comparisonModel,
-          const ImageCoord&  comparisonModelImagePt) const = 0;
+          const SensorModel& comparisonModel,
+          const ImageCoord&  comparisonModelImagePt,
+          const SensorModelList& otherModels = SensorModelList()) const = 0;
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
@@ -430,15 +432,29 @@ public:
       //  from sensors on the same platform. Images may also be correlated due
       //  to post processing of the sensor models.
       //
+      //  The returned vector will logically be a two dimensional matrix of
+      //  covariances, though for simplicity it is stored in a one dimensional
+      //  vector (STL has no two dimensional structure).  The height (number of
+      //  rows) of this matrix is the number of parameters on the current
+      //  model, and the width (number of columns) is the number of parameters
+      //  on the comparison model.  Thus, to find the convariance between p1 on
+      //  this model and p2 on the comparison model, example the index (N*p1 +
+      //  p2) in the returned vector (where N is the number of parameters in
+      //  the comparison model, retreived from getNumParameters()).
+      //
       //  The data returned here may need to be supplemented with the single
       //  image covariance from getCurrentParameterCovariance() and
       //  getUnmodeledError().
+      //
+      //  The otherModels optional list may be passed if there are additional
+      //  sensor models that influence the covariance computation.
       //<
 
-   virtual std::vector<std::vector<double> > getOriginalCrossCovarianceMatrix(
+   virtual std::vector<double> getOriginalCrossCovarianceMatrix(
           const ImageCoord imagePt,
-          const SensorModel* comparisonModel,
-          const ImageCoord&  comparisonModelImagePt) const = 0;
+          const SensorModel& comparisonModel,
+          const ImageCoord&  comparisonModelImagePt,
+          const SensorModelList& otherModels = SensorModelList()) const = 0;
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
@@ -449,9 +465,22 @@ public:
       //  from sensors on the same platform. Images may also be correlated due
       //  to post processing of the sensor models.
       //
+      //  The returned vector will logically be a two dimensional matrix of
+      //  covariances, though for simplicity it is stored in a one dimensional
+      //  vector (STL has no two dimensional structure).  The height (number of
+      //  rows) of this matrix is the number of parameters on the current
+      //  model, and the width (number of columns) is the number of parameters
+      //  on the comparison model.  Thus, to find the convariance between p1 on
+      //  this model and p2 on the comparison model, example the index (N*p1 +
+      //  p2) in the returned vector (where N is the number of parameters in
+      //  the comparison model, retreived from getNumParameters()).
+      //
       //  The data returned here may need to be supplemented with the single
       //  image covariance from getCurrentParameterCovariance() and
       //  getUnmodeledError().
+      //
+      //  The otherModels optional list may be passed if there are additional
+      //  sensor models that influence the covariance computation.
       //<
 
    virtual CovarianceModel* getCovarianceModel() const = 0;
