@@ -13,6 +13,7 @@ LIBS=-lm -ldl
 MKDIR=mkdir
 CP=cp -f
 LN=ln -s
+TAR=tar
 
 LD=$(CC)
 
@@ -36,3 +37,6 @@ install::
 
 clean::
 	$(RM) $(OBJS) $(LIBRARY) *~
+
+package::
+	$(TAR) -czvf csm-reform.$(shell date '+%Y%m%d').tar.gz Makefile* CSM*
