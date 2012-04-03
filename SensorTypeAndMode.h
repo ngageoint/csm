@@ -25,7 +25,8 @@
 
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class SensorTypeAndMode
 {

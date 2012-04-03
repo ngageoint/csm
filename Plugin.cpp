@@ -34,7 +34,8 @@
 # include <pthread.h>
 #endif
 
-namespace csm {
+namespace csm
+{
 
 PluginList*   Plugin::theList = NULL;
 Plugin::Impl* Plugin::theImpl = NULL;

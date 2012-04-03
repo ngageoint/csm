@@ -36,7 +36,8 @@
 #include <vector>
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Des
 {

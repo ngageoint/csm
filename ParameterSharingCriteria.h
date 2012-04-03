@@ -27,7 +27,8 @@
 
 #include "CSMMisc.h"
 
-namespace csm {
+namespace csm
+{
 
 enum SharingType
 //>

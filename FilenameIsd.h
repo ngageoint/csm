@@ -9,7 +9,7 @@
 //    Header for the Filename ISD class derived from the csm_ISD base class.
 //    ISD is encapsulated in a C++ class for transfer through the CSM
 //    interface. This class is designed allow a std::string indicating the name
-//    of a file that contains ISD. The field _filename should be set to the
+//    of a file that contains ISD. The field filename should be set to the
 //    full path name of the file.
 //
 //    LIMITATIONS:       None
@@ -35,7 +35,8 @@
 
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API FilenameIsd : public Isd
 {
@@ -44,7 +45,7 @@ public:
       : Isd("FILENAME"), theFilename(fn) {}
    virtual ~FilenameIsd() {}
 
-   std::string theFilename;
+   std::string filename;
 };
 
 } // namespace csm

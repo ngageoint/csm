@@ -28,7 +28,8 @@
 #include <string>
 #include <list>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Warning
 {

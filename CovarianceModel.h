@@ -1,12 +1,12 @@
 //##################################################################
 //
-//    FILENAME:   TSMCovarianceModel.h
+//    FILENAME:   CSMCovarianceModel.h
 //
 //    CLASSIFICATION:    UNCLASSIFIED
 //
 //    DESCRIPTION:
 //
-//    Header for the covariance model used by the TSM.
+//    Header for the covariance model used by the CSM.
 //
 //    LIMITATIONS:       None
 //
@@ -25,7 +25,8 @@
 #include <string>
 #include "CSMMisc.h"
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API CovarianceModel
 {

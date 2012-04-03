@@ -52,7 +52,8 @@
 #include <list>
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class Model;
 class Plugin;
@@ -113,6 +114,17 @@ public:
    //---
    virtual size_t getNumModels() const = 0;
    virtual std::string getModelName(size_t modelIndex) const = 0;
+   virtual std::string getModelFamily(size_t modelIndex) const = 0;
+      //> This method returns the model "family" for the model at the given
+      //  index.  This should be the same as what is returned from
+      //  csm::Model::getFamily() for the model.
+      //
+      //  SETs can use this information to exclude models when searching for a
+      //  model to create.
+      //
+      //  The model index must be less than getNumModels(), or an exception
+      //  will be thrown.
+      //<
 
    //---
    // Model Descriptors

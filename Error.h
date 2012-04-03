@@ -29,7 +29,8 @@
 #include "CSMMisc.h"
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Error : public std::exception
 {

@@ -30,6 +30,8 @@
 # else
 #  define CSM_EXPORT_API __declspec(dllimport)
 # endif
+#elif LINUX_BUILD
+# define CSM_EXPORT_API __atribute__ ((visibility("default")))
 #else
 #  define CSM_EXPORT_API
 #endif
@@ -39,11 +41,14 @@ namespace csm
    // The getVersion() and getCSMVersion() methods should use CURRENT_CSM_VERSION to
    // return the CSM API version that the sensor model/plugin was written to.
    // The CSM 3.00 API is specified by version equal to 3000.
-   static const int CURRENT_CSM_VERSION = 3000;
-   static const int TEMP_STRING_LENGTH = 2048;
-   static const int MAX_NAME_LENGTH = 40;
-   static const int MAX_FUNCTION_NAME_LENGTH = 80;
-   static const int MAX_MESSAGE_LENGTH = 512;
+   enum
+   {
+      CURRENT_CSM_VERSION = 3000,
+      TEMP_STRING_LENGTH = 2048,
+      MAX_NAME_LENGTH = 40,
+      MAX_FUNCTION_NAME_LENGTH = 80,
+      MAX_MESSAGE_LENGTH = 512
+   }
 
    enum ParamType
    {
@@ -104,6 +109,9 @@ namespace csm
    //  Centered Earth Fixed space.  Usually, it will represent an abolute
    //  point, but some uses of this class in the SensorModel class call for it
    //  to represent an ECEF location vector or an ECEF velocity vector.
+   //
+   //  The units of the doubles are meters when the object is used as a
+   //  location, and meters/second when used as a velocity.
    //<
    //***
    struct EcefCoord

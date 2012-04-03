@@ -45,7 +45,8 @@
 
 #include <vector>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API FourParameterCorrelationModel : public CovarianceModel
 {

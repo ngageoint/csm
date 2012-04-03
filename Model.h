@@ -7,7 +7,7 @@
 //    DESCRIPTION:
 //
 //    Header for abstract base class that is to provide a common interface from
-//    which all Tactical Sensor Model (CSM) plugin models will inherit.
+//    which all Community Sensor Model (CSM) plugin models will inherit.
 //
 //    LIMITATIONS:       None
 //
@@ -29,7 +29,8 @@
 #include "CSMSensorTypeAndMode.h"
 #include <string>
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Model
 {
@@ -45,8 +46,9 @@ public:
       //  is used to help determine what derived class this object is.
       //<
    virtual int getVersion() const = 0;
-      //> This method returns the version of the CSM that the sensor model
-      //  complies with.
+      //> This method returns the version of the model code.  Larger numbers
+      //  imply later versions.  Otherwise, the exact meaning of this number is
+      //  implementation specific.
       //<
    virtual std::string getModelType() const = 0;
       //> This method returns the type of model implemented by the derived
@@ -111,6 +113,13 @@ public:
    virtual void setReferencePoint(const EcefCoord& groundPt) = 0;
       //> This method sets the ground point indicating the general location
       //  of the image.
+      //<
+   virtual std::string getReferenceDateAndTime() const = 0;
+      //> This method returns the time in seconds at which the specified
+      //  pixel was imaged. The time provide is relative to the reference
+      //  date and time given by the getReferenceDateAndTime() method and
+      //  can be used to represent time offsets within the trajectory
+      //  associated with the given image.
       //<
 
    //---

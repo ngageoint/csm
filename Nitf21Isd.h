@@ -33,7 +33,8 @@
 
 #include "CSMISDNITF20.h"
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Nitf21Isd : public NitfIsd
 {

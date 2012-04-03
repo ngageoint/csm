@@ -8,7 +8,7 @@
 //
 //    Header for the ISD base class. ISD is encapsulated in a C++ class for
 //    transfer through the CSM interface. ISD is passed as a pointer to a
-//    simple ISD base class (for example, csm_ISD *isd). i
+//    simple ISD base class (for example, csm::Isd *isd).
 //
 //    LIMITATIONS:       None
 //
@@ -32,7 +32,8 @@
 
 #include "CSMMisc.h"
 
-namespace csm {
+namespace csm
+{
 
 class CSM_EXPORT_API Isd
 {

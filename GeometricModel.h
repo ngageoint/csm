@@ -61,7 +61,8 @@
 
 #define CSM_SENSOR_MODEL_FAMILY "SensorModel"
 
-namespace csm {
+namespace csm
+{
 
 class CovarianceModel;
 
@@ -152,7 +153,7 @@ public:
       //  operation.  If this is unknown, the method may return (0,0).
       //
       //  Here the returned image vector represents the size of the image
-      //  as an image space vector.  Use getValidHeightRange() to get the valid
+      //  as an image space vector.  Use getValidImageRange() to get the valid
       //  range of image coordinates for this model.
       //<
    virtual std::pair<double,double> getValidHeightRange() const = 0;
@@ -188,13 +189,6 @@ public:
       //> This method returns a unique identifer to indicate which
       //  trajectory was used to acquire the image. This ID is unique for
       //  each sensor type on an individual path.
-      //<
-   virtual std::string getReferenceDateAndTime() const = 0;
-      //> This method returns the time in seconds at which the specified
-      //  pixel was imaged. The time provide is relative to the reference
-      //  date and time given by the getReferenceDateAndTime() method and
-      //  can be used to represent time offsets within the trajectory
-      //  associated with the given image.
       //<
    virtual double getImageTime(const ImageCoord& pt) const = 0;
       //> The getImageTime() method returns the time in seconds at which
@@ -303,6 +297,9 @@ public:
       //<
 
    typedef std::pair<double, double> SensorPartials;
+      //> The first element of this pair is the line component, and the second
+      //  element is the sample component.
+      //<
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const EcefCoord& groundPt,
