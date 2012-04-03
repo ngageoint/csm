@@ -42,7 +42,7 @@ class CSM_EXPORT_API FilenameIsd : public Isd
 {
 public:
    explicit FilenameIsd(const std::string& fn = "")
-      : Isd("FILENAME"), theFilename(fn) {}
+      : Isd("FILENAME"), filename(fn) {}
    virtual ~FilenameIsd() {}
 
    std::string filename;

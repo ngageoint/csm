@@ -48,7 +48,7 @@ namespace csm
       MAX_NAME_LENGTH = 40,
       MAX_FUNCTION_NAME_LENGTH = 80,
       MAX_MESSAGE_LENGTH = 512
-   }
+   };
 
    enum ParamType
    {

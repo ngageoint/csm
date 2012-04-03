@@ -55,8 +55,8 @@ public:
       : theType(SHARE_BY_DATE_TIME_MATCH), theTimeLimit(tl) {}
 
    // data access
-   SharingType type() const { return theType; };
-   double timeLimit() const {return theTimeLimit;};
+   SharingType type() const { return theType; }
+   double timeLimit() const {return theTimeLimit;}
 
 private:
    SharingType theType;

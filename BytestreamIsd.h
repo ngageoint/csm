@@ -40,13 +40,19 @@ namespace csm
 class CSM_EXPORT_API BytestreamIsd : public Isd
 {
 public:
-   explicit BytestreamIsd(const std::string& data)
-      : Isd("BYTESTREAM"), theData(data) {}
+   explicit BytestreamIsd(const std::string& aData)
+      : Isd("BYTESTREAM"), data(aData) {}
    virtual ~BytestreamIsd() {}
 
    std::string filename;
+      //> This data member is the optional source filename for the ISD data.
+      //  It may be an empty string if the data did not come from a file.
+      //<
 
    std::string data;
+      //> This data member is the ISD data to be used in construting the CSM
+      //  model.  It must be supplied.
+      //<
 };
 
 } // namespace csm
