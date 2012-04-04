@@ -42,10 +42,14 @@ class CSM_EXPORT_API FilenameIsd : public Isd
 {
 public:
    explicit FilenameIsd(const std::string& fn = "")
-      : Isd("FILENAME"), filename(fn) {}
+      : Isd("FILENAME"), theFilename(fn) {}
    virtual ~FilenameIsd() {}
 
-   std::string filename;
+   const std::string filename() const { return theFilename; }
+   void setFilename(const std::string& fn) { theFilename = fn; }
+
+private:
+   std::string theFilename;
 };
 
 } // namespace csm
