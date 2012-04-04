@@ -153,13 +153,20 @@ class CSM_EXPORT_API NitfIsd : public Isd
 public:
    virtual ~NitfIsd() {}
 
-protected:
-   NitfIsd(const std::string& format, const std::string& filename)
-      : Isd(format,filename),theFileHeader(),theFileTREs(),theFileDESs(),theImages() {}
-
    const std::string& fileHeader() const { return theFileHeader; }
       //> This method returns the entire image subheader, including a copy of
       //  the TRE data.
+      //<
+
+   const std::vector<Tre> fileTREs() const { return theFileTREs; }
+      //> This method returns the parsed fileheader tagged record extension
+      //  objects.
+      //<
+   const std::vector<Des> fileDESs() const { return theFileDESs; }
+      //> This method returns the data extension segment objects in this NITF.
+      //<
+   const std::vector<Image> images() const { return theImages; }
+      //> This method returns the image objects in this NITF.
       //<
 
    void setFileHeader(const std::string& head) { theFileHeader = head; }
@@ -197,6 +204,10 @@ protected:
    void setImages(const std::vector<Image>& images) { theImages = images; }
       //> This method sets the DES list to the given vector.
       //<
+
+protected:
+   NitfIsd(const std::string& format, const std::string& filename)
+      : Isd(format,filename),theFileHeader(),theFileTREs(),theFileDESs(),theImages() {}
 
 private:
    std::string theFileHeader;
