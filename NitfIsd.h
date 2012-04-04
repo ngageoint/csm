@@ -1,15 +1,15 @@
 //#############################################################################
 //
-//    FILENAME:   CSMISDNITF20.h
+//    FILENAME:   CSMISDNITF.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the NITF 2.0 ISD class derived from the csm_ISD base class.
-//    ISD is encapsulated in a C++ class for transfer through the CSM
-//    interface. ISD is passed as a pointer to a simple ISD base class
-//    (for example, csm_ISD *isd).
+//    Header for the NITF 2.0 and 2.1 ISD classes derived from the csm::Isd
+//    base class.  ISD is encapsulated in a C++ class for transfer through the
+//    CSM interface. ISD is passed as a pointer to a simple ISD base class (for
+//    example, csm::Isd* isd).
 //
 //    LIMITATIONS:       None
 //
