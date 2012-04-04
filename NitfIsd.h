@@ -27,8 +27,8 @@
 //
 //#############################################################################
 
-#ifndef __csm_ISDNITF20_H
-#define __csm_ISDNITF20_H
+#ifndef __csm_ISDNITF_H
+#define __csm_ISDNITF_H
 
 #include "CSMImageSupportData.h"
 #include "CSMMisc.h"
