@@ -6,11 +6,10 @@
 //
 //    DESCRIPTION:
 //
-//    Header for the ByteStream ISD class derived from the csm_ISD base class.
+//    Header for the ByteStream ISD class derived from the csm::Isd base class.
 //    ISD is encapsulated in a C++ class for transfer through the CSM
 //    interface. This class is designed to hold ISD in a std::string of unspecified
-//    format. The field "data" is set with the ISD.  The field "filename" may
-//    be set with the source filename.
+//    format. The field "data" is set with the ISD.
 //
 //    LIMITATIONS:       None
 //
