@@ -26,10 +26,8 @@
 #ifdef _WIN32          //exports the symbols to be used (KJR)
 # include <windows.h>
 # include "CSMSensorModel.h"
-# include "CSMISDFilename.h"
 # include "CSMISDByteStream.h"
 # include "CSMISDNITF20.h"
-# include "CSMISDNITF21.h"
 #else
 # include <pthread.h>
 #endif
