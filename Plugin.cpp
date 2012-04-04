@@ -27,7 +27,7 @@
 # include <windows.h>
 # include "CSMSensorModel.h"
 # include "CSMISDByteStream.h"
-# include "CSMISDNITF20.h"
+# include "CSMISDNITF.h"
 #else
 # include <pthread.h>
 #endif
