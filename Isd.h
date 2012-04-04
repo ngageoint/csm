@@ -38,15 +38,41 @@ namespace csm
 class CSM_EXPORT_API Isd
 {
 public:
-   Isd() : theFormat("UNKNOWN") {}
+   Isd() : theFormat("UNKNOWN"), theFilename() {}
+      //> This constructor makes an "unknown" image support data object.  No
+      //  informatino about the image will be available in this mode.
+      //<
+
+   explicit Isd(const std::string& filename)
+      : theFormat("FILENAME"), theFilename(filename) {}
+      //> This constructor makes a "filename" image support data object.  The
+      //  only data available in this mode is the name of the file.
+      //<
+
    virtual ~Isd() {}
 
    const std::string& format() const { return theFormat; }
+      //> This method returns the format of the image support data.  Each
+      //  class derived from csm::Isd has a different format string.
+      //<
+
+   const std::string filename() const { return theFilename; }
+      //> This method returns the filename associated with the image support
+      //  data, if any.  If there is no filename, then this string will be
+      //  empty.
+      //<
+   void setFilename(const std::string& fn) { theFilename = fn; }
+      //> This method sets the filename associated with the image support
+      //  data.  If there is no associated filename, then an empty string
+      //  should be used.
+      //<
 
 protected:
-   explicit Isd(const std::string& format) : theFormat(format) {}
+   explicit Isd(const std::string& format, const std::string& filename)
+      : theFormat(format), theFilename(filename) {}
 
    std::string theFormat;
+   std::string theFilename;
 };
 
 } // namespace csm
