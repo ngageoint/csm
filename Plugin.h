@@ -48,6 +48,7 @@
 #include "CSMMisc.h"
 #include "CSMError.h"
 #include "CSMWarning.h"
+#include "CSMVersion.h"
 
 #include <list>
 #include <string>
@@ -104,7 +105,7 @@ public:
    //---
    virtual std::string getManufacturer() const = 0;
    virtual std::string getReleaseDate() const = 0;
-   virtual int getCSMVersion() const = 0;
+   virtual Version getCSMVersion() const = 0;
       //> This method returns the CSM API version that the plug-in was written
       //  to.
       //<
