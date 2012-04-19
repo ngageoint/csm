@@ -2,7 +2,7 @@
 
 HEADERS=CSMCovarianceModel.h CSMFourParameterCorrelationModel.h CSMError.h CSMImageSupportData.h CSMISDByteStream.h CSMISDNITF.h CSMMisc.h CSMModel.h CSMParameterSharing.h CSMPlugin.h CSMSensorModel.h CSMSensorTypeAndMode.h CSMWarning.h
 
-OBJS=CSMPlugin.o CSMFourParameterCorrelationModel.o
+OBJS=CSMPlugin.o CSMFourParameterCorrelationModel.o CSMVersion.o
 
 LIBNAME=libcsmapi
 LIBVERSION=3
