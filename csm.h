@@ -36,39 +36,31 @@
 #  define CSM_EXPORT_API
 #endif
 
+// The getVersion() and getCSMVersion() methods should use CURRENT_CSM_VERSION to
+// return the CSM API version that the sensor model/plugin was written to.
+#define CURRENT_CSM_VERSION csm::Version(3, 0);
+   
 namespace csm
 {
-   // The getVersion() and getCSMVersion() methods should use CURRENT_CSM_VERSION to
-   // return the CSM API version that the sensor model/plugin was written to.
-   // The CSM 3.00 API is specified by version equal to 3000.
-   enum
-   {
-      CURRENT_CSM_VERSION = 3000,
-      TEMP_STRING_LENGTH = 2048,
-      MAX_NAME_LENGTH = 40,
-      MAX_FUNCTION_NAME_LENGTH = 80,
-      MAX_MESSAGE_LENGTH = 512
-   };
-
    enum ParamType
+   //>
+   // This enumeration lists the possible parameter or characteristic
+   //  types as follows.
+   //
+   //  NONE       - Parameter value has not yet been initialized.
+   //  FICTITIOUS - Parameter value has been calculated by resection
+   //               or other means.
+   //  REAL       - Parameter value has been measured or read from
+   //               support data.
+   //  EXACT      - Parameter value has been specified and is assumed to
+   //               have no uncertainty.
    {
       NONE,
       FICTITIOUS,
       REAL,
       EXACT
    };
-//>
-// This enumeration lists the possible parameter or characteristic
-//  types as follows.
-//
-//  NONE       - Parameter value has not yet been initialized.
-//  FICTITIOUS - Parameter value has been calculated by resection
-//               or other means.
-//  REAL       - Parameter value has been measured or read from
-//               support data.
-//  EXACT      - Parameter value has been specified and is assumed to
-//               have no uncertainty.
-//<
+   //<
 
    //***
    // STRUCT: ImageCoord
