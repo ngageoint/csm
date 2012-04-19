@@ -105,7 +105,8 @@ public:
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
                                    const std::vector<double>& imageCovariance,
-                                   double height, double heightVariance,
+                                   double height,
+                                   double heightVariance,
                                    std::vector<double>& groundCovariance,
                                    double desired_precision = 0.001,
                                    double* achieved_precision = NULL,
@@ -146,11 +147,11 @@ public:
    //---
    virtual ImageCoord getImageStart() const = 0;
       //> This method returns the starting coordinate in image space of the
-      //  imaging operation.  If this is unknown, this may return (0,0).
+      //  imaging operation.
       //<
    virtual ImageVector getImageSize() const = 0;
       //> This method returns the number of lines and samples in the imaging
-      //  operation.  If this is unknown, the method may return (0,0).
+      //  operation.
       //
       //  Here the returned image vector represents the size of the image
       //  as an image space vector.  Use getValidImageRange() to get the valid
@@ -164,6 +165,9 @@ public:
       //
       //  The minimum height is returned as the first element of the pair and
       //  the maximum height is returned as the second element of the pair.
+      //
+      //  If there are no limits defined for the current model,
+      //  (-99999,99999) will be returned.
       //<
    virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
       //> The validImageRange() method returns the minimum and maximum
@@ -415,15 +419,13 @@ public:
 
    typedef std::vector<const SensorModel*> SensorModelList;
    virtual std::vector<double> getCurrentCrossCovarianceMatrix(
-          const ImageCoord imagePt,
           const SensorModel& comparisonModel,
-          const ImageCoord&  comparisonModelImagePt,
           const SensorModelList& otherModels = SensorModelList()) const = 0;
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
-      //  (comparisonModel) at the two given image points.  The convariance is
-      //  computed using the current model parameter values.
+      //  (comparisonModel).  The convariance is computed using the current
+      //  model parameter values.
       //
       //  Images may be correlated because they are taken by the same sensor or
       //  from sensors on the same platform. Images may also be correlated due
@@ -448,15 +450,13 @@ public:
       //<
 
    virtual std::vector<double> getOriginalCrossCovarianceMatrix(
-          const ImageCoord imagePt,
           const SensorModel& comparisonModel,
-          const ImageCoord&  comparisonModelImagePt,
           const SensorModelList& otherModels = SensorModelList()) const = 0;
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
-      //  (comparisonModel) at the two given image points.  The convariance is
-      //  computed using the original model parameter values.
+      //  (comparisonModel).  The convariance is computed using the original
+      //  model parameter values.
       //
       //  Images may be correlated because they are taken by the same sensor or
       //  from sensors on the same platform. Images may also be correlated due
@@ -510,7 +510,7 @@ public:
 #ifdef TESTAPIVERSION
    virtual std::string testAPIVersionSubclass() const = 0;
       //> The testAPIVersionSubclass method provides a means to
-      //  demostrate and test the subclass backward compatibility
+      //  demonstrate and test the subclass backward compatibility
       //  for an API release. This method is not a member of a
       //  standard API compliant released sensor model, but is
       //  the sole addition to the API release that creates the
