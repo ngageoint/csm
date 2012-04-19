@@ -27,6 +27,7 @@
 #include "CSMMisc.h"
 #include "CSMWarning.h"
 #include "CSMSensorTypeAndMode.h"
+#include "CSMVersion.h"
 #include <string>
 
 namespace csm
@@ -45,10 +46,10 @@ public:
       //> This method returns the family of sensor model this object is.  This
       //  is used to help determine what derived class this object is.
       //<
-   virtual int getVersion() const = 0;
-      //> This method returns the version of the model code.  Larger numbers
-      //  imply later versions.  Otherwise, the exact meaning of this number is
-      //  implementation specific.
+   virtual Version getVersion() const = 0;
+      //> This method returns the version of the model code.  The Version
+      //  object can be compared to other Version objects with its comparison
+      //  operators.
       //<
    virtual std::string getModelType() const = 0;
       //> This method returns the type of model implemented by the derived
