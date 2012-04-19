@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMSensorModel.h
+//    FILENAME:          CSMFourParameterCorrelationModel.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -29,7 +29,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface.
 //
@@ -62,18 +62,18 @@ public:
 
    virtual ~FourParameterCorrelationModel();
 
-   size_t getNumSensorModelParameters() const;
+   virtual size_t getNumSensorModelParameters() const;
       //> Returns the number of sensor model parameters. The returned value
       //  will be the same as the value of numSMParams passed to the
       //  constructor when the object was created.
       //<
-   size_t getNumCorrelationParameterGroups() const;
+   virtual size_t getNumCorrelationParameterGroups() const;
       //> Returns the number of correlation parameter groups. The returned
       //  value will be the same as the value of numCPGroups passed to the
       //  constructor when the object was created.
       //<
 
-   int getCorrelationParameterGroup(size_t smParamIndex) const;
+   virtual int getCorrelationParameterGroup(size_t smParamIndex) const;
       //> Returns the index of the correlation parameter group to which the given
       //  sensor model parameter belongs.  The smParamIndex variable is the index
       //  of a sensor model parameter.  If the sensor model parameter
@@ -82,6 +82,28 @@ public:
       //  Precondition:
       //  * 0 <= smParamIndex < numSMParams
       //<
+
+   virtual double getCorrelationCoefficient(size_t cpGroupIndex, double deltaTime) const;
+      //>  Computes the correlation coefficient for the given correlation parameter
+      //  group and delta-time.  The cpGroupIndex variable holds the index of a
+      //  correlation parameter group.  The deltaTime variable represents the
+      //  difference in time for the correlation calculation.
+      //
+      //  Preconditions:
+      //  * 0 <= cpGroupIndex < numCPGroups
+      //
+      //  Notes:
+      //
+      //  The deltaTime parameter should be positive, but the function uses the
+      //  absolute value of the variable, so a negative deltaTime is acceptable
+      //  input.
+      //
+      //  If the computed correlation coefficient is outside the range [-1, 1],
+      //  the function will "clamp" the returned value to the nearest number
+      //  within that range.  For example, if the correlation coefficient equation
+      //  evaluates to 1.1 for a given deltaTime, the value 1.0 will be returned.
+      //<
+
    void setCorrelationParameterGroup(size_t smParamIndex, size_t cpGroupIndex);
       //> Sets the index of the correlation parameter group to which the given
       //  sensor model parameter belongs.  The smParamIndex variable is the index
@@ -113,26 +135,7 @@ public:
       //  * 0.0 < tau
       //<
 
-   double getCorrelationCoefficient(size_t cpGroupIndex, double deltaTime) const;
-      //>  Computes the correlation coefficient for the given correlation parameter
-      //  group and delta-time.  The cpGroupIndex variable holds the index of a
-      //  correlation parameter group.  The deltaTime variable represents the
-      //  difference in time for the correlation calculation.
-      //
-      //  Preconditions:
-      //  * 0 <= cpGroupIndex < numCPGroups
-      //
-      //  Notes:
-      //
-      //  The deltaTime parameter should be positive, but the function uses the
-      //  absolute value of the variable, so a negative deltaTime is acceptable
-      //  input.
-      //
-      //  If the computed correlation coefficient is outside the range [-1, 1],
-      //  the function will "clamp" the returned value to the nearest number
-      //  within that range.  For example, if the correlation coefficient equation
-      //  evaluates to 1.1 for a given deltaTime, the value 1.0 will be returned.
-      //<
+
 
 protected:
    // represents a set of four correlation parameters, grouped to simplify the implementation
@@ -141,7 +144,7 @@ protected:
       CorrelationParameters() : theA(0.), theAlpha(0.), theBeta(0.), theTau(0.) {}
       CorrelationParameters(double a, double alpha, double beta, double tau)
          : theA(a), theAlpha(alpha), theBeta(beta), theTau(tau) {}
-		
+
       double theA;
       double theAlpha;
       double theBeta;
