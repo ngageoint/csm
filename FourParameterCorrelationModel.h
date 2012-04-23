@@ -37,8 +37,8 @@
 //
 //#############################################################################
 
-#ifndef _FOURPARAMETERCORRELATIONMODEL_H_
-#define _FOURPARAMETERCORRELATIONMODEL_H_
+#ifndef _CSM3_FOURPARAMETERCORRELATIONMODEL_H_
+#define _CSM3_FOURPARAMETERCORRELATIONMODEL_H_
 
 #include "CSMCovarianceModel.h"
 #include "CSMWarning.h"
