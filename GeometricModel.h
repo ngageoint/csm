@@ -85,12 +85,10 @@ public:
       //  space (ECEF) to line and sample (pixels) in image space.
       //<
 
-   virtual ImageCoord groundToImage(const EcefCoord& groundPt,
-                                    const std::vector<double>& groundCovariance,
-                                    std::vector<double>& imageCovariance,
-                                    double desired_precision = 0.001,
-                                    double* achieved_precision = NULL,
-                                    WarningList* warnings = NULL) const = 0;
+   virtual ImageCoordCovar groundToImage(const EcefCoordCovar& groundPt,
+                                         double desired_precision = 0.001,
+                                         double* achieved_precision = NULL,
+                                         WarningList* warnings = NULL) const = 0;
       //> This method converts a given ground point into line and sample
       //  (pixels) in image space and returns accuracy information
       //  associated with the image and ground coordinates.
@@ -103,14 +101,12 @@ public:
       //> This method converts a given line and sample (pixels) in image
       //  space to a ground point.
       //<
-   virtual EcefCoord imageToGround(const ImageCoord& imagePt,
-                                   const std::vector<double>& imageCovariance,
-                                   double height,
-                                   double heightVariance,
-                                   std::vector<double>& groundCovariance,
-                                   double desired_precision = 0.001,
-                                   double* achieved_precision = NULL,
-                                   WarningList* warnings = NULL) const = 0;
+   virtual EcefCoordCovar imageToGround(const ImageCoordCovar& imagePt,
+                                        double height,
+                                        double heightVariance,
+                                        double desired_precision = 0.001,
+                                        double* achieved_precision = NULL,
+                                        WarningList* warnings = NULL) const = 0;
       //> This method converts a given line and sample (pixels) in //image space
       //  to a ground point and returns accuracy information associated with
       //  the image and ground coordinates.
@@ -240,7 +236,7 @@ public:
       //  model parameter adjustments are shareable across images for the
       //  sensor model adjustable parameter referenced by index.
       //<
-   virtual std::vector<ParameterSharingCriteria>& getParameterSharingCriteria(
+   virtual std::vector<ParameterSharingCriteria> getParameterSharingCriteria(
                 int index) const = 0;
       //> This method returns characteristics to indicate how
       //  the sensor model adjustable parameter referenced by index

@@ -24,6 +24,8 @@
 #ifndef __CSMMISC_H
 #define __CSMMISC_H
 
+#include <vector>
+
 #ifdef _WIN32
 # ifdef CSM_LIBRARY
 #  define CSM_EXPORT_API __declspec(dllexport)
@@ -64,7 +66,7 @@ namespace csm
 
    //***
    // STRUCT: ImageCoord
-   //> The ImageCoord class represents a 2 dimensional point in image space.
+   //> The ImageCoord structure represents a 2 dimensional point in image space.
    //  Usually, it represents an abolute point location, but some uses on the
    //  SensorModel interface use it as a size (location vector).
    //<
@@ -80,9 +82,39 @@ namespace csm
    };
 
    //***
+   // STRUCT: ImageCoordCovar
+   //> The ImageCoordCovar structure is an image coordinate with covariance
+   //  information.
+   //
+   //  The covariance vector is always 4 elements.  It can be accessed either
+   //  through the one dimensional covar() method, or the two dimensional
+   //  covar() method.
+   //<
+   //***
+   struct ImageCoordCovar : public ImageCoord
+   {
+   public:
+      ImageCoordCovar() : ImageCoord(), theCovar(4, 0.0) {}
+      ImageCoordCovar(double aLine, double aSamp)
+         : ImageCoord(aLine, aSamp), theCovar(4, 0.0) {}
+
+      const double* covar() const { return &(theCovar[0]); }
+            double* covar()       { return &(theCovar[0]); }
+
+      const double& covar(unsigned int i) const { return theCovar[i]; }
+            double& covar(unsigned int i)       { return theCovar[i]; }
+
+      const double& covar(unsigned int l, unsigned int s) const { return theCovar[2*l + s]; }
+            double& covar(unsigned int l, unsigned int s)       { return theCovar[2*l + s]; }
+
+   private:
+      std::vector<double> theCovar;
+   };
+
+   //***
    // STRUCT: ImageVector
-   //> The ImageCoord class represents a 2 dimensional vector in image space.
-   //  This can sometimes be used to represent the size of an image.
+   //> The ImageCoord structure represents a 2 dimensional vector in image
+   //  space. This can sometimes be used to represent the size of an image.
    //<
    //***
    struct ImageVector
@@ -97,10 +129,10 @@ namespace csm
 
    //***
    // STRUCT: EcefCoord
-   //> The EcefCoord class represents a 3 dimensional location in Earth
+   //> The EcefCoord structure represents a 3 dimensional location in Earth
    //  Centered Earth Fixed space.  Usually, it will represent an abolute
-   //  point, but some uses of this class in the SensorModel class call for it
-   //  to represent an ECEF location vector or an ECEF velocity vector.
+   //  point, but some uses of this structure in the SensorModel class call for
+   //  it to represent an ECEF location vector or an ECEF velocity vector.
    //
    //  The units of the doubles are meters when the object is used as a
    //  location, and meters/second when used as a velocity.
@@ -118,8 +150,38 @@ namespace csm
    };
 
    //***
+   // STRUCT: EcefCoordCovar
+   //> The EcefCoordCovar structure is an ECEF coordinate with covariance
+   //  information.
+   //
+   //  The covariance vector is always 9 elements.  It can be accessed either
+   //  through the one dimensional covar() method, or the two dimensional
+   //  covar() method.
+   //<
+   //***
+   struct EcefCoordCovar : public EcefCoord
+   {
+   public:
+      EcefCoordCovar() : EcefCoord(), theCovar(9, 0.0) {}
+      EcefCoordCovar(double aX, double aY, double aZ)
+         : EcefCoord(aX, aY, aZ), theCovar(9, 0.0) {}
+
+      const double* covar() const { return &(theCovar[0]); }
+            double* covar()       { return &(theCovar[0]); }
+
+      const double& covar(unsigned int i) const { return theCovar[i]; }
+            double& covar(unsigned int i)       { return theCovar[i]; }
+
+      const double& covar(unsigned int l, unsigned int s) const { return theCovar[3*l + s]; }
+            double& covar(unsigned int l, unsigned int s)       { return theCovar[3*l + s]; }
+
+   private:
+      std::vector<double> theCovar;
+   };
+
+   //***
    // STRUCT: EcefVector
-   //> The EcefVector class represents a 3 dimensional vector in Earth
+   //> The EcefVector structure represents a 3 dimensional vector in Earth
    //  Centered Earth Fixed space.  It can represent an ECEF location vector or
    //  an ECEF velocity vector.
    //<
