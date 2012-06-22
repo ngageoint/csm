@@ -20,6 +20,7 @@
 //     06-Feb-2004   KRW      Incorporates changes approved by 
 //                            January and February 2004 CCB.
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     04-Jun-2012   SCM      Added generic parameters.
 //
 //    NOTES:
 //
@@ -29,6 +30,7 @@
 #define __CSMIMAGESUPORTDATA_H
 
 #include <string>
+#include <map>
 
 #include "CSMMisc.h"
 
@@ -67,13 +69,57 @@ public:
       //  should be used.
       //<
 
+   inline std::string param(const std::string& name, int instance = 0) const;
+      //> This method returns the value of the instance'th occurrance of the
+      //  parameter named name in the parameter map.  If there are no
+      //  parameters named name or instance is greater than the number of
+      //  parameters named name, then an empty string ("") is returned.
+      //<
+   inline void addParam(const std::string& name, const std::string& value);
+      //> This method adds a parameter named name with the value value to the
+      //  parameter map.
+      //<
+   const std::multimap<std::string, std::string>& parameters() const { return theParameters; }
+      //> This method returns a reference to the parameter map.
+      //<
+
 protected:
    explicit Isd(const std::string& format, const std::string& filename)
       : theFormat(format), theFilename(filename) {}
 
    std::string theFormat;
    std::string theFilename;
+
+   std::multimap<std::string, std::string> theParameters;
+      //> Data member multimap that organizes additional parameters used to 
+      //  build a particular geometry.  It allows for multiple keys.  Though it
+      //  can be accessed directly, it may be easier to access it through the
+      //  param() and addParam() functions.
+      //<
 };
+
+std::string Isd::param(const std::string& name, int instance) const
+{
+   std::multimap<std::string, std::string>::const_iterator it = theParameters.find(name);
+   while (it != theParameters.end() && (instance || it->first != name))
+   {
+      // the iterator is not limited to items whose key is name unfortunately,
+      // so only decrement the instance variable if this matches
+      if (it->first == name) --instance;
+
+      ++it;
+   }
+
+   if (it == theParameters.end()) return "";
+   
+   return it->second;
+}
+
+void Isd::addParam(const std::string& name, const std::string& value)
+{
+   std::multimap<std::string, std::string>::value_type val(name, value);
+   theParameters.insert(val);
+}
 
 } // namespace csm
 
