@@ -32,6 +32,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface.
+//     22-Jun-2012   SCM      Made CorrelationParameters public, added accessor.
 //
 //    NOTES:
 //
@@ -51,6 +52,19 @@ namespace csm
 class CSM_EXPORT_API FourParameterCorrelationModel : public CovarianceModel
 {
 public:
+   // represents a set of four correlation parameters, grouped to simplify the implementation
+   struct CSM_EXPORT_API CorrelationParameters
+   {
+      CorrelationParameters() : a(0.), alpha(0.), beta(0.), tau(0.) {}
+      CorrelationParameters(double aA, double aAlpha, double aBeta, double aTau)
+         : a(aA), alpha(aAlpha), beta(aBeta), tau(aTau) {}
+
+      double a;
+      double alpha;
+      double beta;
+      double tau;
+   };
+
    FourParameterCorrelationModel(size_t numSMParams, size_t numCPGroups);
       //> Constructor.  The number of sensor model parameters and correlation
       //  parameter groups must be provided.
@@ -135,22 +149,20 @@ public:
       //  * 0.0 < tau
       //<
 
+   void setCorrelationGroupParameters(size_t cpGroupIndex, const CorrelationParameters& params);
+      //> Sets the values of the correlation parameters for a given group.
+      //
+      //  Throws an exception if cpGroupIndex or any of the correlation
+      //  parameters is out of range.
+      //<
 
+   const CorrelationParameters& getCorrelationGroupParameters(size_t cpGroupIndex) const;
+      //> Returns the values of the correlation parameters for a given group.
+      //
+      //  Throws an exception if cpGroupIndex is out of range.
+      //<
 
 protected:
-   // represents a set of four correlation parameters, grouped to simplify the implementation
-   struct CSM_EXPORT_API CorrelationParameters
-   {
-      CorrelationParameters() : theA(0.), theAlpha(0.), theBeta(0.), theTau(0.) {}
-      CorrelationParameters(double a, double alpha, double beta, double tau)
-         : theA(a), theAlpha(alpha), theBeta(beta), theTau(tau) {}
-
-      double theA;
-      double theAlpha;
-      double theBeta;
-      double theTau;
-   };
-
    std::vector<int> theGroupMapping;
       //> This data member stores the mapping between sensor model parameter
       //  indices and correlation parameter group indices.

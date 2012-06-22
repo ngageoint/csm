@@ -64,6 +64,12 @@ void FourParameterCorrelationModel::setCorrelationParameterGroup(size_t smParamI
 void FourParameterCorrelationModel::setCorrelationGroupParameters(
    size_t cpGroupIndex, double a, double alpha, double beta, double tau)
 {
+   setCorrelationGroupParameters(cpGroupIndex, CorrelationParameters(a, alpha, beta, tau));
+}
+
+void FourParameterCorrelationModel::setCorrelationGroupParameters(
+   size_t cpGroupIndex, const CorrelationParameters& params)
+{
    static const char* const MODULE =
       "csm::FourParameterCorrelationModel::setCorrelationGroupParameters";
 
@@ -71,28 +77,28 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
 
    // make sure the values of each correlation model parameter fall within acceptable ranges
-   if ((a < -1.0) || (a > 1.0))
+   if ((params.a < -1.0) || (params.a > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range [-1, 1].",
                   MODULE);
    }
 
-   if ((alpha < 0.0) || (alpha > 1.0))
+   if ((params.alpha < 0.0) || (params.alpha > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter alpha must be in the range [0, 1].",
                   MODULE);
    }
 
-   if (beta < 0.0)
+   if (params.beta < 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter beta must be non-negative.",
                   MODULE);
    }
 
-   if (tau <= 0.0)
+   if (params.tau <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter tau must be positive.",
@@ -100,7 +106,7 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
    }
 
    // store the correlation parameter values
-   theCorrParams[cpGroupIndex] = CorrelationParameters(a, alpha, beta, tau);
+   theCorrParams[cpGroupIndex] = params;
 }
 
 double FourParameterCorrelationModel::getCorrelationCoefficient(
@@ -111,15 +117,24 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
 
    // compute the value of the correlation coefficient
    const CorrelationParameters& cp = theCorrParams[cpGroupIndex];
-   double corrCoeff = cp.theAlpha +
-                      (cp.theA * (1.0 - cp.theAlpha) * (1.0 + cp.theBeta) /
-                       (cp.theBeta + exp(fabs(deltaTime) / cp.theTau)));
+   double corrCoeff = cp.alpha +
+                      (cp.a * (1.0 - cp.alpha) * (1.0 + cp.beta) /
+                       (cp.beta + exp(fabs(deltaTime) / cp.tau)));
 
    // if necessary, clamp the coefficient value to the acceptable range
    if (corrCoeff < -1.0) return -1.0;
    if (corrCoeff > 1.0)  return 1.0;
 
    return corrCoeff;
+}
+
+const FourParameterCorrelationModel::CorrelationParameters&
+FourParameterCorrelationModel::getCorrelationGroupParameters(size_t cpGroupIndex) const
+{
+   // make sure the index falls within the acceptable range
+   checkParameterGroupIndex(cpGroupIndex, "getCorrelationGroupParameters");
+
+   return theCorrParams[cpGroupIndex];
 }
 
 void FourParameterCorrelationModel::checkSensorModelParameterIndex(
