@@ -25,6 +25,7 @@
 //     08-JUN-2004   TWC      API 3.1
 //     19-Aug-2004   PW       Add throws
 //     02-Mar-2012   SCM      Refactor interface.
+//     21-Jun-2012   SCM      Added data directory.
 //
 //    NOTES:
 //
@@ -168,6 +169,26 @@ public:
       const std::string& modelName,
       WarningList* warnings = NULL) const = 0;
 
+   static const std::string& getDataDirectory() { return theDataDir; }
+      //> This method returns the data directory set by the Sensor Exploitation
+      //  Tool (SET) before plugins are loaded.  It contains the path to the
+      //  common directory area that contains extra support files derived
+      //  plugin classes may need.  This directory should be used in preference
+      //  to any environment variable.
+      //<
+   static void setDataDirectory(const std::string& dir) { theDataDir = dir; }
+      //> This method sets the data directory string.  This directory contains
+      //  files provided by sensor implementers that are necessary for the
+      //  proper execution of the sensor code.
+      //
+      //  This method should be called by the SET to set this directory value
+      //  before any plugins are loaded, and should not be changed while any
+      //  plugins are loaded.
+      //
+      //  Sensor implementations should not call this method.  They should only
+      //  read the directory by calling getDataDirectory().
+      //<
+
 protected:
    Plugin();
       //>This special constructor is responsible for registering each plugin
@@ -185,6 +206,8 @@ private:
 
    static PluginList* theList;
    static Impl*       theImpl;
+
+   static std::string theDataDir;
 };
 
 } // namespace csm

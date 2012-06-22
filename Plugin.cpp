@@ -37,6 +37,7 @@ namespace csm
 
 PluginList*   Plugin::theList = NULL;
 Plugin::Impl* Plugin::theImpl = NULL;
+std::string   Plugin::theDataDir("");
 
 //*****************************************************************************
 // Plugin::Impl
