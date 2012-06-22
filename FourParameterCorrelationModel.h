@@ -32,7 +32,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface.
-//     22-Jun-2012   SCM      Made CorrelationParameters public, added accessor.
+//     22-Jun-2012   SCM      Made Parameters public, added accessor.
 //
 //    NOTES:
 //
@@ -53,10 +53,10 @@ class CSM_EXPORT_API FourParameterCorrelationModel : public CovarianceModel
 {
 public:
    // represents a set of four correlation parameters, grouped to simplify the implementation
-   struct CSM_EXPORT_API CorrelationParameters
+   struct CSM_EXPORT_API Parameters
    {
-      CorrelationParameters() : a(0.), alpha(0.), beta(0.), tau(0.) {}
-      CorrelationParameters(double aA, double aAlpha, double aBeta, double aTau)
+      Parameters() : a(0.), alpha(0.), beta(0.), tau(0.) {}
+      Parameters(double aA, double aAlpha, double aBeta, double aTau)
          : a(aA), alpha(aAlpha), beta(aBeta), tau(aTau) {}
 
       double a;
@@ -149,14 +149,14 @@ public:
       //  * 0.0 < tau
       //<
 
-   void setCorrelationGroupParameters(size_t cpGroupIndex, const CorrelationParameters& params);
+   void setCorrelationGroupParameters(size_t cpGroupIndex, const Parameters& params);
       //> Sets the values of the correlation parameters for a given group.
       //
       //  Throws an exception if cpGroupIndex or any of the correlation
       //  parameters is out of range.
       //<
 
-   const CorrelationParameters& getCorrelationGroupParameters(size_t cpGroupIndex) const;
+   const Parameters& getCorrelationGroupParameters(size_t cpGroupIndex) const;
       //> Returns the values of the correlation parameters for a given group.
       //
       //  Throws an exception if cpGroupIndex is out of range.
@@ -168,7 +168,7 @@ protected:
       //  indices and correlation parameter group indices.
       //<
 
-   std::vector<CorrelationParameters> theCorrParams;
+   std::vector<Parameters> theCorrParams;
       //> This data member stores the values of the correlation parameters for
       //  each parameter group.
       //<

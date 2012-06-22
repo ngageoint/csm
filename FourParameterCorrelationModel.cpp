@@ -64,11 +64,11 @@ void FourParameterCorrelationModel::setCorrelationParameterGroup(size_t smParamI
 void FourParameterCorrelationModel::setCorrelationGroupParameters(
    size_t cpGroupIndex, double a, double alpha, double beta, double tau)
 {
-   setCorrelationGroupParameters(cpGroupIndex, CorrelationParameters(a, alpha, beta, tau));
+   setCorrelationGroupParameters(cpGroupIndex, Parameters(a, alpha, beta, tau));
 }
 
 void FourParameterCorrelationModel::setCorrelationGroupParameters(
-   size_t cpGroupIndex, const CorrelationParameters& params)
+   size_t cpGroupIndex, const Parameters& params)
 {
    static const char* const MODULE =
       "csm::FourParameterCorrelationModel::setCorrelationGroupParameters";
@@ -116,7 +116,7 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
    checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
 
    // compute the value of the correlation coefficient
-   const CorrelationParameters& cp = theCorrParams[cpGroupIndex];
+   const Parameters& cp = theCorrParams[cpGroupIndex];
    double corrCoeff = cp.alpha +
                       (cp.a * (1.0 - cp.alpha) * (1.0 + cp.beta) /
                        (cp.beta + exp(fabs(deltaTime) / cp.tau)));
@@ -128,7 +128,7 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
    return corrCoeff;
 }
 
-const FourParameterCorrelationModel::CorrelationParameters&
+const FourParameterCorrelationModel::Parameters&
 FourParameterCorrelationModel::getCorrelationGroupParameters(size_t cpGroupIndex) const
 {
    // make sure the index falls within the acceptable range
