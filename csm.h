@@ -101,11 +101,11 @@ namespace csm
       const double* covar() const { return &(theCovar[0]); }
             double* covar()       { return &(theCovar[0]); }
 
-      const double& covar(unsigned int i) const { return theCovar[i]; }
-            double& covar(unsigned int i)       { return theCovar[i]; }
+      double  covar(unsigned int i) const { return theCovar[i]; }
+      double& covar(unsigned int i)       { return theCovar[i]; }
 
-      const double& covar(unsigned int l, unsigned int s) const { return theCovar[2*l + s]; }
-            double& covar(unsigned int l, unsigned int s)       { return theCovar[2*l + s]; }
+      double  covar(unsigned int l, unsigned int s) const { return theCovar[2*l + s]; }
+      double& covar(unsigned int l, unsigned int s)       { return theCovar[2*l + s]; }
 
    private:
       std::vector<double> theCovar;
@@ -169,11 +169,11 @@ namespace csm
       const double* covar() const { return &(theCovar[0]); }
             double* covar()       { return &(theCovar[0]); }
 
-      const double& covar(unsigned int i) const { return theCovar[i]; }
-            double& covar(unsigned int i)       { return theCovar[i]; }
+      double  covar(unsigned int i) const { return theCovar[i]; }
+      double& covar(unsigned int i)       { return theCovar[i]; }
 
-      const double& covar(unsigned int l, unsigned int s) const { return theCovar[3*l + s]; }
-            double& covar(unsigned int l, unsigned int s)       { return theCovar[3*l + s]; }
+      double  covar(unsigned int l, unsigned int s) const { return theCovar[3*l + s]; }
+      double& covar(unsigned int l, unsigned int s)       { return theCovar[3*l + s]; }
 
    private:
       std::vector<double> theCovar;
