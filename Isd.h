@@ -63,7 +63,7 @@ public:
       //  data, if any.  If there is no filename, then this string will be
       //  empty.
       //<
-   void setFilename(const std::string& fn) { theFilename = fn; }
+   inline void setFilename(const std::string& fn);
       //> This method sets the filename associated with the image support
       //  data.  If there is no associated filename, then an empty string
       //  should be used.
@@ -98,7 +98,15 @@ protected:
       //<
 };
 
-std::string Isd::param(const std::string& name, int instance) const
+inline void Isd::setFilename(const std::string& fn)
+{
+   theFilename = fn;
+
+   // if the format was unkown before set it to FILENAME now
+   if (theFormat == "UNKNOWN") theFormat = "FILENAME";
+}
+
+inline std::string Isd::param(const std::string& name, int instance) const
 {
    std::multimap<std::string, std::string>::const_iterator it = theParameters.find(name);
    while (it != theParameters.end() && (instance || it->first != name))
@@ -115,7 +123,7 @@ std::string Isd::param(const std::string& name, int instance) const
    return it->second;
 }
 
-void Isd::addParam(const std::string& name, const std::string& value)
+inline void Isd::addParam(const std::string& name, const std::string& value)
 {
    std::multimap<std::string, std::string>::value_type val(name, value);
    theParameters.insert(val);
