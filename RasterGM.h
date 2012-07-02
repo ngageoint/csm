@@ -44,6 +44,7 @@
 //                                         getCurrentGeometricCorrectionSwitch,
 //                                     and setCurrentGeometricCorrectionSwitch
 //     02-Mar-2012   SCM    Refactored interface.
+//     02-Jul-2012   SCM    Made getUnmodeledError() be implemented inline.
 //
 //    NOTES:
 //
@@ -483,14 +484,14 @@ public:
       //  is responsible for deallocating the object returned by this method.
       //<
 
-   virtual std::vector<double> getUnmodeledError(const ImageCoord& pt) const = 0;
+   inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
+   { return getUnmodeledCrossCovariance(pt, pt); }
       //> The getUnmodeledError() function gives a sensor specific
       //  error for the given input image point. The error is reported
       //  as the four terms of a 2x2 covariance mensuration error
       //  matrix, returned as a 4 element vector.  This error term is meant to
       //  map error terms that are not modeled in the sensor model to image
-      //  space for inclusion in error propagation. The extra error is added to
-      //  the mensuration error that may already be in the matrix.
+      //  space for inclusion in error propagation.
       //<
    virtual std::vector<double> getUnmodeledCrossCovariance(
                 const ImageCoord& pt1,
