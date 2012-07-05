@@ -421,7 +421,7 @@ public:
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
-      //  (comparisonModel).  The convariance is computed using the current
+      //  (comparisonModel).  The covariance is computed using the current
       //  model parameter values.
       //
       //  Images may be correlated because they are taken by the same sensor or
@@ -433,7 +433,7 @@ public:
       //  vector (STL has no two dimensional structure).  The height (number of
       //  rows) of this matrix is the number of parameters on the current
       //  model, and the width (number of columns) is the number of parameters
-      //  on the comparison model.  Thus, to find the convariance between p1 on
+      //  on the comparison model.  Thus, to find the covariance between p1 on
       //  this model and p2 on the comparison model, example the index (N*p1 +
       //  p2) in the returned vector (where N is the number of parameters in
       //  the comparison model, retreived from getNumParameters()).
@@ -452,7 +452,7 @@ public:
       //> The getCurrentCovarianceMatrix() function returns a matrix containing
       //  all elements of the error cross covariance matrix between the
       //  instantiated sensor model and a specified second sensor model
-      //  (comparisonModel).  The convariance is computed using the original
+      //  (comparisonModel).  The covariance is computed using the original
       //  model parameter values.
       //
       //  Images may be correlated because they are taken by the same sensor or
@@ -464,7 +464,7 @@ public:
       //  vector (STL has no two dimensional structure).  The height (number of
       //  rows) of this matrix is the number of parameters on the current
       //  model, and the width (number of columns) is the number of parameters
-      //  on the comparison model.  Thus, to find the convariance between p1 on
+      //  on the comparison model.  Thus, to find the covariance between p1 on
       //  this model and p2 on the comparison model, example the index (N*p1 +
       //  p2) in the returned vector (where N is the number of parameters in
       //  the comparison model, retreived from getNumParameters()).
@@ -486,22 +486,21 @@ public:
 
    inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
    { return getUnmodeledCrossCovariance(pt, pt); }
-      //> The getUnmodeledError() function gives a sensor specific
-      //  error for the given input image point. The error is reported
-      //  as the four terms of a 2x2 covariance mensuration error
-      //  matrix, returned as a 4 element vector.  This error term is meant to
-      //  map error terms that are not modeled in the sensor model to image
-      //  space for inclusion in error propagation.
+      //> The getUnmodeledError() function gives the image-space covariance for
+      //  any unmodeled sensor error for the given input image point. The error
+      //  is reported as the four terms of a 2x2 covariance matrix, returned as
+      //  a 4 element vector.  This covariance is meant to account for errors
+      //  that are not modeled by the sensor model parameters.
       //<
    virtual std::vector<double> getUnmodeledCrossCovariance(
                 const ImageCoord& pt1,
                 const ImageCoord& pt2) const = 0;
-      //> The getUnmodeledCrossCovariance function gives the cross
-      //  covariance for unmodeled error between two image points on
-      //  the same image. The error is reported as the four terms of
-      //  a 2x2 matrix, returned as a 4 element vector. The unmodeled cross
-      //  covariance is added to any values that may already be in the cross
-      //  covariance matrix.
+      //> The getUnmodeledCrossCovariance function gives the image-space cross
+      //  covariance for any unmodeled sensor error between two image points on
+      //  the same image. The error is reported as the four terms of a 2x2
+      //  matrix, returned as a 4 element vector.  This covariance is meant to
+      //  account for errors that are not modeled by the sensor model
+      //  parameters.
       //<
 
 #ifdef TESTAPIVERSION
