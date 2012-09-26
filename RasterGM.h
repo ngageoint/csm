@@ -302,6 +302,22 @@ public:
       //  first element and a sample partials in the second element.
       //<
 
+   virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
+      //> The computeGroundPartials method calculates the partial
+      //  derivatives (partials) of image position (both line and sample)
+      //  with respect to ground coordinates at the given ground
+      //  position x, y, z.
+      //  Upon successful completion, computeGroundPartials() produces and
+      //  returns the partial derivatives as follows:
+      //
+      //  partials [0] = line wrt x
+      //  partials [1] = line wrt y
+      //  partials [2] = line wrt z
+      //  partials [3] = sample wrt x
+      //  partials [4] = sample wrt y
+      //  partials [5] = sample wrt z
+      //<
+
    inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
    { return getUnmodeledCrossCovariance(pt, pt); }
       //> The getUnmodeledError() function gives the image-space covariance for
