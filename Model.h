@@ -16,6 +16,7 @@
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     02-Mar-2012   SCM      Initial creation
+//     26-Sep-2012   JPK      Removed getModelType() and reference point.
 //
 //    NOTES:
 //
@@ -50,11 +51,6 @@ public:
       //> This method returns the version of the model code.  The Version
       //  object can be compared to other Version objects with its comparison
       //  operators.
-      //<
-   virtual std::string getModelType() const = 0;
-      //> This method returns the type of model implemented by the derived
-      //  class.  Valid values include, but are not limited to: "EO", "SAR",
-      //  and "LIDAR".
       //<
    virtual std::string getModelName() const = 0;
       //> This method returns a string identifying the name of the senor model.
@@ -107,14 +103,6 @@ public:
       // ...
       //<
 
-   virtual EcefCoord getReferencePoint() const = 0;
-      //> This method returns the ground point indicating the general
-      //  location of the image.
-      //<
-   virtual void setReferencePoint(const EcefCoord& groundPt) = 0;
-      //> This method sets the ground point indicating the general location
-      //  of the image.
-      //<
    virtual std::string getReferenceDateAndTime() const = 0;
       //> This method returns the time in seconds at which the specified
       //  pixel was imaged. The time provide is relative to the reference
