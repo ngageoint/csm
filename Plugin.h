@@ -26,6 +26,8 @@
 //     19-Aug-2004   PW       Add throws
 //     02-Mar-2012   SCM      Refactor interface.
 //     21-Jun-2012   SCM      Added data directory.
+//     26-Sep-2012   SCM      Changed getModelVersion() to return a
+//                            csm::Version object
 //
 //    NOTES:
 //
@@ -83,14 +85,14 @@ public:
       //> Returns a pointer to the first plugin found whose name is
       //  pluginName; returns NULL if no such plugin found.
       //
-      //  Warnings may be gerenated and put in the given list, if specified.
+      //  Warnings may be generated and put in the given list, if specified.
       //<
    static void removePlugin(const std::string& pluginName,
                             WarningList* warnings = NULL);
       //> This method attempts to remove the plugin from the list.  This does
       //  not actually unload the plugin library.
       //
-      //  Warnings may be gerenated and put in the given list, if specified.
+      //  Warnings may be generated and put in the given list, if specified.
       //<
 
    //--------------------------------------------------------------------------
@@ -131,7 +133,7 @@ public:
    //---
    // Model Descriptors
    //---
-   virtual int getModelVersion(const std::string& modelName) const = 0;
+   virtual Version getModelVersion(const std::string& modelName) const = 0;
 
    //---
    // Model Construction
