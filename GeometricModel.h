@@ -47,6 +47,8 @@
 //     02-Jul-2012   SCM    Made getUnmodeledError() be implemented inline.
 //     26-Sep-2012   JPK    Split SensorModel class into GeometricModel and
 //                          RasterGM classes.
+//     26-Sep-2012   SCM    Moved all sensor partials to derived RasterGM
+//                          class.
 //
 //    NOTES:
 //
@@ -104,7 +106,7 @@ public:
                 int index) const = 0;
       //> This method returns characteristics to indicate how
       //  the sensor model adjustable parameter referenced by index
-      //  may be shareable accross images.
+      //  may be shareable across images.
       //<
 
    virtual double getOriginalParameterValue(int index) const = 0;
@@ -144,40 +146,6 @@ public:
    //---
    // Uncertainty Propagation
    //---
-   virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
-      //> The computeGroundPartials method calculates the partial
-      //  derivatives (partials) of image position (both line and sample)
-      //  with respect to ground coordinates at the given ground
-      //  position x, y, z.
-      //  Upon successful completion, computeGroundPartials() produces and
-      //  returns the partial derivatives as follows:
-      //
-      //  partials [0] = line wrt x
-      //  partials [1] = line wrt y
-      //  partials [2] = line wrt z
-      //  partials [3] = sample wrt x
-      //  partials [4] = sample wrt y
-      //  partials [5] = sample wrt z
-      //<
-
-   typedef std::pair<double, double> SensorPartials;
-      //> The first element of this pair is the line component, and the second
-      //  element is the sample component.
-      //<
-   virtual SensorPartials computeSensorPartials(
-                int index,
-                const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
-
-  
-   virtual std::vector<SensorPartials> computeAllSensorPartials(
-                const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
-  
    virtual double getCurrentParameterCovariance(int index1,
                                                 int index2) const = 0;
       //> The getCurrentParameterCovariance() method
@@ -255,7 +223,7 @@ public:
       //  on the comparison model.  Thus, to find the covariance between p1 on
       //  this model and p2 on the comparison model, example the index (N*p1 +
       //  p2) in the returned vector (where N is the number of parameters in
-      //  the comparison model, retreived from getNumParameters()).
+      //  the comparison model, retrieved from getNumParameters()).
       //
       //  The data returned here may need to be supplemented with the single
       //  image covariance from getCurrentParameterCovariance() and
@@ -286,7 +254,7 @@ public:
       //  on the comparison model.  Thus, to find the covariance between p1 on
       //  this model and p2 on the comparison model, example the index (N*p1 +
       //  p2) in the returned vector (where N is the number of parameters in
-      //  the comparison model, retreived from getNumParameters()).
+      //  the comparison model, retrieved from getNumParameters()).
       //
       //  The data returned here may need to be supplemented with the single
       //  image covariance from getCurrentParameterCovariance() and
