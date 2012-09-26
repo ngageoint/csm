@@ -21,6 +21,7 @@
 //                            January and February 2004 CCB.
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     04-Jun-2012   SCM      Added generic parameters.
+//     26-Sep-2012   JPK      Added some common parameter types
 //
 //    NOTES:
 //
@@ -128,6 +129,11 @@ inline void Isd::addParam(const std::string& name, const std::string& value)
    std::multimap<std::string, std::string>::value_type val(name, value);
    theParameters.insert(val);
 }
+   
+#define IMAGE_ID_PARAM       "IMAGE_ID"
+#define IMAGE_INDEX_PARAM    "IMAGE_INDEX"
+#define LOGICAL_INDEX_PARAM  "LOGICAL_INDEX"
+#define MODEL_NAME_PARAM     "MODEL_NAME"
 
 } // namespace csm
 
