@@ -48,6 +48,7 @@
 //     26-Sep-2012   JPK    Split SensorModel class into GeometricModel and
 //                          RasterGM classes.  RasterGM is now the
 //                          equivalent class to the previous SensorModel class.
+//     26-Sep-2012   SCM    Moved all sensor partials to this class.
 //
 //    NOTES:
 //
@@ -186,7 +187,7 @@ public:
    // Time and Trajectory
    //---
    virtual std::string getTrajectoryIdentifier() const = 0;
-      //> This method returns a unique identifer to indicate which
+      //> This method returns a unique identifier to indicate which
       //  trajectory was used to acquire the image. This ID is unique for
       //  each sensor type on an individual path.
       //<
@@ -222,6 +223,10 @@ public:
    //---
    // Uncertainty Propagation
    //---
+   typedef std::pair<double, double> SensorPartials;
+      //> The first element of this pair is the line component, and the second
+      //  element is the sample component.
+      //<
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const ImageCoord& imagePt,
@@ -229,24 +234,35 @@ public:
                 double desired_precision = 0.001,
                 double* achieved_precision = NULL,
                 WarningList* warnings = NULL) = 0;
-      //> The computeSensorPartials() method calculates the partial
-      //  derivatives of image position (both line and sample) with
-      //  respect to the given sensor parameter (index) at the given
-      //  ground position.
+      //> The computeSensorPartials() method calculates the partial derivatives
+      //  of image position (both line and sample) with respect to the given
+      //  sensor parameter (index) at the given ground position.
       //
-      //  Two versions of the method are provided. The first method,
-      //  computeSensorPartials(), takes in only necessary information.
-      //  It may be implemented by calling groundToImage() on the ground
-      //  coordinate and then calling the second form of the method with the
-      //  obtained line and sample.
-      //
-      //  If the calling function has already performed groundToImage with the
-      //  ground coordinate, it may call the second method directly since it
-      //  may be significantly faster than the first.
+      //  This method varies from the overload with the same name on the base
+      //  class GeometricModel because it takes both a ground and image point.
+      //  This version may be more efficient to call if the calling function
+      //  has already performed groundToImage with the ground coordinate.
       //
       //  The results are unpredictable if the line and sample provided do not
       //  correspond to the result of calling groundToImage() with the given
       //  ground position (x, y, and z).
+      //
+      //  The returned pair will have the line partial in the first element and
+      //  the sample partial in the second element.
+      //<
+   virtual SensorPartials computeSensorPartials(
+                int index,
+                const EcefCoord& groundPt,
+                double desired_precision = 0.001,
+                double* achieved_precision = NULL,
+                WarningList* warnings = NULL) = 0;
+      //> The computeSensorPartials() method calculates the partial derivatives
+      //  of image position (both line and sample) with respect to the given
+      //  sensor parameter (index) at the given ground position.
+      //
+      //  Derived model implementations may wish to implement this method by
+      //  calling groundToImage() and passing the result to the other overload
+      //  of computeSensorPartials().
       //
       //  The returned pair will have the line partial in the first element and
       //  the sample partial in the second element.
@@ -261,13 +277,31 @@ public:
       //> The computeAllSensorPartials() function calculates the
       //  partial derivatives of image position (both line and sample)
       //  with respect to each of the adjustable parameters at the
-      //  given ground position.  The semantics for the two versions are the
+      //  given ground position.  The semantics for this method is the
       //  same as for computeSensorPartials().
       //
       //  The value returned is a vector of pairs with line partials in the
       //  first element and a sample partials in the second element.
       //<
-      
+   virtual std::vector<SensorPartials> computeAllSensorPartials(
+                const EcefCoord& groundPt,
+                double desired_precision = 0.001,
+                double* achieved_precision = NULL,
+                WarningList* warnings = NULL) = 0;
+      //> The computeAllSensorPartials() function calculates the
+      //  partial derivatives of image position (both line and sample)
+      //  with respect to each of the adjustable parameters at the
+      //  given ground position.  The semantics for this method is the
+      //  same as for computeSensorPartials().
+      //
+      //  Derived model implementations may wish to implement this method by
+      //  calling groundToImage() and passing the result to the other overload
+      //  of computeSensorPartials().
+      //
+      //  The value returned is a vector of pairs with line partials in the
+      //  first element and a sample partials in the second element.
+      //<
+
    inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
    { return getUnmodeledCrossCovariance(pt, pt); }
       //> The getUnmodeledError() function gives the image-space covariance for
