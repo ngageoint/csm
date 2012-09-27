@@ -1,6 +1,6 @@
 
 
-HEADERS=CSMCovarianceModel.h CSMFourParameterCorrelationModel.h CSMError.h CSMImageSupportData.h CSMISDByteStream.h CSMISDNITF.h CSMMisc.h CSMModel.h CSMParameterSharing.h CSMPlugin.h CSMGeometricModel.h CSMRasterGM.h CSMRasterWithRangeGM.h CSMSensorTypeAndMode.h CSMWarning.h CSMVersion.h
+HEADERS=CSMCovarianceModel.h CSMFourParameterCorrelationModel.h CSMError.h CSMImageSupportData.h CSMISDByteStream.h CSMISDNITF.h CSMMisc.h CSMModel.h CSMParameterSharing.h CSMPlugin.h CSMGeometricModel.h CSMRasterGM.h CSMSensorTypeAndMode.h CSMWarning.h CSMVersion.h
 
 OBJS=CSMPlugin.o CSMFourParameterCorrelationModel.o CSMVersion.o
 
