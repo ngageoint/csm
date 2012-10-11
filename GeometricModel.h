@@ -49,6 +49,7 @@
 //                          RasterGM classes.
 //     26-Sep-2012   SCM    Moved all sensor partials to derived RasterGM
 //                          class.
+//     02-Oct-2012   SCM    Added getParameterUnits() method.
 //
 //    NOTES:
 //
@@ -97,6 +98,62 @@ public:
       //
       //  If the index is out of range, a CSMError may be thrown.
       //<
+   virtual std::string getParameterUnits(int index) const = 0;
+      //> This method returns the units for the sensor model parameter
+      //  indicated by the given index.  This string is intended for human
+      //  consumption, not automated analysis.  Preferred unit names are:
+      //
+      //-    meters                "m"
+      //-    centimeters           "cm"
+      //-    millimeters           "mm"
+      //-    micrometers           "um"
+      //-    nanometers            "nm"
+      //-    kilometers            "km"
+      //-    inches-US             "inch"
+      //-    feet-US               "ft"
+      //-    statute miles         "mi"
+      //-    nautical miles        "nmi"
+      //-
+      //-    radians               "rad"
+      //-    microradians          "urad"
+      //-    decimal degrees       "deg"
+      //-    arc seconds           "arcsec"
+      //-    arc minutes           "arcmin"
+      //-
+      //-    seconds               "sec"
+      //-    minutes               "min"
+      //-    hours                 "hr"
+      //-
+      //-    steradian             "sterad"
+      //-
+      //-    none                  "unitless"
+      //-
+      //-    lines per second      "lines/sec"
+      //-    samples per second    "samples/sec"
+      //-    frames per second     "frames/sec"
+      //-
+      //-    watts                 "watt"
+      //-
+      //-    degrees Kelvin        "K"
+      //-
+      //-    gram                  "g"
+      //-    kilogram              "kg"
+      //-    pound - US            "lb"
+      //-
+      //-    hertz                 "hz"
+      //-    megahertz             "mhz"
+      //-    gigahertz             "ghz"
+      //
+      //  Units may be combined with "/" or "." to indicate division or
+      //  multiplication.  The caret symbol "^" can be used to indicate
+      //  exponentiation.  Thus "m.m" and "m^2" are the same and indicate
+      //  square meters.  The return "m/sec^2" indicates an acceleration in
+      //  meters per second per second.
+      //
+      //  Derived classes may choose to return additional unit names, as
+      //  required.
+      //<
+
    virtual bool isParameterShareable(int index) const = 0;
       //> This method returns a flag to indicate whether or not a sensor
       //  model parameter adjustments are shareable across images for the
