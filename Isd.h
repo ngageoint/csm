@@ -22,6 +22,7 @@
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     04-Jun-2012   SCM      Added generic parameters.
 //     26-Sep-2012   JPK      Added some common parameter types
+//     11-Oct-2012   SCM      Added clearAllParams() and clearParams().
 //
 //    NOTES:
 //
@@ -79,6 +80,13 @@ public:
    inline void addParam(const std::string& name, const std::string& value);
       //> This method adds a parameter named name with the value value to the
       //  parameter map.
+      //<
+   void clearAllParams() { theParameters.clear(); }
+      //> This method removes all the parameters added to the parameter map.
+      //<
+   void clearParams(const std::string& name) { theParameters.erase(name); }
+      //> This method removes all the instances of the given parameter name in
+      //  the parameter map.
       //<
    const std::multimap<std::string, std::string>& parameters() const { return theParameters; }
       //> This method returns a reference to the parameter map.
