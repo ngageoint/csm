@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMISDNITF.h
+//    FILENAME:   NitfIsd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -23,19 +23,18 @@
 //     01-Oct-2004   KRW      October 2004 CCB
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     29-Oct-2012   SCM      Fixed NitfIsd to return const vector references.
+//     30-Oct-2012   SCM      Renamed to NitfIsd.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __csm_ISDNITF_H
-#define __csm_ISDNITF_H
+#ifndef __CSM_NITFISD_H
+#define __CSM_NITFISD_H
 
-#include "CSMImageSupportData.h"
-#include "CSMMisc.h"
+#include "Isd.h"
 
 #include <vector>
-#include <string>
 
 namespace csm
 {
