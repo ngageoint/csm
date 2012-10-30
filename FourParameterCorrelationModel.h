@@ -176,12 +176,12 @@ protected:
 
    void checkSensorModelParameterIndex(size_t smParamIndex, const std::string& functionName) const;
       //> If the given sensor model parameter index is not within the range
-      //  [0, numSMParams), throws a CSMError.
+      //  [0, numSMParams), throws a csm::Error.
       //<
 
    void checkParameterGroupIndex(size_t groupIndex, const std::string& functionName) const;
       //> If the given correlation parameter group index is not within the range
-      //  [0, numCPGroups), throws a CSMError.
+      //  [0, numCPGroups), throws a csm::Error.
       //<
 
 };

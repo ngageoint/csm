@@ -6,7 +6,7 @@
 //
 //    DESCRIPTION:
 //
-//    This header defines the CSMLinearDecayCorrelationModel class.  This
+//    This header defines the csm::LinearDecayCorrelationModel class.  This
 //    class is used to compute the correlation between adjustable parameters in
 //    a community sensor model (CSM).
 //
@@ -187,14 +187,14 @@ protected:
       size_t             smParamIndex,
       const std::string& functionName) const;
       //> If the given sensor model parameter index is not within the range
-      //  [0, numSMParams), throws a CSMError.
+      //  [0, numSMParams), throws a csm::Error.
       //<
 
    void checkParameterGroupIndex(
       size_t             groupIndex,
       const std::string& functionName) const;
       //> If the given correlation parameter group index is not within the range
-      //  [0, numCPGroups), throws a CSMError.
+      //  [0, numCPGroups), throws a csm::Error.
       //<
 };
 
