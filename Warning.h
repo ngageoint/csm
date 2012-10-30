@@ -1,6 +1,6 @@
 //####################################################################
 //
-//    FILENAME:   CSMWarning.h
+//    FILENAME:   Warning.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -12,19 +12,20 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
-//     -----------   ------   -------
+//     Date          Author    Comment   
+//     -----------   ------    -------
 //     01-Jun-2004   Kevin Lam CCB Change
 //     02-Mar-2012   SCM       Refactored interface.
+//     30-Oct-2012   SCM       Renamed to Warning.h
 //
 //    NOTES:
 //
 //###################################################################
 
-#ifndef __CSMWARNING_H
-#define __CSMWARNING_H
+#ifndef __CSM_WARNING_H
+#define __CSM_WARNING_H
 
-#include "CSMMisc.h"
+#include "csm.h"
 #include <string>
 #include <list>
 
