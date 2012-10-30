@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMMisc.h
+//    FILENAME:   csm.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -18,13 +18,14 @@
 //     02-Mar-2012   SCM      Added csm namespace.
 //     30-Oct-2012   SCM      Changed covariances from std::vectors to arrays.
 //                            Made the covariances public.
+//     30-Oct-2012   SCM      Renamed to csm.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMMISC_H
-#define __CSMMISC_H
+#ifndef __CSM_CSM_H
+#define __CSM_CSM_H
 
 #include <vector>
 
