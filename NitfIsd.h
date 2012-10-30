@@ -22,6 +22,7 @@
 //                             control board.
 //     01-Oct-2004   KRW      October 2004 CCB
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     29-Oct-2012   SCM      Fixed NitfIsd to return const vector references.
 //
 //    NOTES:
 //
@@ -158,14 +159,14 @@ public:
       //  the TRE data.
       //<
 
-   const std::vector<Tre> fileTREs() const { return theFileTREs; }
+   const std::vector<Tre>& fileTREs() const { return theFileTREs; }
       //> This method returns the parsed fileheader tagged record extension
       //  objects.
       //<
-   const std::vector<Des> fileDESs() const { return theFileDESs; }
+   const std::vector<Des>& fileDESs() const { return theFileDESs; }
       //> This method returns the data extension segment objects in this NITF.
       //<
-   const std::vector<Image> images() const { return theImages; }
+   const std::vector<Image>& images() const { return theImages; }
       //> This method returns the image objects in this NITF.
       //<
 
