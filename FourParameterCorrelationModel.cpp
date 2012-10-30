@@ -1,11 +1,11 @@
 /**
  * This file contains the implementation of the
- * CSMFourParameterCorrelationModel class.  See the comments in the header file
+ * FourParameterCorrelationModel class.  See the comments in the header file
  * for more information about the class interface.
  **/
 #define CSM_LIBRARY
-#include "CSMFourParameterCorrelationModel.h"
-#include "CSMError.h"
+#include "FourParameterCorrelationModel.h"
+#include "Error.h"
 
 #ifdef IRIXN32
 #include "math.h"
