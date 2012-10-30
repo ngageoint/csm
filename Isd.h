@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMImageSupportData.h
+//    FILENAME:   Isd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -23,18 +23,19 @@
 //     04-Jun-2012   SCM      Added generic parameters.
 //     26-Sep-2012   JPK      Added some common parameter types
 //     11-Oct-2012   SCM      Added clearAllParams() and clearParams().
+//     30-Oct-2012   SCM      Renamed to Isd.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMIMAGESUPORTDATA_H
-#define __CSMIMAGESUPORTDATA_H
+#ifndef __CSM_ISD_H
+#define __CSM_ISD_H
 
 #include <string>
 #include <map>
 
-#include "CSMMisc.h"
+#include "csm.h"
 
 namespace csm
 {
