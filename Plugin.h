@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMPlugin.h
+//    FILENAME:   Plugin.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -28,6 +28,7 @@
 //     21-Jun-2012   SCM      Added data directory.
 //     26-Sep-2012   SCM      Changed getModelVersion() to return a
 //                            csm::Version object
+//     30-Oct-2012   SCM      Renamed to Plugin.h
 //
 //    NOTES:
 //
@@ -44,14 +45,14 @@
 //
 //#############################################################################
 
-#ifndef __CSMPLUGIN_H
-#define __CSMPLUGIN_H
+#ifndef __CSM_PLUGIN_H
+#define __CSM_PLUGIN_H
 
-#include "CSMImageSupportData.h"
-#include "CSMMisc.h"
-#include "CSMError.h"
-#include "CSMWarning.h"
-#include "CSMVersion.h"
+#include "csm.h"
+#include "Isd.h"
+#include "Error.h"
+#include "Warning.h"
+#include "Version.h"
 
 #include <list>
 #include <string>
