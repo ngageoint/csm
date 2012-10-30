@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMGeometricModel.h
+//    FILENAME:          GeometricModel.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -50,18 +50,19 @@
 //     26-Sep-2012   SCM    Moved all sensor partials to derived RasterGM
 //                          class.
 //     02-Oct-2012   SCM    Added getParameterUnits() method.
+//     30-Oct-2012   SCM    Renamed to GeometricModel.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMGEOMETRICMODEL_H
-#define __CSMGEOMETRICMODEL_H
+#ifndef __CSM_GEOMETRICMODEL_H
+#define __CSM_GEOMETRICMODEL_H
 
-#include "CSMMisc.h"
-#include "CSMWarning.h"
-#include "CSMParameterSharing.h"
-#include "CSMModel.h"
+#include "csm.h"
+#include "Warning.h"
+#include "ParameterSharing.h"
+#include "Model.h"
 #include <vector>
 #include <string>
 
