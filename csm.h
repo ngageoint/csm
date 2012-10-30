@@ -16,6 +16,7 @@
 //     -----------   ------   -------
 //     01-Jul-2003   LMT      Initial version.
 //     02-Mar-2012   SCM      Added csm namespace.
+//     30-Oct-2012   SCM      Changed covariances from std::vectors to arrays.
 //
 //    NOTES:
 //
@@ -94,9 +95,9 @@ namespace csm
    struct ImageCoordCovar : public ImageCoord
    {
    public:
-      ImageCoordCovar() : ImageCoord(), theCovar(4, 0.0) {}
+      ImageCoordCovar() : ImageCoord() { memset(theCovar, 0, sizeof(theCovar)); }
       ImageCoordCovar(double aLine, double aSamp)
-         : ImageCoord(aLine, aSamp), theCovar(4, 0.0) {}
+         : ImageCoord(aLine, aSamp) { memset(theCovar, 0, sizeof(theCovar)); }
 
       const double* covar() const { return &(theCovar[0]); }
             double* covar()       { return &(theCovar[0]); }
@@ -108,7 +109,7 @@ namespace csm
       double& covar(unsigned int l, unsigned int s)       { return theCovar[2*l + s]; }
 
    private:
-      std::vector<double> theCovar;
+      double theCovar[4];
    };
 
    //***
@@ -162,9 +163,9 @@ namespace csm
    struct EcefCoordCovar : public EcefCoord
    {
    public:
-      EcefCoordCovar() : EcefCoord(), theCovar(9, 0.0) {}
+      EcefCoordCovar() : EcefCoord() { memset(theCovar, 0, sizeof(theCovar)); }
       EcefCoordCovar(double aX, double aY, double aZ)
-         : EcefCoord(aX, aY, aZ), theCovar(9, 0.0) {}
+         : EcefCoord(aX, aY, aZ) { memset(theCovar, 0, sizeof(theCovar)); }
 
       const double* covar() const { return &(theCovar[0]); }
             double* covar()       { return &(theCovar[0]); }
@@ -176,7 +177,7 @@ namespace csm
       double& covar(unsigned int l, unsigned int s)       { return theCovar[3*l + s]; }
 
    private:
-      std::vector<double> theCovar;
+      double theCovar[9];
    };
 
    //***
