@@ -135,7 +135,6 @@ const Plugin* Plugin::findPlugin(const std:: string& pluginName,
 
    const PluginList& plugins = getList();
 
-   bool found = false;
    for (PluginList::const_iterator i = plugins.begin();
         i != plugins.end(); ++i)
    {
