@@ -36,8 +36,8 @@ Version::Version(const std::string& version)
    static const char* const MODULE = "csm::Version::Version";
 
    // split on periods
-   int pos = 0;
-   int dotPos = 0;
+   std::string::size_type pos = 0;
+   std::string::size_type dotPos = 0;
    while ( (dotPos = version.find('.', pos)) != std::string::npos )
    {
       const std::string v = version.substr(pos, dotPos - pos);
