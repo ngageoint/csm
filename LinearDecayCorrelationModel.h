@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMLinearDecayCorrelationModel.h
+//    FILENAME:          LinearDecayCorrelationModel.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -31,16 +31,17 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     20-Nov-2012   ISK      Initial Release.
+//     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef _CSM3_LINEAR_DECAY_CORRELATION_MODEL_H_
-#define _CSM3_LINEAR_DECAY_CORRELATION_MODEL_H_
+#ifndef __CSM_LINEARDECAYCORRELATIONMODEL_H_
+#define __CSM_LINEARDECAYCORRELATIONMODEL_H_
 
-#include "CSMCovarianceModel.h"
-#include "CSMWarning.h"
+#include "CovarianceModel.h"
+#include "Warning.h"
 
 #include <vector>
 
@@ -54,10 +55,10 @@ public:
    struct CSM_EXPORT_API Parameters
    {
       Parameters() {}
-      Parameters(
-         const std::vector<double> &initialCorrsPerSegment,
-         const std::vector<double> &timesPerSegment)
-      {}
+      Parameters(const std::vector<double>& initialCorrsPerSegment,
+                 const std::vector<double>& timesPerSegment)
+         : theInitialCorrsPerSegment(initialCorrsPerSegment),
+           theTimesPerSegment(timesPerSegment) {}
 
       std::vector<double> theInitialCorrsPerSegment;
       std::vector<double> theTimesPerSegment;
@@ -141,8 +142,8 @@ public:
 
    void setCorrelationGroupParameters(
       size_t cpGroupIndex,
-      const std::vector<double> &initialCorrsPerSegment,
-      const std::vector<double> &timesPerSegment);
+      const std::vector<double>& initialCorrsPerSegment,
+      const std::vector<double>& timesPerSegment);
       //> Sets the values of the correlation parameters for a given group.  The
       //  cpGroupIndex variable holds the index of a correlation parameter group
       //  and the remaining arguments are the values of the correlation
@@ -172,7 +173,6 @@ public:
       //<
 
 protected:
-
    std::vector<int> theGroupMapping;
       //> This data member stores the mapping between sensor model parameter
       //  indices and correlation parameter group indices.
