@@ -17,6 +17,7 @@
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     19-Apr-2012   SCM      Initial creation
+//     30-Oct-2012   SCM      Added version() accessors.
 //
 //    NOTES:
 //
@@ -30,6 +31,7 @@
 #include <string>
 #include <iosfwd>
 #include <vector>
+#include <sstream>
 
 namespace csm
 {
@@ -58,6 +60,29 @@ public:
    std::ostream& print(std::ostream& os) const;
       //> This method renders the version as a string to the given output
       //  stream.
+      //<
+
+   std::string version() const { std::ostringstream s; print(s); return s.str(); }
+      //> This method returns the version as a string.  This method should not
+      //  be called if the result is being sent to an ostream.  It will work,
+      //  but will be inefficient.  Instead, use the operator<< defined below,
+      //  or call print() directly.
+      //<
+
+   int version(unsigned int part) const { return (part < theVersions.size() ? theVersions[part] : -1); }
+      //> This method returns the requested portion of the version.  If the
+      //  requested part does not exist, then this method returns -1.
+      //<
+   int major() const { return version(0); }
+      //> This method returns the major version number of the version.
+      //<
+   int minor() const { return version(1); }
+      //> This method returns the minor version number of the version.
+      //<
+   int revision() const { return version(2); }
+      //> This method returns the revision version number of the version, if it
+      //  exists.  If there is no revision in this version, this method returns
+      //  -1.
       //<
 
    bool operator==(const Version& rhs);
