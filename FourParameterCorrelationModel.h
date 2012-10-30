@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMFourParameterCorrelationModel.h
+//    FILENAME:          FourParameterCorrelationModel.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -33,16 +33,17 @@
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface.
 //     22-Jun-2012   SCM      Made Parameters public, added accessor.
+//     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef _CSM3_FOURPARAMETERCORRELATIONMODEL_H_
-#define _CSM3_FOURPARAMETERCORRELATIONMODEL_H_
+#ifndef __CSM_FOURPARAMETERCORRELATIONMODEL_H_
+#define __CSM_FOURPARAMETERCORRELATIONMODEL_H_
 
-#include "CSMCovarianceModel.h"
-#include "CSMWarning.h"
+#include "CovarianceModel.h"
+#include "Warning.h"
 
 #include <vector>
 
