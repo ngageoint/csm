@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMISDNITF21.h
+//    FILENAME:   Nitf21Isd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -23,15 +23,16 @@
 //     01-Nov-2004   KRW      October 2004 CCB
 //     08-Jan-2005   KRW      Multi Image/Frame ? Administrative changes
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     30-Oct-2012   SCM      Renamed to Nitf21Isd.h.  And deleted.
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSM_ISDNITF21_H
-#define __CSM_ISDNITF21_H
+#ifndef __CSM_NITF21ISD_H
+#define __CSM_NITF21ISD_H
 
-#include "CSMISDNITF20.h"
+#include "NitfIsd.h"
 
 namespace csm
 {
