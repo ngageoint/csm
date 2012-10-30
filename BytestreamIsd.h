@@ -1,12 +1,12 @@
 //#############################################################################
 //
-//    FILENAME:   CSMISDByteStream.h
+//    FILENAME:   BytestreamIsd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the ByteStream ISD class derived from the csm::Isd base class.
+//    Header for the byte stream ISD class derived from the csm::Isd base class.
 //    ISD is encapsulated in a C++ class for transfer through the CSM
 //    interface. This class is designed to hold ISD in a std::string of unspecified
 //    format. The field "data" is set with the ISD.
@@ -21,17 +21,16 @@
 //                            January and February 2004
 //                            Configuration control board.
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     30-Oct-2012   SCM      Renamed to BytestreamIsd.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __csm_ISDBYTESTREAM_H
-#define __csm_ISDBYTESTREAM_H
+#ifndef __CSM_BYTESTREAMISD_H
+#define __CSM_BYTESTREAMISD_H
 
-#include "CSMImageSupportData.h"
-#include "CSMMisc.h"
-#include <string>
+#include "Isd.h"
 
 namespace csm
 {
