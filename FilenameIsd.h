@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMISDFilename.h
+//    FILENAME:   FilenameIsd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -22,18 +22,16 @@
 //                            January and February 2004
 //                            Configuration control board.
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     30-Oct-2012   SCM      Renamed to FilenameIsd.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __csm_ISDFILENAME_H
-#define __csm_ISDFILENAME_H
+#ifndef __CSM_FILENAMEISD_H
+#define __CSM_FILENAMEISD_H
 
-#include "CSMImageSupportData.h"
-#include "CSMMisc.h"
-
-#include <string>
+#include "Isd.h"
 
 namespace csm
 {
