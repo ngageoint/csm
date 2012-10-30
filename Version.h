@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMVersion.h
+//    FILENAME:          Version.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -18,15 +18,16 @@
 //     -----------   ------   -------
 //     19-Apr-2012   SCM      Initial creation
 //     30-Oct-2012   SCM      Added version() accessors.
+//     30-Oct-2012   SCM      Renamed to Version.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMVERSION_H
-#define __CSMVERSION_H
+#ifndef __CSM_VERSION_H
+#define __CSM_VERSION_H
 
-#include "CSMMisc.h"
+#include "csm.h"
 
 #include <string>
 #include <iosfwd>
