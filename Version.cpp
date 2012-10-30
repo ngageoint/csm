@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMVersion.cpp
+//    FILENAME:   Version.cpp
 //
 //    DESCRIPTION:
 //     This file provides implementation for methods declared in the
@@ -10,6 +10,7 @@
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     19-Apr-2012   SCM      Initial creation
+//     30-Oct-2012   SCM      Renamed to Version.cpp
 //
 //    NOTES:
 //     Refer to CSMVersion.h for more information.
@@ -18,8 +19,8 @@
 
 #define CSM_LIBRARY
 
-#include "CSMVersion.h"
-#include "CSMError.h"
+#include "Version.h"
+#include "Error.h"
 
 #include <ostream>
 
