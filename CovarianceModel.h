@@ -1,6 +1,6 @@
 //##################################################################
 //
-//    FILENAME:   CSMCovarianceModel.h
+//    FILENAME:   CovarianceModel.h
 //
 //    CLASSIFICATION:    UNCLASSIFIED
 //
@@ -14,16 +14,17 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface
+//     30-Oct-2012   SCM      Renamed to CovarianceModel.h
 //
 //    NOTES:
 //
 //#####################################################################
 
-#ifndef __CSMCOVARIANCE_MODEL_H
-#define __CSMCOVARIANCE_MODEL_H
+#ifndef __CSM_COVARIANCEMODEL_H
+#define __CSM_COVARIANCEMODEL_H
 
 #include <string>
-#include "CSMMisc.h"
+#include "csm.h"
 
 namespace csm
 {
