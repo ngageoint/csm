@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMModel.h
+//    FILENAME:          Model.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -17,18 +17,19 @@
 //     -----------   ------   -------
 //     02-Mar-2012   SCM      Initial creation
 //     26-Sep-2012   JPK      Removed getModelType() and reference point.
+//     30-Oct-2012   SCM      Renamed to Model.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMMODEL_H
-#define __CSMMODEL_H
+#ifndef __CSM_MODEL_H
+#define __CSM_MODEL_H
 
-#include "CSMMisc.h"
-#include "CSMWarning.h"
-#include "CSMSensorTypeAndMode.h"
-#include "CSMVersion.h"
+#include "csm.h"
+#include "Warning.h"
+#include "SensorTypeAndMode.h"
+#include "Version.h"
 #include <string>
 
 namespace csm
