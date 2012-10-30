@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMSensorTypeAndMode.h
+//    FILENAME:          SensorTypeAndMode.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -15,13 +15,14 @@
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     02-Mar-2012   SCM      Initial version
+//     30-Oct-2012   SCM      Renamed to SensorTypeAndMode.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMSENSORTYPEANDMODE_H
-#define __CSMSENSORTYPEANDMODE_H
+#ifndef __CSM_SENSORTYPEANDMODE_H
+#define __CSM_SENSORTYPEANDMODE_H
 
 #include <string>
 
