@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMPlugin.cpp
+//    FILENAME:   Plugin.cpp
 //
 //    DESCRIPTION:
 //
@@ -16,18 +16,16 @@
 
 #define CSM_LIBRARY
 
-#include "CSMPlugin.h"
-#include "CSMWarning.h"
-#include "CSMError.h"
+#include "Plugin.h"
 
 #include <algorithm>
 #include <iostream>
 
 #ifdef _WIN32          //exports the symbols to be used (KJR)
 # include <windows.h>
-# include "CSMRasterGM.h"
-# include "CSMISDByteStream.h"
-# include "CSMISDNITF.h"
+# include "RasterGM.h"
+# include "BytestreamIsd.h"
+# include "NitfIsd.h"
 #else
 # include <pthread.h>
 #endif
