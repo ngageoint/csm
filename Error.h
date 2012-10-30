@@ -96,5 +96,5 @@ private:
 
 } // namespace csm
 
-#endif // __CSMERROR_H
+#endif
 

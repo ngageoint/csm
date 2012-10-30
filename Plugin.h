@@ -215,5 +215,5 @@ private:
 
 } // namespace csm
 
-#endif // __CSMPLUGIN_H
+#endif
 

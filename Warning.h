@@ -84,5 +84,5 @@ typedef std::list<Warning> WarningList;
 
 } // namespace csm
 
-#endif // __CSMWARNING_H
+#endif
 

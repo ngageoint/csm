@@ -66,5 +66,5 @@ private:
 
 } // namespace csm
 
-#endif // __CSMPARAMETER_SHARING_H
+#endif
 
