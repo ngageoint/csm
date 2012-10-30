@@ -61,7 +61,7 @@
 
 #include "csm.h"
 #include "Warning.h"
-#include "ParameterSharing.h"
+#include "ParameterSharingCriteria.h"
 #include "Model.h"
 #include <vector>
 #include <string>
