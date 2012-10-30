@@ -4,8 +4,8 @@
  * for more information about the class interface.
  **/
 #define CSM_LIBRARY
-#include "CSMLinearDecayCorrelationModel.h"
-#include "CSMError.h"
+#include "LinearDecayCorrelationModel.h"
+#include "Error.h"
 
 #ifdef IRIXN32
 #include "math.h"
@@ -17,12 +17,11 @@ using std::fabs;
 
 namespace csm {
 
-LinearDecayCorrelationModel::LinearDecayCorrelationModel(
-   size_t numSMParams,
-   size_t numCPGroups)
+LinearDecayCorrelationModel::LinearDecayCorrelationModel(size_t numSMParams,
+                                                         size_t numCPGroups)
    :
-   theGroupMapping(numSMParams, -1),
-   theCorrParams(numSMParams)
+      theGroupMapping(numSMParams, -1),
+      theCorrParams(numSMParams)
 {
    // set the format string in the base class
    theFormat = "LinearDecayCorrelation";
@@ -65,8 +64,8 @@ void LinearDecayCorrelationModel::setCorrelationParameterGroup(
 
 void LinearDecayCorrelationModel::setCorrelationGroupParameters(
    size_t cpGroupIndex,
-   const std::vector<double> &initialCorrsPerSegment,
-   const std::vector<double> &timesPerSegment)
+   const std::vector<double>& initialCorrsPerSegment,
+   const std::vector<double>& timesPerSegment)
 {
    setCorrelationGroupParameters(
       cpGroupIndex, Parameters(initialCorrsPerSegment, timesPerSegment) );
@@ -84,8 +83,8 @@ void LinearDecayCorrelationModel::setCorrelationGroupParameters(
 
    // make sure the values of each correlation model parameter
    // fall within acceptable ranges
-   int size = params.theInitialCorrsPerSegment.size();
-   if( size != params.theTimesPerSegment.size() )
+   size_t size = params.theInitialCorrsPerSegment.size();
+   if (size != params.theTimesPerSegment.size())
    {
       throw Error(
          Error::BOUNDS,
@@ -96,13 +95,13 @@ void LinearDecayCorrelationModel::setCorrelationGroupParameters(
    double corr, prevCorr;
    double time, prevTime;
 
-   if( size > 1 )
+   if (size > 1)
    {
-      for( int i = 0; i < size; i++ )
+      for(size_t i = 0; i < size; ++i)
       {
          corr = params.theInitialCorrsPerSegment[i];
          time = params.theTimesPerSegment[i];
-         if( corr < 0.0 || corr > 1.0 )
+         if (corr < 0.0 || corr > 1.0)
          {
             throw Error(
                Error::BOUNDS,
@@ -110,18 +109,18 @@ void LinearDecayCorrelationModel::setCorrelationGroupParameters(
                MODULE);
          }
 
-         if( i > 0 )
+         if (i > 0)
          {
             prevCorr = params.theInitialCorrsPerSegment[i-1];
             prevTime = params.theTimesPerSegment[i-1];
-            if( corr > prevCorr )
+            if (corr > prevCorr)
             {
                throw Error(
                   Error::BOUNDS,
                   "Correlation must be monotomically decreasing.",
                   MODULE);
             }
-            if( time < prevTime )
+            if (time < prevTime)
             {
                throw Error(
                   Error::BOUNDS,
@@ -145,19 +144,18 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 
    // compute the value of the correlation coefficient
    const Parameters& cp = theCorrParams[cpGroupIndex];
-   int size = cp.theInitialCorrsPerSegment.size();
-   double corrCoeff = 0.0;
+   const size_t size = cp.theInitialCorrsPerSegment.size();
 
-   double adt = fabs(deltaTime);
+   const double adt = fabs(deltaTime);
    double prevCorr = cp.theInitialCorrsPerSegment[0];
    double prevTime = cp.theTimesPerSegment[0];
 
    double correlation = prevCorr;
 
-   for (int s = 1; s < size; s ++)
+   for(size_t s = 1; s < size; ++s)
    {
-      double corr = cp.theInitialCorrsPerSegment[s];
-      double time = cp.theTimesPerSegment[s];
+      const double corr = cp.theInitialCorrsPerSegment[s];
+      const double time = cp.theTimesPerSegment[s];
       if (adt <= time)
       {
          if (time - prevTime != 0.0)
