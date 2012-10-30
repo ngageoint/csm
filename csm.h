@@ -17,6 +17,7 @@
 //     01-Jul-2003   LMT      Initial version.
 //     02-Mar-2012   SCM      Added csm namespace.
 //     30-Oct-2012   SCM      Changed covariances from std::vectors to arrays.
+//                            Made the covariances public.
 //
 //    NOTES:
 //
@@ -95,21 +96,16 @@ namespace csm
    struct ImageCoordCovar : public ImageCoord
    {
    public:
-      ImageCoordCovar() : ImageCoord() { memset(theCovar, 0, sizeof(theCovar)); }
+      ImageCoordCovar() : ImageCoord() { memset(covariance, 0, sizeof(covariance)); }
       ImageCoordCovar(double aLine, double aSamp)
-         : ImageCoord(aLine, aSamp) { memset(theCovar, 0, sizeof(theCovar)); }
+         : ImageCoord(aLine, aSamp) { memset(covariance, 0, sizeof(covariance)); }
+      ImageCoordCovar(double aLine, double aSamp, double aCovar[4])
+         : ImageCoord(aLine, aSamp) { memcpy(covariance, aCovar, sizeof(covariance)); }
 
-      const double* covar() const { return &(theCovar[0]); }
-            double* covar()       { return &(theCovar[0]); }
+      double  covar2d(unsigned int l, unsigned int s) const { return covariance[2*l + s]; }
+      double& covar2d(unsigned int l, unsigned int s)       { return covariance[2*l + s]; }
 
-      double  covar(unsigned int i) const { return theCovar[i]; }
-      double& covar(unsigned int i)       { return theCovar[i]; }
-
-      double  covar(unsigned int l, unsigned int s) const { return theCovar[2*l + s]; }
-      double& covar(unsigned int l, unsigned int s)       { return theCovar[2*l + s]; }
-
-   private:
-      double theCovar[4];
+      double covariance[4];
    };
 
    //***
@@ -163,21 +159,16 @@ namespace csm
    struct EcefCoordCovar : public EcefCoord
    {
    public:
-      EcefCoordCovar() : EcefCoord() { memset(theCovar, 0, sizeof(theCovar)); }
+      EcefCoordCovar() : EcefCoord() { memset(covariance, 0, sizeof(covariance)); }
       EcefCoordCovar(double aX, double aY, double aZ)
-         : EcefCoord(aX, aY, aZ) { memset(theCovar, 0, sizeof(theCovar)); }
+         : EcefCoord(aX, aY, aZ) { memset(covariance, 0, sizeof(covariance)); }
+      EcefCoordCovar(double aX, double aY, double aZ, double aCovar[9])
+         : EcefCoord(aX, aY, aZ) { memcpy(covariance, aCovar, sizeof(covariance)); }
 
-      const double* covar() const { return &(theCovar[0]); }
-            double* covar()       { return &(theCovar[0]); }
+      double  covar2d(unsigned int l, unsigned int s) const { return covariance[3*l + s]; }
+      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; }
 
-      double  covar(unsigned int i) const { return theCovar[i]; }
-      double& covar(unsigned int i)       { return theCovar[i]; }
-
-      double  covar(unsigned int l, unsigned int s) const { return theCovar[3*l + s]; }
-      double& covar(unsigned int l, unsigned int s)       { return theCovar[3*l + s]; }
-
-   private:
-      double theCovar[9];
+      double covariance[9];
    };
 
    //***
