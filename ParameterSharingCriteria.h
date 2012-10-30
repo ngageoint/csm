@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   CSMParameterSharing.h
+//    FILENAME:   ParameterSharingCriteria.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -17,15 +17,16 @@
 //     -----------   ------   -------
 //     16 Sep 2010   Gene Rose  Initial version.
 //     02-Mar-2012   SCM      Refactored interfaces.
+//     30-Oct-2012   SCM      Renamed to ParameterSharingCriteria.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMPARAMETERSHARING_H
-#define __CSMPARAMETERSHARING_H
+#ifndef __CSM_PARAMETERSHARINGCRITERIA_H
+#define __CSM_PARAMETERSHARINGCRITERIA_H
 
-#include "CSMMisc.h"
+#include "csm.h"
 
 namespace csm
 {
