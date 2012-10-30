@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CSMRasterGM.h
+//    FILENAME:          RasterGM.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -49,15 +49,16 @@
 //                          RasterGM classes.  RasterGM is now the
 //                          equivalent class to the previous SensorModel class.
 //     26-Sep-2012   SCM    Moved all sensor partials to this class.
+//     30-Oct-2012   SCM    Renamed to RasterGM.h
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSMRASTERGM_H
-#define __CSMRASTERGM_H
+#ifndef __CSM_RASTERGM_H
+#define __CSM_RASTERGM_H
 
-#include "CSMGeometricModel.h"
+#include "GeometricModel.h"
 
 #define CSM_RASTER_FAMILY "Raster"
 
