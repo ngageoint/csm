@@ -1,6 +1,6 @@
 //#####################################################################
 //
-//    FILENAME:   CSMError.h
+//    FILENAME:   Error.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -18,15 +18,16 @@
 //                                DATA_NOT_AVAILABLE
 //     09 Mar 2010   Don Leonard CCB Change Deleted DATA_NOT_AVAILABLE
 //     02 Mar 2012   SCM         Refactored interface.
+//     30-Oct-2012   SCM         Renamed to Error.h
 //
 //    NOTES:
 //
 //#####################################################################
 
-#ifndef __CSMERROR_H
-#define __CSMERROR_H
+#ifndef __CSM_ERROR_H
+#define __CSM_ERROR_H
 
-#include "CSMMisc.h"
+#include "csm.h"
 #include <string>
 
 namespace csm
