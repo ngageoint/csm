@@ -50,6 +50,9 @@
 //                          equivalent class to the previous SensorModel class.
 //     26-Sep-2012   SCM    Moved all sensor partials to this class.
 //     30-Oct-2012   SCM    Renamed to RasterGM.h
+//     31-Oct-2012   SCM    Moved getTrajectoryIdentifier() to Model.  Moved
+//                          unmodeled error methods to GeometricModel.  Made
+//                          compute partial methods const.
 //
 //    NOTES:
 //
@@ -155,18 +158,6 @@ public:
       //  as an image space vector.  Use getValidImageRange() to get the valid
       //  range of image coordinates for this model.
       //<
-   virtual std::pair<double,double> getValidHeightRange() const = 0;
-      //> The validHeightsRange() method returns the minimum and maximum
-      //  heights that describe the range of validity of the model. For
-      //  example, the model may not be valid at heights above the heights
-      //  of the sensor for physical models.
-      //
-      //  The minimum height is returned as the first element of the pair and
-      //  the maximum height is returned as the second element of the pair.
-      //
-      //  If there are no limits defined for the current model,
-      //  (-99999,99999) will be returned.
-      //<
    virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
       //> The validImageRange() method returns the minimum and maximum
       //  values for image position (line and sample) that describe the
@@ -179,6 +170,18 @@ public:
       //  and the maximum coordinate is returned as the second element of the
       //  pair.
       //<
+   virtual std::pair<double,double> getValidHeightRange() const = 0;
+      //> The validHeightsRange() method returns the minimum and maximum
+      //  heights that describe the range of validity of the model. For
+      //  example, the model may not be valid at heights above the heights
+      //  of the sensor for physical models.
+      //
+      //  The minimum height is returned as the first element of the pair and
+      //  the maximum height is returned as the second element of the pair.
+      //
+      //  If there are no limits defined for the current model,
+      //  (-99999,99999) will be returned.
+      //<
    virtual EcefVector getIlluminationDirection(const EcefCoord& gndPt) const = 0;
       //> The getIlluminationDirection() method calculates the direction of
       //  illumination at the given ground position x, y, z.
@@ -187,11 +190,6 @@ public:
    //---
    // Time and Trajectory
    //---
-   virtual std::string getTrajectoryIdentifier() const = 0;
-      //> This method returns a unique identifier to indicate which
-      //  trajectory was used to acquire the image. This ID is unique for
-      //  each sensor type on an individual path.
-      //<
    virtual double getImageTime(const ImageCoord& pt) const = 0;
       //> The getImageTime() method returns the time in seconds at which
       //  the pixel specified by line and sample was imaged. The time
@@ -234,7 +232,7 @@ public:
                 const EcefCoord& groundPt,
                 double desired_precision = 0.001,
                 double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
+                WarningList* warnings = NULL) const = 0;
       //> The computeSensorPartials() method calculates the partial derivatives
       //  of image position (both line and sample) with respect to the given
       //  sensor parameter (index) at the given ground position.
@@ -256,7 +254,7 @@ public:
                 const EcefCoord& groundPt,
                 double desired_precision = 0.001,
                 double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
+                WarningList* warnings = NULL) const = 0;
       //> The computeSensorPartials() method calculates the partial derivatives
       //  of image position (both line and sample) with respect to the given
       //  sensor parameter (index) at the given ground position.
@@ -274,7 +272,7 @@ public:
                 const EcefCoord& groundPt,
                 double desired_precision = 0.001,
                 double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
+                WarningList* warnings = NULL) const = 0;
       //> The computeAllSensorPartials() function calculates the
       //  partial derivatives of image position (both line and sample)
       //  with respect to each of the adjustable parameters at the
@@ -288,7 +286,7 @@ public:
                 const EcefCoord& groundPt,
                 double desired_precision = 0.001,
                 double* achieved_precision = NULL,
-                WarningList* warnings = NULL) = 0;
+                WarningList* warnings = NULL) const = 0;
       //> The computeAllSensorPartials() function calculates the
       //  partial derivatives of image position (both line and sample)
       //  with respect to each of the adjustable parameters at the
@@ -303,7 +301,7 @@ public:
       //  first element and a sample partials in the second element.
       //<
 
-   virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) = 0;
+   virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) const = 0;
       //> The computeGroundPartials method calculates the partial
       //  derivatives (partials) of image position (both line and sample)
       //  with respect to ground coordinates at the given ground
@@ -317,26 +315,6 @@ public:
       //  partials [3] = sample wrt x
       //  partials [4] = sample wrt y
       //  partials [5] = sample wrt z
-      //<
-
-   inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
-   { return getUnmodeledCrossCovariance(pt, pt); }
-      //> The getUnmodeledError() function gives the image-space covariance for
-      //  any unmodeled sensor error for the given input image point. The error
-      //  is reported as the four terms of a 2x2 covariance matrix, returned as
-      //  a 4 element vector.  This covariance is meant to account for errors
-      //  that are not modeled by the sensor model parameters.
-      //<
-
-   virtual std::vector<double> getUnmodeledCrossCovariance(
-      const ImageCoord& pt1,
-      const ImageCoord& pt2) const = 0;
-      //> The getUnmodeledCrossCovariance function gives the image-space cross
-      //  covariance for any unmodeled sensor error between two image points on
-      //  the same image. The error is reported as the four terms of a 2x2
-      //  matrix, returned as a 4 element vector.  This covariance is meant to
-      //  account for errors that are not modeled by the sensor model
-      //  parameters.
       //<
 
    virtual CovarianceModel* getCovarianceModel() const = 0;
