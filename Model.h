@@ -18,6 +18,10 @@
 //     02-Mar-2012   SCM      Initial creation
 //     26-Sep-2012   JPK      Removed getModelType() and reference point.
 //     30-Oct-2012   SCM      Renamed to Model.h
+//     31-Oct-2012   SCM      Split getSensorTypeAndMode() into getSensorType()
+//                            and getSensorMode().  Removed include for
+//                            SensorTypeAndMode.h.  Moved
+//                            getTrajectoryIdentifier() to this class.
 //
 //    NOTES:
 //
@@ -28,7 +32,6 @@
 
 #include "csm.h"
 #include "Warning.h"
-#include "SensorTypeAndMode.h"
 #include "Version.h"
 #include <string>
 
@@ -99,9 +102,15 @@ public:
       //  a collection activity by a sensor platform. This ID will vary
       //  depending on the sensor type and platform.
       //<
-   virtual SensorTypeAndMode getSensorTypeAndMode() const = 0;
-      //> This method returns a flag to indicate whether or not a sensor
-      // ...
+   virtual std::string getSensorType() const = 0;
+      //> This method returns a description of the sensor type.  See csm.h for
+      //  a list of common types.  Should return CSM_SENSOR_TYPE_UNKNOWN if the
+      //  sensor type is not known.
+      //<
+   virtual std::string getSensorMode() const = 0;
+      //> This method returns a description of the sensor mode.  See csm.h for
+      //  a list of common modes.  Should return CSM_SENSOR_MODE_UNKNOWN if the
+      //  sensor mode is not known.
       //<
 
    virtual std::string getReferenceDateAndTime() const = 0;
@@ -110,6 +119,11 @@ public:
       //  date and time given by the getReferenceDateAndTime() method and
       //  can be used to represent time offsets within the trajectory
       //  associated with the given image.
+      //<
+   virtual std::string getTrajectoryIdentifier() const = 0;
+      //> This method returns a unique identifier to indicate which
+      //  trajectory was used to acquire the image. This ID is unique for
+      //  each sensor type on an individual path.
       //<
 
    //---
