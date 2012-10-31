@@ -19,6 +19,7 @@
 //     30-Oct-2012   SCM      Changed covariances from std::vectors to arrays.
 //                            Made the covariances public.
 //     30-Oct-2012   SCM      Renamed to csm.h
+//     31-Oct-2012   SCM      Moved common sensor type and mode defines here.
 //
 //    NOTES:
 //
@@ -44,7 +45,28 @@
 // The getVersion() and getCSMVersion() methods should use CURRENT_CSM_VERSION to
 // return the CSM API version that the sensor model/plugin was written to.
 #define CURRENT_CSM_VERSION csm::Version(3, 0);
-   
+
+// common sensor types returned from csm::Model::getSensorType()
+#define CSM_SENSOR_TYPE_UNKNOWN       "UNKNOWN"
+#define CSM_SENSOR_TYPE_EO            "EO"
+#define CSM_SENSOR_TYPE_IR            "IR"
+#define CSM_SENSOR_TYPE_MWIR          "MWIR"
+#define CSM_SENSOR_TYPE_LWIR          "LWIR"
+#define CSM_SENSOR_TYPE_SAR           "SAR"
+#define CSM_SENSOR_TYPE_EOIRSC        "EO_IR_SPECIAL_CASE"
+
+// common sensor modes returned from csm::Model::getSensorMode()
+#define CSM_SENSOR_MODE_UNKNOWN       "UNKNOWN"
+#define CSM_SENSOR_MODE_FRAME         "FRAME"
+#define CSM_SENSOR_MODE_PULSE         "PULSE"
+#define CSM_SENSOR_MODE_PB            "PUSHBROOM"
+#define CSM_SENSOR_MODE_WB            "WHISKBROOM"
+#define CSM_SENSOR_MODE_SPOT          "SPOT"
+#define CSM_SENSOR_MODE_STRIP         "STRIP"
+#define CSM_SENSOR_MODE_SCAN          "SCAN"
+#define CSM_SENSOR_MODE_VIDEO         "VIDEO"
+#define CSM_SENSOR_MODE_BODY_POINTING "BODY_POINTING"
+
 namespace csm
 {
    enum ParamType
