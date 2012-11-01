@@ -53,6 +53,7 @@
 //     31-Oct-2012   SCM    Moved getTrajectoryIdentifier() to Model.  Moved
 //                          unmodeled error methods to GeometricModel.  Made
 //                          compute partial methods const.
+//     01-Nov-2012   SCM    Moved unmodeled error methods back to RasterGM.
 //
 //    NOTES:
 //
@@ -322,6 +323,26 @@ public:
       //
       //  A new object is created every time this method is called.  The client
       //  is responsible for deallocating the object returned by this method.
+      //<
+
+   inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
+   { return getUnmodeledCrossCovariance(pt, pt); }
+      //> The getUnmodeledError() function gives the image-space covariance for
+      //  any unmodeled sensor error for the given input image point. The error
+      //  is reported as the four terms of a 2x2 covariance matrix, returned as
+      //  a 4 element vector.  This covariance is meant to account for errors
+      //  that are not modeled by the sensor model parameters.
+      //<
+
+   virtual std::vector<double> getUnmodeledCrossCovariance(
+      const ImageCoord& pt1,
+      const ImageCoord& pt2) const = 0;
+      //> The getUnmodeledCrossCovariance function gives the image-space cross
+      //  covariance for any unmodeled sensor error between two image points on
+      //  the same image. The error is reported as the four terms of a 2x2
+      //  matrix, returned as a 4 element vector.  This covariance is meant to
+      //  account for errors that are not modeled by the sensor model
+      //  parameters.
       //<
 
 #ifdef TESTAPIVERSION

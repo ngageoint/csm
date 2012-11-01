@@ -53,6 +53,7 @@
 //     30-Oct-2012   SCM    Renamed to GeometricModel.h
 //     31-Oct-2012   SCM    Added hasShareableParameters().  Moved unmodeled
 //                          error methods to this class.
+//     01-Nov-2012   SCM    Moved unmodeled error methods back to RasterGM.
 //
 //    NOTES:
 //
@@ -329,27 +330,6 @@ public:
       //  The otherModels optional list may be passed if there are additional
       //  sensor models that influence the covariance computation.
       //<
-
-   inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
-   { return getUnmodeledCrossCovariance(pt, pt); }
-      //> The getUnmodeledError() function gives the image-space covariance for
-      //  any unmodeled sensor error for the given input image point. The error
-      //  is reported as the four terms of a 2x2 covariance matrix, returned as
-      //  a 4 element vector.  This covariance is meant to account for errors
-      //  that are not modeled by the sensor model parameters.
-      //<
-
-   virtual std::vector<double> getUnmodeledCrossCovariance(
-      const ImageCoord& pt1,
-      const ImageCoord& pt2) const = 0;
-      //> The getUnmodeledCrossCovariance function gives the image-space cross
-      //  covariance for any unmodeled sensor error between two image points on
-      //  the same image. The error is reported as the four terms of a 2x2
-      //  matrix, returned as a 4 element vector.  This covariance is meant to
-      //  account for errors that are not modeled by the sensor model
-      //  parameters.
-      //<
-
 };
 
 } // namespace csm
