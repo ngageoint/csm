@@ -1,6 +1,5 @@
-PROJECT_NAME           = CSM
+PROJECT_NAME           = "Community Sensor Model"
 PROJECT_NUMBER         = 3.0
-OUTPUT_DIRECTORY       = /programs/origin/html/doxygen/csm3
 CREATE_SUBDIRS         = YES
 FULL_PATH_NAMES        = YES
 JAVADOC_AUTOBRIEF      = YES
@@ -10,8 +9,7 @@ SORT_BY_SCOPE_NAME     = YES
 INPUT                  = ./csm/.
 RECURSIVE              = YES
 EXCLUDE_SYMLINKS       = YES
-EXCLUDE_PATTERNS       = */test/* *.m *.f */ImageLinker/*
-INPUT_FILTER           = /view/org_sminster_linux64_rh5/vobs/Origin/scripts/doxygen-filter.pl
+EXCLUDE_PATTERNS       = */test/* *.m *.f
 REFERENCED_BY_RELATION = NO
 GENERATE_TREEVIEW      = YES
 ALPHABETICAL_INDEX     = YES
