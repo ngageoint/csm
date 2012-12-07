@@ -24,6 +24,8 @@
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     29-Oct-2012   SCM      Fixed NitfIsd to return const vector references.
 //     30-Oct-2012   SCM      Renamed to NitfIsd.h
+//     06-Dec-2012   JPK      Made Filename parameter optional, replaced
+//                            TRE and DES with Tre and Des for consistency
 //
 //    NOTES:
 //
@@ -65,7 +67,7 @@ class CSM_EXPORT_API Tre
 public:
    Tre() : theName(), theLength(0), theData() {}
    explicit Tre(const std::string& treData)
-      : theName(), theLength(0), theData() { setTRE(treData); }
+      : theName(), theLength(0), theData() { setTre(treData); }
    Tre(const std::string& aName, unsigned int aLength, const std::string& aData)
       : theName(aName), theLength(aLength), theData(aData) {}
    ~Tre() {}
@@ -79,7 +81,7 @@ public:
    const void setData(const std::string& aData) { theData = aData; }
 
    // treData includes TRE name, length and data
-   void setTRE(const std::string& treData)
+   void setTre(const std::string& treData)
    {
       if (treData.length() < 11) return;
       theName = treData.substr(0, 6);
@@ -118,7 +120,7 @@ public:
       //> This method returns the entire image subheader, including a copy of
       //  the TRE data.
       //<
-   const std::vector<Tre>& imageTREs() const { return theImageTres; }
+   const std::vector<Tre>& imageTres() const { return theImageTres; }
       //> This method returns the list of image subheader tagged record
       //  extensions (TREs).
       //<
@@ -129,13 +131,13 @@ public:
       //  list of TREs in sync using the list modification methods below.
       //<
 
-   void clearImageTREs() { theImageTres.clear(); }
-      //> This method remvoes all existing Tre objects from the list.
+   void clearImageTres() { theImageTres.clear(); }
+      //> This method remvoes all existing TRE objects from the list.
       //<
-   void addImageTRE(const Tre& tre) { theImageTres.push_back(tre); }
-      //> This method adds the given Tre object to the list.
+   void addImageTre(const Tre& tre) { theImageTres.push_back(tre); }
+      //> This method adds the given TRE object to the list.
       //<
-   void setImageTREs(const std::vector<Tre>& tres) { theImageTres = tres; }
+   void setImageTres(const std::vector<Tre>& tres) { theImageTres = tres; }
       //> This method sets the TRE list to the given vector.
       //<
 
@@ -158,11 +160,11 @@ public:
       //  the TRE data.
       //<
 
-   const std::vector<Tre>& fileTREs() const { return theFileTREs; }
+   const std::vector<Tre>& fileTres() const { return theFileTres; }
       //> This method returns the parsed fileheader tagged record extension
       //  objects.
       //<
-   const std::vector<Des>& fileDESs() const { return theFileDESs; }
+   const std::vector<Des>& fileDess() const { return theFileDess; }
       //> This method returns the data extension segment objects in this NITF.
       //<
    const std::vector<Image>& images() const { return theImages; }
@@ -175,39 +177,39 @@ public:
       //  list of TREs in sync using the list modification methods below.
       //<
 
-   void clearFileTREs() { theFileTREs.clear(); }
-      //> This method remvoes all existing Tre objects from the list.
+   void clearFileTres() { theFileTres.clear(); }
+      //> This method remvoes all existing TRE objects from the list.
       //<
-   void addFileTRE(const Tre& tre) { theFileTREs.push_back(tre); }
-      //> This method adds the given Tre object to the list.
+   void addFileTre(const Tre& tre) { theFileTres.push_back(tre); }
+      //> This method adds the given TRE object to the list.
       //<
-   void setFileTREs(const std::vector<Tre>& tres) { theFileTREs = tres; }
+   void setFileTres(const std::vector<Tre>& tres) { theFileTres = tres; }
       //> This method sets the TRE list to the given vector.
       //<
 
-   void clearFileDESs() { theFileDESs.clear(); }
-      //> This method remvoes all existing Des objects from the list.
+   void clearFileDess() { theFileDess.clear(); }
+      //> This method remvoes all existing DES objects from the list.
       //<
-   void addFileDES(const Des& des) { theFileDESs.push_back(des); }
-      //> This method adds the given Des object to the list.
+   void addFileDes(const Des& des) { theFileDess.push_back(des); }
+      //> This method adds the given DES object to the list.
       //<
-   void setFileDESs(const std::vector<Des>& dess) { theFileDESs = dess; }
+   void setFileDess(const std::vector<Des>& dess) { theFileDess = dess; }
       //> This method sets the DES list to the given vector.
       //<
 
    void clearImages() { theImages.clear(); }
-      //> This method remvoes all existing Des objects from the list.
+      //> This method remvoes all existing DES objects from the list.
       //<
    void addImage(const Image& image) { theImages.push_back(image); }
-      //> This method adds the given Des object to the list.
+      //> This method adds the given DES object to the list.
       //<
    void setImages(const std::vector<Image>& images) { theImages = images; }
       //> This method sets the DES list to the given vector.
       //<
 
 protected:
-   NitfIsd(const std::string& format, const std::string& filename)
-      : Isd(format,filename),theFileHeader(),theFileTREs(),theFileDESs(),theImages() {}
+   NitfIsd(const std::string& format, const std::string& filename = "")
+      : Isd(format,filename),theFileHeader(),theFileTres(),theFileDess(),theImages() {}
 
 private:
    std::string theFileHeader;
@@ -215,22 +217,22 @@ private:
       //  the file level TRE data.
       //<
 
-   std::vector<Tre> theFileTREs;
-   std::vector<Des> theFileDESs;
+   std::vector<Tre>   theFileTres;
+   std::vector<Des>   theFileDess;
    std::vector<Image> theImages;
 };
 
 class CSM_EXPORT_API Nitf20Isd : public NitfIsd
 {
 public:
-   Nitf20Isd(const std::string& filename) : NitfIsd("NITF2.0", filename) {}
+   Nitf20Isd(const std::string& filename = "") : NitfIsd("NITF2.0", filename) {}
    virtual ~Nitf20Isd() {}
 };
 
 class CSM_EXPORT_API Nitf21Isd : public NitfIsd
 {
 public:
-   Nitf21Isd(const std::string& filename) : NitfIsd("NITF2.1", filename) {}
+   Nitf21Isd(const std::string& filename = "") : NitfIsd("NITF2.1", filename) {}
    virtual ~Nitf21Isd() {}
 };
 
