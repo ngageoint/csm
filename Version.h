@@ -41,12 +41,12 @@ class CSM_EXPORT_API Version
 {
 public:
    explicit Version(const std::string& version);
-      //> This constructs a CSM version object with the given string
+      //> This constructs a Version object with the given string
       //  version.  The string should be a sequence of numbers separated by
       //  periods (".").
       //<
    Version(int major, int minor, int revision = -1);
-      //> This constructs a CSM version object with the given major, minor, and
+      //> This constructs a Version object with the given major, minor, and
       //  revision version information.  The major and minor versions must be
       //  greater than or equal to 0, or an exception will be thrown.  If the
       //  revision is less than zero, it will be omitted from the object.
@@ -96,6 +96,9 @@ public:
 
 private:
    std::vector<int> theVersions;
+   //> This data member stores the major, minor, and revision components of the
+   //  current Version object.
+   //<
 };
 
 } // namespace csm

@@ -13,7 +13,7 @@
 //     30-Oct-2012   SCM      Renamed to Version.cpp
 //
 //    NOTES:
-//     Refer to CSMVersion.h for more information.
+//     Refer to Version.h for more information.
 //
 //#############################################################################
 
