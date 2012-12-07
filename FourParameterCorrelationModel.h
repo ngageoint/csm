@@ -12,12 +12,12 @@
 //
 //    The class is a wrapper around the equation
 //
-//    rho = alpha + a * (1 - alpha) * (1 + beta) / (beta + exp(deltaT / tau)),
+//    rho = a * (alpha + ((1 - alpha)*(1 + beta)/(beta + exp(deltaT / tau)))),
 //
 //    where a, alpha, beta, and tau are the correlation parameters, deltaT is
 //    the difference in time, and rho is the correlation coefficient.
 //
-//    The class assumes that sensor model parameter are divided into disjoint
+//    The class assumes that sensor model parameters are divided into disjoint
 //    groups, such that the correlation coefficient between any two parameters
 //    in the same group is given by the equation above, and the correlation
 //    between two parameters in different groups is 0.0.  This implementation
@@ -34,6 +34,7 @@
 //     29-Mar-2012   SCM      Refactored interface.
 //     22-Jun-2012   SCM      Made Parameters public, added accessor.
 //     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
+//     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
 //
 //    NOTES:
 //

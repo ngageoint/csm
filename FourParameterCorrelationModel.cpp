@@ -1,8 +1,45 @@
-/**
- * This file contains the implementation of the
- * FourParameterCorrelationModel class.  See the comments in the header file
- * for more information about the class interface.
- **/
+//#############################################################################
+//
+//    FILENAME:          FourParameterCorrelationModel.cpp
+//
+//    CLASSIFICATION:    Unclassified
+//
+//    DESCRIPTION:
+//
+//    This class is used to compute the correlation between adjustable
+//    parameters in a community sensor model (CSM).
+//
+//    The class is a wrapper around the equation
+//
+//    rho = a * (alpha + ((1 - alpha)*(1 + beta)/(beta + exp(deltaT / tau)))),
+//
+//    where a, alpha, beta, and tau are the correlation parameters, deltaT is
+//    the difference in time, and rho is the correlation coefficient.
+//
+//    The class assumes that sensor model parameters are divided into disjoint
+//    groups, such that the correlation coefficient between any two parameters
+//    in the same group is given by the equation above, and the correlation
+//    between two parameters in different groups is 0.0.  This implementation
+//    provides a way to assign sensor model parameters to groups, to set the
+//    values of the correlation parameters for a given group, and to compute
+//    the equation above.
+//
+//    LIMITATIONS:       None
+//
+//
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment
+//     -----------   ------   -------
+//     29-Mar-2012   SCM      Refactored interface.
+//     22-Jun-2012   SCM      Made Parameters public, added accessor.
+//     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
+//     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
+//
+//    NOTES:
+//     Refer to FourParameterCorrelationModel.h for more information.
+//
+//#############################################################################
+
 #define CSM_LIBRARY
 #include "FourParameterCorrelationModel.h"
 #include "Error.h"
@@ -16,7 +53,7 @@ using std::fabs;
 #endif
 
 namespace csm {
-
+     
 FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
                                                              size_t numCPGroups)
    :
@@ -77,7 +114,7 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
 
    // make sure the values of each correlation model parameter fall within acceptable ranges
-   if ((params.a < -1.0) || (params.a > 1.0))
+   if ((params.a < 0.0) || (params.a > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range [-1, 1].",
@@ -91,7 +128,7 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
                   MODULE);
    }
 
-   if (params.beta < 0.0)
+   if ((params.beta < 0.0) || (params.beta > 10.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter beta must be non-negative.",
@@ -117,14 +154,20 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
 
    // compute the value of the correlation coefficient
    const Parameters& cp = theCorrParams[cpGroupIndex];
-   double corrCoeff = cp.alpha +
-                      (cp.a * (1.0 - cp.alpha) * (1.0 + cp.beta) /
-                       (cp.beta + exp(fabs(deltaTime) / cp.tau)));
+   double corrCoeff = cp.a *
+                      (cp.alpha + ((1.0 - cp.alpha) * (1.0 + cp.beta) /
+                                   (cp.beta + exp(fabs(deltaTime) / cp.tau))));
 
    // if necessary, clamp the coefficient value to the acceptable range
-   if (corrCoeff < -1.0) return -1.0;
-   if (corrCoeff > 1.0)  return 1.0;
-
+   if (corrCoeff < -1.0)
+   {
+      corrCoeff = -1.0;
+   }
+   else if (corrCoeff > 1.0)
+   {
+      corrCoeff = 1.0;
+   }
+   
    return corrCoeff;
 }
 
