@@ -2,6 +2,8 @@
 //
 //    FILENAME:   Plugin.cpp
 //
+//    CLASSIFICATION:    Unclassified
+//
 //    DESCRIPTION:
 //
 //    This file provides implementation for methods declared in the
@@ -9,8 +11,8 @@
 //
 //    NOTES:
 //
-//
-//    Refer to CSMPlugin.h for more information.
+// 
+//    Refer to Plugin.h for more information.
 //
 //#############################################################################
 
