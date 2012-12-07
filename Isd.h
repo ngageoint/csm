@@ -24,6 +24,7 @@
 //     26-Sep-2012   JPK      Added some common parameter types
 //     11-Oct-2012   SCM      Added clearAllParams() and clearParams().
 //     30-Oct-2012   SCM      Renamed to Isd.h
+//     06-Dec-2012   JPK      Used CSM_UNKNOWN instead of "UNKNOWN"
 //
 //    NOTES:
 //
@@ -43,7 +44,7 @@ namespace csm
 class CSM_EXPORT_API Isd
 {
 public:
-   Isd() : theFormat("UNKNOWN"), theFilename() {}
+   Isd() : theFormat(CSM_UNKNOWN), theFilename() {}
       //> This constructor makes an "unknown" image support data object.  No
       //  informatino about the image will be available in this mode.
       //<
@@ -113,7 +114,7 @@ inline void Isd::setFilename(const std::string& fn)
    theFilename = fn;
 
    // if the format was unkown before set it to FILENAME now
-   if (theFormat == "UNKNOWN") theFormat = "FILENAME";
+   if (theFormat == CSM_UNKNOWN) theFormat = "FILENAME";
 }
 
 inline std::string Isd::param(const std::string& name, int instance) const
