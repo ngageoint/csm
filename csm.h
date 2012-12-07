@@ -12,7 +12,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     01-Jul-2003   LMT      Initial version.
 //     02-Mar-2012   SCM      Added csm namespace.
@@ -80,9 +80,9 @@
 
 namespace csm
 {
-namespace param
-{
-   enum Type
+   namespace param
+   {
+      enum Type
       //>
       // This enumeration lists the possible parameter or characteristic
       //  types as follows.
@@ -95,31 +95,31 @@ namespace param
       //  EXACT      - Parameter value has been specified and is not
       //               to be adjusted, but may contribute to error
       //               propagation.
-   {
-      NONE = 0 ,
-      FICTITIOUS,
-      REAL,
-      EXACT
-   };
+      {
+         NONE = 0 ,
+         FICTITIOUS,
+         REAL,
+         EXACT
+      };
       //<
-  
-   enum Set
+
+      enum Set
       //>
       // This enumeration lists the set of parameters a user may be interested
       // in exploiting, and membership in one of these sets is determined by
       //  parameter type.
-      //  VALID      - Parameters of type NONE are excluded. 
+      //  VALID      - Parameters of type NONE are excluded.
       //               All others are included,
       //  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included
       //  FIXED      - Only EXACT parameters are included.
-   {
-      VALID = 0,
-      ADJUSTABLE,
-      FIXED
-   };
+      {
+         VALID = 0,
+         ADJUSTABLE,
+         FIXED
+      };
       //<
-}
-   
+   }
+
    //***
    // STRUCT: SharingCriteria
    //> This structure stores information regarding whether or not parameters
@@ -162,10 +162,10 @@ namespace param
            matchesCollectionID (byCollectionID),
            matchesTrajectoryID (byTrajectoryID),
            matchesDateTime     (byDateTime),
-           maxTimeDelta        (maxDelta)  
+           maxTimeDelta        (maxDelta)
       {}
    };
-      
+
    //***
    // STRUCT: ImageCoord
    //> The ImageCoord structure represents a 2 dimensional point in image space.
@@ -179,7 +179,7 @@ namespace param
       double samp;
 
       ImageCoord() : line(0.0), samp(0.0) {}
-      
+
       ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
@@ -197,17 +197,18 @@ namespace param
    {
    public:
       ImageCoordCovar() : ImageCoord() { memset(covariance, 0, sizeof(covariance)); }
-      //> Default Constructor
-      //<
+         //> Default Constructor
+         //<
       ImageCoordCovar(double aLine, double aSamp)
          : ImageCoord(aLine, aSamp) { memset(covariance, 0, sizeof(covariance)); }
-      //> Constructor taking point only (all covariance entries are 0)
-      //<    
+         //> Constructor taking point only (all covariance entries are 0)
+         //<
       ImageCoordCovar(double aLine, double aSamp, double aCovar[4])
          : ImageCoord(aLine, aSamp) { memcpy(covariance, aCovar, sizeof(covariance)); }
-      //> Constructor taking point and a 4 element array of doubles for covariance
-      //  Note that no check is made to insure symmetry of covariance matrix.
-      //< 
+         //> Constructor taking point and a 4 element array of doubles for
+         //  covariance.  Note that no check is made to insure symmetry of
+         //  covariance matrix.
+         //<
       ImageCoordCovar(double aLine,   double aSamp,
                       double aCovar00,double aCovar01,
                                       double aCovar11)
@@ -218,23 +219,24 @@ namespace param
          covariance[1] = covariance[2] = aCovar01;
          covariance[3] = aCovar11;
       }
-      //> Constructor taking point and upper triangular portion of covariance matrix.
-      //  Elements are assigned to covariance matrix assuming symmetry.
-      //<
+         //> Constructor taking point and upper triangular portion of
+         //  covariance matrix.  Elements are assigned to covariance matrix
+         //  assuming symmetry.
+         //<
 
       //***
       //> The 2 x 2 covariance matrix for the image coordinate is stored in a one dimensional
-      // array.  Elements can either be accessed directly from that array, or via a 
+      // array.  Elements can either be accessed directly from that array, or via a
       // two dimensional lookup using the covar2d() methods below.  Note that using the
       // "non-const" method allows assignment as well as retrieval.
       // Ex.   To look up the variance in the sample direction of a coordinate "coord" and
-      // assign it to a variable A, the syntax would be :  
+      // assign it to a variable A, the syntax would be:
       //
       // Using one dimensional access : double A = coord.covariance[3];
       // Using two dimensional access : double A = coord.covar2d(1,1);
       //
-      // Similarly, to assign a value of 0.5 as the variance in the sample direction 
-      // for "coord", the syntax would be :  
+      // Similarly, to assign a value of 0.5 as the variance in the sample direction
+      // for "coord", the syntax would be:
       //
       // Using one dimensional access : coord.covariance[3] = 0.5;
       // Using two dimensional access : coord.covar2d(1,1) = 0.5;
@@ -299,22 +301,22 @@ namespace param
    {
    public:
       EcefCoordCovar() : EcefCoord() { memset(covariance, 0, sizeof(covariance)); }
-      //> Default Constructor
-      //<   
+         //> Default Constructor
+         //<
       EcefCoordCovar(double aX, double aY, double aZ)
          : EcefCoord(aX, aY, aZ) { memset(covariance, 0, sizeof(covariance)); }
-      //> Constructor taking point only (all covariance entries are 0)
-      //<    
+         //> Constructor taking point only (all covariance entries are 0)
+         //<
       EcefCoordCovar(double aX, double aY, double aZ, double aCovar[9])
          : EcefCoord(aX, aY, aZ) { memcpy(covariance, aCovar, sizeof(covariance)); }
-      //> Constructor taking point and a 9 element array of doubles for covariance
-      //  Note that no check is made to insure symmetry of covariance matrix.
-      //< 
+         //> Constructor taking point and a 9 element array of doubles for
+         //  covariance.  Note that no check is made to insure symmetry of
+         //  covariance matrix.
+         //<
       EcefCoordCovar(double aX,       double aY,       double aZ,
                      double aCovar00, double aCovar01, double aCovar02,
                                       double aCovar11, double aCovar12,
                                                        double aCovar22)
-         
          :
             EcefCoord(aX, aY, aZ)
       {
@@ -325,23 +327,24 @@ namespace param
          covariance[5] = covariance[7] = aCovar12;
          covariance[8] = aCovar22;
       }
-      //> Constructor taking point and upper triangular portion of covariance matrix.
-      //  Elements are assigned to covariance matrix assuming symmetry.
-      //<
-  
+         //> Constructor taking point and upper triangular portion of
+         //  covariance matrix.  Elements are assigned to covariance matrix
+         //  assuming symmetry.
+         //<
+
       //***
       //> The 3 x 3 covariance matrix for the ECEF coordinate is stored in a one dimensional
-      // array.  Elements can either be accessed directly from that array, or via a 
+      // array.  Elements can either be accessed directly from that array, or via a
       // two dimensional lookup using the covar2d() methods below.  Note that using the
       // "non-const" method allows assignment as well as retrieval.
       // Ex.   To look up the variance in the Z direction of a coordinate "coord" and
-      // assign it to a variable A, the syntax would be :  
+      // assign it to a variable A, the syntax would be:
       //
       // Using one dimensional access : double A = coord.covariance[8];
       // Using two dimensional access : double A = coord.covar2d(2,2);
       //
       // Similarly, to assign a value of 9.0 as the variance in the Z direction
-      // for "coord", the syntax would be :  
+      // for "coord", the syntax would be:
       //
       // Using one dimensional access : coord.covariance[8] = 9.0;
       // Using two dimensional access : coord.covar2d(2,2) = 9.0;
@@ -349,7 +352,7 @@ namespace param
       //***
       double covariance[9];
       double  covar2d(unsigned int l, unsigned int s) const { return covariance[3*l + s]; }
-      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; } 
+      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; }
    };
 
    //***
@@ -369,11 +372,11 @@ namespace param
       EcefVector() : x(0.0), y(0.0), z(0.0) {}
       EcefVector(double aX, double aY, double aZ) : x(aX), y(aY), z(aZ) {}
    };
-   
+
    //***
    // STRUCT: EcefLocus
-   // > The EcefLocus structure contains a point and a direction in Earth
-   //   Centered Earth Fixed space.
+   //> The EcefLocus structure contains a point and a direction in Earth
+   //  Centered Earth Fixed space.
    //<
    //***
    struct EcefLocus
@@ -398,7 +401,7 @@ namespace param
             direction(dirX,dirY,dirZ)
       {}
    };
-             
+
 } // namespace csm
 
 #endif
