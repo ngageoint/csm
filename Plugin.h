@@ -29,6 +29,7 @@
 //     26-Sep-2012   SCM      Changed getModelVersion() to return a
 //                            csm::Version object
 //     30-Oct-2012   SCM      Renamed to Plugin.h
+//     06-Dec-2012   JPK      Renamed getCSMVersion() to getCsmVersion()
 //
 //    NOTES:
 //
@@ -41,7 +42,7 @@
 //    class providing, at least, implementation for each pure virtual function.
 //    In order to allow the plugin to self-register itself and be recognized
 //    by the system as a "plugin", a static instance of the derived class must
-//    invoke the CSMPlugin constructor.
+//    invoke the Plugin constructor.
 //
 //#############################################################################
 
@@ -109,7 +110,7 @@ public:
    //---
    virtual std::string getManufacturer() const = 0;
    virtual std::string getReleaseDate() const = 0;
-   virtual Version getCSMVersion() const = 0;
+   virtual Version getCsmVersion() const = 0;
       //> This method returns the CSM API version that the plug-in was written
       //  to.
       //<
