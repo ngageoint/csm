@@ -54,7 +54,19 @@
 //                          unmodeled error methods to GeometricModel.  Made
 //                          compute partial methods const.
 //     01-Nov-2012   SCM    Moved unmodeled error methods back to RasterGM.
-//
+//     27-Nov-2012   JPK    Cleaned up some comments, variable names and
+//                          changed return type for getCovarianceModel() from
+//                          pointer to const reference.  Removed unused
+//                          testAPIVersionSubclass().
+//     29-Nov-2012   JPK    Modified computeAllSensorPartials to return
+//                          results for a specified ParamSet.
+//     06-Dec-2012   JPK    Changed ParamSet to param::Set.  De-inlined
+//                          destructor and getFamily() methods.
+//                          Replaced vector<double> with EcefLocus for
+//                          imageTo*Locus methods.  Added inline method
+//                          getCovarianceMatrix().  Provided reference
+//                          implementations for computeAllSensorPartials()
+//                          methods.
 //    NOTES:
 //
 //#############################################################################
@@ -68,240 +80,231 @@
 
 namespace csm
 {
-
 class CovarianceModel;
 
 class CSM_EXPORT_API RasterGM : public GeometricModel
 {
 public:
    RasterGM() {}
-   virtual ~RasterGM() { }
-
-   virtual std::string getFamily() const { return (GeometricModel::getFamily() +
-                                                   CSM_RASTER_FAMILY); }
-
+   virtual ~RasterGM();
+   
+   virtual std::string getFamily() const;
+      //> This method returns the Family ID for the current model.
+      //<
+   
    //---
    // Core Photogrammetry
    //---
    virtual ImageCoord groundToImage(const EcefCoord& groundPt,
-                                    double desired_precision = 0.001,
-                                    double* achieved_precision = NULL,
+                                    double desiredPrecision = 0.001,
+                                    double* achievedPrecision = NULL,
                                     WarningList* warnings = NULL) const = 0;
-      //> The groundToImage() method converts x, y and z (meters) in ground
-      //  space (ECEF) to line and sample (pixels) in image space.
+      //> This method converts a ground coordinate (x,y,z meters ECEF)
+      //  to an image coordinate (line,sample in full image space).
       //<
 
    virtual ImageCoordCovar groundToImage(const EcefCoordCovar& groundPt,
-                                         double desired_precision = 0.001,
-                                         double* achieved_precision = NULL,
+                                         double desiredPrecision = 0.001,
+                                         double* achievedPrecision = NULL,
                                          WarningList* warnings = NULL) const = 0;
-      //> This method converts a given ground point into line and sample
-      //  (pixels) in image space and returns accuracy information
-      //  associated with the image and ground coordinates.
+      //> This method converts a ground coordinate (x,y,z meters ECEF) and the
+      //  associated 3x3 covariance to an image coordinate (line,sample 
+      //  in full image space) with associated 2x2 covariance.
       //<
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
                                    double height,
-                                   double desired_precision = 0.001,
-                                   double* achieved_precision = NULL,
+                                   double desiredPrecision = 0.001,
+                                   double* achievedPrecision = NULL,
                                    WarningList* warnings = NULL) const = 0;
-      //> This method converts a given line and sample (pixels) in image
-      //  space to a ground point.
+      //> This method converts an image coordinate (line,sample
+      //  in full image space) and known height relative to the 
+      //  WGS-84 Ellipsoid to a ground coordinate (x,y,z meters ECEF).
       //<
    virtual EcefCoordCovar imageToGround(const ImageCoordCovar& imagePt,
                                         double height,
                                         double heightVariance,
-                                        double desired_precision = 0.001,
-                                        double* achieved_precision = NULL,
+                                        double desiredPrecision = 0.001,
+                                        double* achievedPrecision = NULL,
                                         WarningList* warnings = NULL) const = 0;
-      //> This method converts a given line and sample (pixels) in image space
-      //  to a ground point and returns accuracy information associated with
-      //  the image and ground coordinates.
+      //> This method converts an image coordinate (line,sample
+      //  in full image space) and its associated 2x2 covariance and a known
+      //  height relative to the WGS-84 Ellipsoid with its associated variance
+      //  to a ground coordinate (x,y,z meters ECEF) and its associated 3x3
+      //  covariance.
+      //<   
+  virtual EcefLocus imageToProximateImagingLocus(
+     const ImageCoord& imagePt,
+     const EcefCoord& groundPt,
+     double desiredPrecision = 0.001,
+     double* achievedPrecision = NULL,
+     WarningList* warnings = NULL) const = 0;
+      //> This method computes a vector approximation of the imaging locus
+      //  for an image coordinate (line,sample in full image space) nearest 
+      //  the argument ground coordinate (x,y,z meters ECEF) The "achieved 
+      //  precision" refers to the finding the origin of the locus and not
+      //  its orientation.
       //<
 
-   virtual std::vector<double> imageToProximateImagingLocus(
+   virtual EcefLocus imageToRemoteImagingLocus(
       const ImageCoord& imagePt,
-      const EcefCoord& groundPt,
-      double desired_precision = 0.001,
-      double* achieved_precision = NULL,
+      double desiredPrecision = 0.001,
+      double* achievedPrecision = NULL,
       WarningList* warnings = NULL) const = 0;
-      //> The imageToProximateImagingLocus() method computes a proximate
-      //  imaging locus, a vector approximation of the imaging locus for the
-      //  given line and sample nearest the given x, y and z or at the given
-      //  height. The precision of this calculation refers to the locus's
-      //  origin and does not refer to the locus's orientation.
-      //<
-
-   virtual std::vector<double> imageToRemoteImagingLocus(
-      const ImageCoord& imagePt,
-      double desired_precision = 0.001,
-      double* achieved_precision = NULL,
-      WarningList* warnings = NULL) const = 0;
-      //> The imageToRemoteImagingLocus() method computes locus, a vector
-      //  approximation of the imaging locus for the given line and sample.
-      //  The precision of this calculation refers only to the origin of the
-      //  locus vector and does not refer to the locus's orientation. For an
-      //  explanation of the remote imaging locus, see the section at the
-      //  beginning of this document.
+      //> This method computes a vector approximation of the imaging locus
+      //  for an image coordinate (line,sample in full image space).
+      //  The "achieved precision" refers to the finding the origin of the
+      //  locus and not its orientation.
       //<
 
    //---
    // Monoscopic Mensuration
    //---
    virtual ImageCoord getImageStart() const = 0;
-      //> This method returns the starting coordinate in image space of the
-      //  imaging operation.
+      //> This method returns the starting coordinate in full image space
+      //  for the imaging operation.
       //<
    virtual ImageVector getImageSize() const = 0;
-      //> This method returns the number of lines and samples in the imaging
-      //  operation.
+      //> This method returns the number of lines and samples in full image
+      //  space for the imaging operation.
       //
-      //  Here the returned image vector represents the size of the image
-      //  as an image space vector.  Use getValidImageRange() to get the valid
-      //  range of image coordinates for this model.
+      //  Use getValidImageRange() to get the valid range of image 
+      //  coordinates for this model.
       //<
    virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
-      //> The validImageRange() method returns the minimum and maximum
-      //  values for image position (line and sample) that describe the
-      //  range of validity of the model. This range may not always match
-      //  the physical size of the image as returned by getImageSize(). This
-      //  method is used in conjunction with getValidHeightRange() to determine
-      //  the full range of applicability of the sensor model.
+      //> This method returns the minimum and maximum image coordinates
+      //  over which the current sensor model is valid. 
+      //  This range does not always match the full image coverage as
+      //  returned by getImageStart() / getImageSize().
+      //  Used in conjunction with getValidHeightRange(), it is possible to 
+      //  determine the full range of coordinates over which the sensor model
+      //  is valid.
       //
       //  The minimum coordinate is returned as the first element of the pair
       //  and the maximum coordinate is returned as the second element of the
       //  pair.
       //<
    virtual std::pair<double,double> getValidHeightRange() const = 0;
-      //> The validHeightsRange() method returns the minimum and maximum
-      //  heights that describe the range of validity of the model. For
-      //  example, the model may not be valid at heights above the heights
-      //  of the sensor for physical models.
+      //> This method returns the minimum and maximum
+      //  heights (relative to WGS-84 Ellipsoid) over which the sensor model is
+      //  valid.  For example, a sensor model for an airborne platform which is
+      //  aimed at the ground shouldn't be expected to return valid coordinates
+      //  for heights above the height of the aircraft.
       //
       //  The minimum height is returned as the first element of the pair and
       //  the maximum height is returned as the second element of the pair.
       //
       //  If there are no limits defined for the current model,
-      //  (-99999,99999) will be returned.
+      //  (-99999.0,99999.0) will be returned.
       //<
    virtual EcefVector getIlluminationDirection(const EcefCoord& gndPt) const = 0;
-      //> The getIlluminationDirection() method calculates the direction of
-      //  illumination at the given ground position x, y, z.
+      //> This method returns a vector defining the direction of
+      //  illumination at the given ground coordinate (x,y,z meters ECEF).
       //<
 
    //---
    // Time and Trajectory
    //---
    virtual double getImageTime(const ImageCoord& pt) const = 0;
-      //> The getImageTime() method returns the time in seconds at which
-      //  the pixel specified by line and sample was imaged. The time
-      //  provided is relative to the reference date and time given by
-      //  getReferenceDateAndTime.
+      //> This method returns the time in seconds at which
+      //  the pixel at the argument image coordinate was captured. 
+      //  The time provided is relative to the reference date and time given
+      //  by getReferenceDateAndTime.
       //<
    virtual EcefCoord getSensorPosition(const ImageCoord& pt) const = 0;
-      //> The getSensorPosition() method returns the position of
-      //  the physical sensor at the given position in the image.
+      //> This method returns the position of the physical sensor
+      // (x,y,z meters ECEF) for the argument image coordinate.
       //<
    virtual EcefCoord getSensorPosition(double time) const = 0;
-      //> The getSensorPosition() method returns the position of
-      //  the physical sensor at the given time of imaging.
+      //> This method returns the position of the physical sensor
+      //  (x,y,z meters ECEF) for the argument imaging time.
       //<
    virtual EcefVector getSensorVelocity(const ImageCoord& pt) const = 0;
-      //> The getSensorVelocity() method returns the velocity
-      //  of the physical sensor at the given position in the image.
-      //
-      //  The values returned in the EcefVector represent velocity rather than
-      //  position.
+      //> This method returns the velocity of the physical sensor
+      // (x,y,z meters per second ) for the argument image coordinate.
       //<
    virtual EcefVector getSensorVelocity(double time) const = 0;
-      //> The getSensorVelocity() method returns the velocity
-      //  of the physical sensor at the given time of imaging.
-      //
-      //  The values returned in the EcefVector represent velocity rather than
-      //  position.
+      //> This method returns the velocity of the physical sensor
+      // (x,y,z meters per second ) for the argument image coordinate.
       //<
 
    //---
    // Uncertainty Propagation
    //---
-   typedef std::pair<double, double> SensorPartials;
-      //> The first element of this pair is the line component, and the second
-      //  element is the sample component.
+   typedef std::pair<double,double> SensorPartials;
+                                                             
+   virtual SensorPartials computeSensorPartials(
+                int index,
+                const EcefCoord& groundPt,
+                double desiredPrecision   = 0.001,
+                double* achievedPrecision = NULL,
+                WarningList* warnings     = NULL) const = 0;
+      //> This method returns the partial derivatives
+      //  of image position with respect to an adjustable parameter specified
+      //  by index, at a specified ground location (x,y,z meters ECEF)
+      //  Derived model implementations may wish to implement this method by
+      //  calling groundToImage() and passing the result to the other overload
+      //  of computeSensorPartials().
       //<
+
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const ImageCoord& imagePt,
                 const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) const = 0;
-      //> The computeSensorPartials() method calculates the partial derivatives
-      //  of image position (both line and sample) with respect to the given
-      //  sensor parameter (index) at the given ground position.
-      //
-      //  This method varies from the overload with the same name on the base
-      //  class GeometricModel because it takes both a ground and image point.
-      //  This version may be more efficient to call if the calling function
-      //  has already performed groundToImage with the ground coordinate.
+                double desiredPrecision   = 0.001,
+                double* achievedPrecision = NULL,
+                WarningList* warnings     = NULL) const = 0;
+      //> This method returns the partial derivatives
+      //  of image position with respect to an adjustable parameter specified
+      //  by index.  This method differs from the previous version because it 
+      //  expects both ground and image coordinates to be provided 
+      //  (corresponding to the same location) for efficiency of the computation.
       //
       //  The results are unpredictable if the line and sample provided do not
       //  correspond to the result of calling groundToImage() with the given
-      //  ground position (x, y, and z).
-      //
-      //  The returned pair will have the line partial in the first element and
-      //  the sample partial in the second element.
+      //  ground coordinate (x,y,z meters ECEF).
       //<
-   virtual SensorPartials computeSensorPartials(
-                int index,
+   
+   virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) const = 0;
-      //> The computeSensorPartials() method calculates the partial derivatives
-      //  of image position (both line and sample) with respect to the given
-      //  sensor parameter (index) at the given ground position.
+                param::Set pSet           = param::VALID,
+                double desiredPrecision   = 0.001,
+                double* achievedPrecision = NULL,
+                WarningList* warnings     = NULL) const;
+      //> This method calculates the partial derivatives of image position
+      //  (both line and sample) with respect to each of the desired 
+      //  adjustable parameters at the given ground position.  
+      //  The semantics for this method are the same as for 
+      //  computeSensorPartials().
       //
-      //  Derived model implementations may wish to implement this method by
-      //  calling groundToImage() and passing the result to the other overload
-      //  of computeSensorPartials().
-      //
-      //  The returned pair will have the line partial in the first element and
-      //  the sample partial in the second element.
+      //  Derived models may wish to implement this directly for efficiency,
+      //  but an implementation is provided here which calls 
+      //  computeSensorPartials for each desired parameter index.
+      //  
+      //  The value returned is a vector of pairs with line partials in the
+      //  first element and a sample partials in the second element.
       //<
 
    virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const ImageCoord& imagePt,
                 const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) const = 0;
-      //> The computeAllSensorPartials() function calculates the
-      //  partial derivatives of image position (both line and sample)
-      //  with respect to each of the adjustable parameters at the
-      //  given ground position.  The semantics for this method is the
-      //  same as for computeSensorPartials().
+                param::Set pSet           = param::VALID,
+                double desiredPrecision   = 0.001,
+                double* achievedPrecision = NULL,
+                WarningList* warnings     = NULL) const;
+      //> This method calculates the partial derivatives of image position
+      //  (both line and sample) with respect to each of the desired 
+      //  adjustable parameters at the given ground and image positions.  
+      //  The semantics for this method are the same as for 
+      //  computeSensorPartials().
+      //
+      //  Derived models may wish to implement this directly for efficiency,
+      //  but an implementation is provided here which calls 
+      //  computeSensorPartials for each desired parameter index.
       //
       //  The value returned is a vector of pairs with line partials in the
       //  first element and a sample partials in the second element.
       //<
-   virtual std::vector<SensorPartials> computeAllSensorPartials(
-                const EcefCoord& groundPt,
-                double desired_precision = 0.001,
-                double* achieved_precision = NULL,
-                WarningList* warnings = NULL) const = 0;
-      //> The computeAllSensorPartials() function calculates the
-      //  partial derivatives of image position (both line and sample)
-      //  with respect to each of the adjustable parameters at the
-      //  given ground position.  The semantics for this method is the
-      //  same as for computeSensorPartials().
-      //
-      //  Derived model implementations may wish to implement this method by
-      //  calling groundToImage() and passing the result to the other overload
-      //  of computeSensorPartials().
-      //
-      //  The value returned is a vector of pairs with line partials in the
-      //  first element and a sample partials in the second element.
-      //<
-
+   
    virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) const = 0;
       //> The computeGroundPartials method calculates the partial
       //  derivatives (partials) of image position (both line and sample)
@@ -318,13 +321,13 @@ public:
       //  partials [5] = sample wrt z
       //<
 
-   virtual CovarianceModel* getCovarianceModel() const = 0;
+   virtual const CovarianceModel& getCovarianceModel() const = 0;
       //> This method returns the covariance model for this sensor model.
       //
       //  A new object is created every time this method is called.  The client
       //  is responsible for deallocating the object returned by this method.
       //<
-
+                                                               
    inline std::vector<double> getUnmodeledError(const ImageCoord& pt) const
    { return getUnmodeledCrossCovariance(pt, pt); }
       //> The getUnmodeledError() function gives the image-space covariance for
@@ -335,8 +338,8 @@ public:
       //<
 
    virtual std::vector<double> getUnmodeledCrossCovariance(
-      const ImageCoord& pt1,
-      const ImageCoord& pt2) const = 0;
+         const ImageCoord& pt1,
+         const ImageCoord& pt2) const = 0;
       //> The getUnmodeledCrossCovariance function gives the image-space cross
       //  covariance for any unmodeled sensor error between two image points on
       //  the same image. The error is reported as the four terms of a 2x2
@@ -345,20 +348,8 @@ public:
       //  parameters.
       //<
 
-#ifdef TESTAPIVERSION
-   virtual std::string testAPIVersionSubclass() const = 0;
-      //> The testAPIVersionSubclass method provides a means to
-      //  demonstrate and test the subclass backward compatibility
-      //  for an API release. This method is not a member of a
-      //  standard API compliant released sensor model, but is
-      //  the sole addition to the API release that creates the
-      //  API compliant subclassing test version of a sensor model
-      //  release.
-      //<
-#endif
 };
 
 } // namespace csm
 
 #endif
-
