@@ -1,8 +1,40 @@
-/**
- * This file contains the implementation of the
- * CSMLinearDecayCorrelationModel class.  See the comments in the header file
- * for more information about the class interface.
- **/
+//#############################################################################
+//
+//    FILENAME:          LinearDecayCorrelationModel.cpp
+//
+//    CLASSIFICATION:    Unclassified
+//
+//    DESCRIPTION:
+//
+//    This class is used to compute the correlation between adjustable
+//    parameters in a community sensor model (CSM).
+//
+//    The class holds correlation data in the form of two lists. The first is a
+//    list of times that specify the start times of each time segment.
+//    The second list spcifies the correlation at the specified time. Between
+//    specified times the correlation is a linear imterpolation in time of the 
+//    correlation at each end of the time segment.
+//
+//    The class assumes that sensor model parameters are divided into disjoint
+//    groups, such that the correlation coefficient between any two parameters
+//    in the same group is given by the equation above, and the correlation
+//    between two parameters in different groups is 0.0.  This implementation
+//    provides a way to assign sensor model parameters to groups, to set the
+//    values of the correlation parameters for a given group, and to compute
+//    the equation above.
+//
+//    LIMITATIONS:       None
+//
+//
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment
+//     -----------   ------   -------
+//     20-Nov-2012   ISK      Initial Release.
+//     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
+//
+//    NOTES:
+//     Refer to LinearDecayCorrelationModel.h for more information.
+//#############################################################################
 #define CSM_LIBRARY
 #include "LinearDecayCorrelationModel.h"
 #include "Error.h"
@@ -172,11 +204,15 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
    }
 
    // if necessary, clamp the coefficient value to the acceptable range
-   if (correlation < 0.0) 
+   if (correlation < 0.0)
+   {
       correlation =  0.0;
-   if (correlation > 1.0)
+   }
+   else if (correlation > 1.0)
+   {
       correlation = 1.0;
-
+   }
+   
    return correlation;
 }
 
