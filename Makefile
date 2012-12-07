@@ -1,8 +1,8 @@
 
 
-HEADERS = csm.h Error.h Warning.h Version.h Isd.h FilenameIsd.h BytestreamIsd.h NitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h ParameterSharingCriteria.h SensorTypeAndMode.h CovarianceModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h
+HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h CovarianceModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h
 
-OBJS = Version.o Plugin.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o
+OBJS = Version.o Plugin.o GeometricModel.o RasterGM.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o
 
 LIBNAME=libcsmapi
 LIBVERSION=3
