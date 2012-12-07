@@ -40,3 +40,10 @@ clean::
 
 package::
 	$(TAR) -czvf csm-reform.$(shell date '+%Y%m%d').tar.gz Makefile* $(HEADERS) $(OBJS:.o=.cpp)
+
+DOXYFILE=$(INSTDIR)/include/Doxyfile
+
+doxygen::
+	cat Doxyfile > $(DOXYFILE)
+	cd $(dir $(DOXYFILE)) && doxygen
+
