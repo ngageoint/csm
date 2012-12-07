@@ -22,6 +22,7 @@
 //                            and getSensorMode().  Removed include for
 //                            SensorTypeAndMode.h.  Moved
 //                            getTrajectoryIdentifier() to this class.
+//     06-Dec-2012   JPK      Added pure virtual method replaceModelState()
 //
 //    NOTES:
 //
@@ -139,7 +140,15 @@ public:
       //  An empty string is returned if it is not possible to save the
       //  current state.
       //<
-};
+   
+   virtual void replaceModelState(const std::string& argState) = 0;
+      //> This method loads the argument state string and attempts to
+      //  use it to initialize the state of the current model.
+      //  If the state string contains a valid state for current
+      //  model, the internal state of the model is updated.
+      //  If the argument state string is empty, 
+      //<
+ };
 
 } // namespace csm
 
