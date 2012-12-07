@@ -7,6 +7,9 @@ OBJS = Version.o Plugin.o GeometricModel.o RasterGM.o FourParameterCorrelationMo
 LIBNAME=libcsmapi
 LIBVERSION=3
 
+DOXYGEN_OUT=/programs/origin/html/doxygen/csm3
+DOXYGEN_FILTER=$(PWD)/scripts/doxygen-filter.pl
+
 LIBRARY=$(LIBNAME).so.$(LIBVERSION)
 LIBS=-lm -ldl
 
@@ -39,11 +42,14 @@ clean::
 	$(RM) $(OBJS) $(LIBRARY) *~
 
 package::
-	$(TAR) -czvf csm-reform.$(shell date '+%Y%m%d').tar.gz Makefile* $(HEADERS) $(OBJS:.o=.cpp)
+	$(TAR) -czvf csm-reform.$(shell date '+%Y%m%d').tar.gz Makefile* $(HEADERS) $(OBJS:.o=.cpp) Doxyfile
 
 DOXYFILE=$(INSTDIR)/include/Doxyfile
 
 doxygen::
 	cat Doxyfile > $(DOXYFILE)
+	echo "OUTPUT_DIRECTORY       = $(DOXYGEN_OUT)" >> $(DOXYFILE)
+	echo "INPUT_FILTER           = $(DOXYGEN_FILTER)" >> $(DOXYFILE)
+	rm -rf $(DOXYGEN_OUT)
 	cd $(dir $(DOXYFILE)) && doxygen
 
