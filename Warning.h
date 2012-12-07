@@ -70,13 +70,15 @@ public:
 
 private:
    WarningType theWarning;
-      //> enumeration of the warning (for application control),
+      //> This data member contains the enumeration of the warning
+      // (used for application control),
       //<
    std::string theMessage;
-      //> string describing the warning.
+      //> This data member is a string describing the warning.
       //<
    std::string theFunction;
-      //> string identifying the function in which the warning occurred.
+      //> This data member is a string identifying the function in which
+      //  the warning occurred.
       //<
 };
 
