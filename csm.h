@@ -211,7 +211,7 @@ namespace csm
       double samp;
 
       ImageCoord() : line(0.0), samp(0.0) {}
-
+      
       ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
@@ -227,55 +227,63 @@ namespace csm
    struct ImageCoordCovar : public ImageCoord
    {
    public:
+      double covariance[4];
+         //> 2x2 line and sample covariance matrix, in pixels squared,
+         //  stored as an array of four doubles as follows:
+         //
+         //  [0] = line variance
+         //  [1] = line/sample covariance
+         //  [2] = sample/line covariance
+         //  [3] = sample variance
+         //
+         //  It can be accessed directly or through the covar2d methods.
+         //<
+
       ImageCoordCovar() : ImageCoord() { memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
          //<
       ImageCoordCovar(double aLine, double aSamp)
          : ImageCoord(aLine, aSamp) { memset(covariance, 0, sizeof(covariance)); }
-         //> Constructor taking point only (all covariance entries are 0)
-         //<
+         //> This constructor takes a line and sample in pixels.
+         //  The covariance is set to zeroes.
+         //<    
       ImageCoordCovar(double aLine, double aSamp, double aCovar[4])
          : ImageCoord(aLine, aSamp) { memcpy(covariance, aCovar, sizeof(covariance)); }
-         //> Constructor taking point and a 4 element array of doubles for
-         //  covariance.  Note that no check is made to insure symmetry of
-         //  covariance matrix.
-         //<
-      ImageCoordCovar(double aLine,   double aSamp,
-                      double aCovar00,double aCovar01,
-                                      double aCovar11)
-         :
-            ImageCoord(aLine, aSamp)
+         //> This constructor takes a line and sample in pixels and covariance
+         //  as an array of four doubles in pixels squared.
+         //  Note that no check is made to ensure symmetry of the covariance
+         //  matrix.
+         //< 
+      ImageCoordCovar(double aLine,    double aSamp,
+                      double aCovar00, double aCovar01,
+                                       double aCovar11)
+         : ImageCoord(aLine, aSamp)
       {
          covariance[0] = aCovar00;
          covariance[1] = covariance[2] = aCovar01;
          covariance[3] = aCovar11;
       }
-         //> Constructor taking point and upper triangular portion of
-         //  covariance matrix.  Elements are assigned to covariance matrix
-         //  assuming symmetry.
+         //> This constructor takes a line and sample in pixels and the
+         //  upper-triangular portion of a covariance matrix in pixels squared.
+         //  It is assumed that the covariance matrix is symmetric.
          //<
 
-      //***
-      //> The 2 x 2 covariance matrix for the image coordinate is stored in a one dimensional
-      // array.  Elements can either be accessed directly from that array, or via a
-      // two dimensional lookup using the covar2d() methods below.  Note that using the
-      // "non-const" method allows assignment as well as retrieval.
-      // Ex.   To look up the variance in the sample direction of a coordinate "coord" and
-      // assign it to a variable A, the syntax would be:
-      //
-      // Using one dimensional access : double A = coord.covariance[3];
-      // Using two dimensional access : double A = coord.covar2d(1,1);
-      //
-      // Similarly, to assign a value of 0.5 as the variance in the sample direction
-      // for "coord", the syntax would be:
-      //
-      // Using one dimensional access : coord.covariance[3] = 0.5;
-      // Using two dimensional access : coord.covar2d(1,1) = 0.5;
-      //<
-      //***
-      double covariance[4];
       double  covar2d(unsigned int l, unsigned int s) const { return covariance[2*l + s]; }
+         //> This method provides a convenient two-dimensional access to
+         //  the covariance.  For example, the sample variance stored in
+         //  covariance[3] could also be accessed as follows:
+         //
+         //-    ImageCoordCovar coord;
+         //-    double A = coord.covar2d(1,1);
+         //<
       double& covar2d(unsigned int l, unsigned int s)       { return covariance[2*l + s]; }
+         //> This method provides a convenient two-dimensional means of setting
+         //  the covariance.  For example, the sample variance stored in
+         //  covariance[3] could also be set as follows:
+         //
+         //-    ImageCoordCovar coord;
+         //-    coord.covar2d(1,1) = 0.5;
+         //<
    };
 
    //***
@@ -327,25 +335,43 @@ namespace csm
    struct EcefCoordCovar : public EcefCoord
    {
    public:
+      double covariance[9];
+         //> 3x3 ECEF coordinate covariance matrix, in meters squared,
+         //  stored as an array of nine doubles as follows:
+         //
+         //  [0] = x  variance
+         //  [1] = xy covariance
+         //  [2] = xz covariance
+         //  [3] = yx covariance
+         //  [4] = y  variance
+         //  [5] = yz covariance
+         //  [6] = zx covariance
+         //  [7] = zy covariance
+         //  [8] = z  variance
+         //
+         //  It can be accessed directly or through the covar2d methods.
+         //<
+
       EcefCoordCovar() : EcefCoord() { memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
-         //<
+         //<   
       EcefCoordCovar(double aX, double aY, double aZ)
          : EcefCoord(aX, aY, aZ) { memset(covariance, 0, sizeof(covariance)); }
-         //> Constructor taking point only (all covariance entries are 0)
-         //<
+         //> This constructor takes ECEF x, y, and z values in meters.
+         //  The covariance is set to zeroes.
+         //<    
       EcefCoordCovar(double aX, double aY, double aZ, double aCovar[9])
          : EcefCoord(aX, aY, aZ) { memcpy(covariance, aCovar, sizeof(covariance)); }
-         //> Constructor taking point and a 9 element array of doubles for
-         //  covariance.  Note that no check is made to insure symmetry of
-         //  covariance matrix.
-         //<
+         //> This constructor takes ECEF x, y, and z values in meters and
+         //  covariance as an array of nine doubles in meters squared.
+         //  Note that no check is made to ensure symmetry of the covariance
+         //  matrix.
+         //< 
       EcefCoordCovar(double aX,       double aY,       double aZ,
                      double aCovar00, double aCovar01, double aCovar02,
                                       double aCovar11, double aCovar12,
                                                        double aCovar22)
-         :
-            EcefCoord(aX, aY, aZ)
+         : EcefCoord(aX, aY, aZ)
       {
          covariance[0] = aCovar00;
          covariance[1] = covariance[3] = aCovar01;
@@ -354,32 +380,27 @@ namespace csm
          covariance[5] = covariance[7] = aCovar12;
          covariance[8] = aCovar22;
       }
-         //> Constructor taking point and upper triangular portion of
-         //  covariance matrix.  Elements are assigned to covariance matrix
-         //  assuming symmetry.
+         //> This constructor takes a ECEF x, y, and z values in meters and the
+         //  upper-triangular portion of a covariance matrix in meters squared.
+         //  It is assumed that the covariance matrix is symmetric.
          //<
-
-      //***
-      //> The 3 x 3 covariance matrix for the ECEF coordinate is stored in a one dimensional
-      // array.  Elements can either be accessed directly from that array, or via a
-      // two dimensional lookup using the covar2d() methods below.  Note that using the
-      // "non-const" method allows assignment as well as retrieval.
-      // Ex.   To look up the variance in the Z direction of a coordinate "coord" and
-      // assign it to a variable A, the syntax would be:
-      //
-      // Using one dimensional access : double A = coord.covariance[8];
-      // Using two dimensional access : double A = coord.covar2d(2,2);
-      //
-      // Similarly, to assign a value of 9.0 as the variance in the Z direction
-      // for "coord", the syntax would be:
-      //
-      // Using one dimensional access : coord.covariance[8] = 9.0;
-      // Using two dimensional access : coord.covar2d(2,2) = 9.0;
-      //<
-      //***
-      double covariance[9];
+  
       double  covar2d(unsigned int l, unsigned int s) const { return covariance[3*l + s]; }
-      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; }
+         //> This method provides a convenient two-dimensional access to
+         //  the covariance.  For example, the yz covariance stored in
+         //  covariance[5] could also be accessed as follows:
+         //
+         //-    ImageCoordCovar coord;
+         //-    double A = coord.covar2d(1,2);
+         //<
+      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; } 
+         //> This method provides a convenient two-dimensional means of setting
+         //  the covariance.  For example, the yz covariance stored in
+         //  covariance[5] could also be set as follows:
+         //
+         //-    ImageCoordCovar coord;
+         //-    coord.covar2d(1,2) = 0.5;
+         //<
    };
 
    //***
