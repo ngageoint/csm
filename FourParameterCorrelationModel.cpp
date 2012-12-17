@@ -6,26 +6,10 @@
 //
 //    DESCRIPTION:
 //
-//    This class is used to compute the correlation between adjustable
+//    This class is used to compute the correlation between model
 //    parameters in a community sensor model (CSM).
 //
-//    The class is a wrapper around the equation
-//
-//    rho = a * (alpha + ((1 - alpha)*(1 + beta)/(beta + exp(deltaT / tau)))),
-//
-//    where a, alpha, beta, and tau are the correlation parameters, deltaT is
-//    the difference in time, and rho is the correlation coefficient.
-//
-//    The class assumes that sensor model parameters are divided into disjoint
-//    groups, such that the correlation coefficient between any two parameters
-//    in the same group is given by the equation above, and the correlation
-//    between two parameters in different groups is 0.0.  This implementation
-//    provides a way to assign sensor model parameters to groups, to set the
-//    values of the correlation parameters for a given group, and to compute
-//    the equation above.
-//
 //    LIMITATIONS:       None
-//
 //
 //    SOFTWARE HISTORY:
 //     Date          Author   Comment
@@ -34,6 +18,7 @@
 //     22-Jun-2012   SCM      Made Parameters public, added accessor.
 //     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
 //     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
@@ -94,7 +79,7 @@ void FourParameterCorrelationModel::setCorrelationParameterGroup(size_t smParamI
    checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
 
-   // set the group index for the given sensor model parameter
+   // set the group index for the given model parameter
    theGroupMapping[smParamIndex] = cpGroupIndex;
 }
 

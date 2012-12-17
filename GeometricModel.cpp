@@ -1,15 +1,18 @@
 //#############################################################################
 //
-//    FILENAME:   GeometricModel.cpp
+//    FILENAME:          GeometricModel.cpp
 //
-//    CLASSIFICATION: Unclassified
+//    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    This file provides implementation for methods declared in the
-//    csm::GeometricModel class.
+//    This file provides implementations for methods declared in the
+//    GeometricModel class.
 //
-//>     29-Nov-2012   JPK  Initial Coding
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment
+//     -----------   ------   -------
+//      29-Nov-2012   JPK  Initial Coding
 //      06-Dec-2012   JPK  De-inlined destructor and getFamily() methods
 //                         Added inline definition for convenience method
 //                         getCovarianceMatrix().  Replaced ParamType
@@ -19,9 +22,9 @@
 //                         and setCurrent* to get* and set* respectively.
 //                         Moved Parameter struct inside class definition to
 //                         avoid name clashes.
-//<
+//      17-Dec-2012   BAH  Documentation updates.
+// 
 //    NOTES:
-//
 //
 //    Refer to GeometricModel.h for more information.
 //
@@ -78,7 +81,7 @@ std::string GeometricModel::getFamily() const
 GeometricModel::Parameter GeometricModel::getParameter(int index) const
 {
    //***
-   // Each of the individual "get" calls is repsonsible for range checking
+   // Each of the individual "get" calls is responsible for range checking
    // the provided index, so no need to do so here.
    //*** 
    return Parameter(getParameterName(index),
@@ -129,5 +132,3 @@ GeometricModel::getParameters(param::Set pSet) const
 }
 
 } // namespace csm
-
-

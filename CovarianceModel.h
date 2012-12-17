@@ -1,12 +1,16 @@
 //##################################################################
 //
-//    FILENAME:   CovarianceModel.h
+//    FILENAME:          CovarianceModel.h
 //
-//    CLASSIFICATION:    UNCLASSIFIED
+//    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the covariance model used by the CSM.
+//    Header for the covariance model base class used in the CSM interface.
+//    Intended for replacement models to recreate cross covariance calculations;
+//    most calling applications will use the CSM cross covariance method.
+//    The covariance model is passed as the base class and cast to the
+//    appropriate derived class for use.
 //
 //    LIMITATIONS:       None
 //
@@ -17,6 +21,7 @@
 //     30-Oct-2012   SCM      Renamed to CovarianceModel.h
 //     14-Nov-2012   SCM      Added NoCovarianceModel.
 //     06-Dec 2012   JPK      Replaced "UNKNOWN" with CSM_UNKNOWN
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -37,48 +42,50 @@ class CSM_EXPORT_API CovarianceModel
 public:
    CovarianceModel() : theFormat(CSM_UNKNOWN) {}
    virtual ~CovarianceModel() {}
+      //> A virtual destructor is needed so derived class destructors will
+      //  be called when the base class object is destroyed.
+      //<
 
    const std::string& format() const { return theFormat; }
 
    virtual size_t getNumSensorModelParameters() const = 0;
-      //> Returns the number of sensor model parameters. The returned value
+      //> Returns the number of model parameters. The returned value
       //  will be the same as the value of numSMParams passed to the
-      //  constructor when the object was created.
+      //  constructor when the derived object was created.
       //<
    virtual size_t getNumCorrelationParameterGroups() const = 0;
       //> Returns the number of correlation parameter groups. The returned
       //  value will be the same as the value of numCPGroups passed to the
-      //  constructor when the object was created.
+      //  constructor when the derived object was created.
       //<
 
    virtual int getCorrelationParameterGroup(size_t smParamIndex) const = 0;
-      //> Returns the index of the correlation parameter group to which the given
-      //  sensor model parameter belongs.  The smParamIndex variable is the index
-      //  of a sensor model parameter.  If the sensor model parameter
-      //  does not belong to a group, the return value will be -1.
+      //> Returns the index of the correlation parameter group to which the
+      //  model parameter given by smParamIndex belongs.  If the model
+      //  parameter does not belong to a group, the return value will be -1.
       //
       //  The smParamIndex must be less than getNumSensorModelParameters().
       //<
 
    virtual double getCorrelationCoefficient(size_t cpGroupIndex,
                                             double deltaTime) const = 0;
-      //>  Computes the correlation coefficient for the given correlation parameter
-      //  group and delta-time.  The cpGroupIndex variable holds the index of a
-      //  correlation parameter group.  The deltaTime variable represents the
-      //  difference in time for the correlation calculation.
+      //> Computes the correlation coefficient for the correlation parameter
+      //  group given by cpGroupIndex for the given deltaTime.
+      //  The deltaTime argument represents the difference in time, in seconds,
+      //  for which the correlation is calculated.
       //
       //  The cpGroupIndex must be less than getNumCorrelationParameterGroups().
       //
       //  Notes:
       //
-      //  The deltaTime parameter should be positive, but the function uses the
-      //  absolute value of the variable, so a negative deltaTime is acceptable
-      //  input.
+      //  The deltaTime argument should be positive, but the method uses the
+      //  absolute value of the argument, so a negative deltaTime is acceptable.
       //
       //  If the computed correlation coefficient is outside the range [-1, 1],
-      //  the function will "clamp" the returned value to the nearest number
-      //  within that range.  For example, if the correlation coefficient equation
-      //  evaluates to 1.1 for a given deltaTime, the value 1.0 will be returned.
+      //  the method will "clamp" the returned value to the nearest number
+      //  within that range.  For example, if the correlation coefficient
+      //  equation evaluates to 1.1 for a given deltaTime,
+      //  the value 1.0 will be returned.
       //<
 
 protected:
@@ -87,6 +94,13 @@ protected:
    std::string theFormat;
 };
 
+//***
+// CLASS: NoCovarianceModel
+//> The NoCovarianceModel class is needed for sensor models that do not have
+//  a covariance model because the RasterGM::getCovarianceModel() method
+//  returns a const reference.
+//<
+//***
 class CSM_EXPORT_API NoCovarianceModel : public CovarianceModel
 {
 public:

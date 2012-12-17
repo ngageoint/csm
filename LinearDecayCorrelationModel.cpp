@@ -6,22 +6,8 @@
 //
 //    DESCRIPTION:
 //
-//    This class is used to compute the correlation between adjustable
+//    This class is used to compute the correlation between model
 //    parameters in a community sensor model (CSM).
-//
-//    The class holds correlation data in the form of two lists. The first is a
-//    list of times that specify the start times of each time segment.
-//    The second list spcifies the correlation at the specified time. Between
-//    specified times the correlation is a linear imterpolation in time of the 
-//    correlation at each end of the time segment.
-//
-//    The class assumes that sensor model parameters are divided into disjoint
-//    groups, such that the correlation coefficient between any two parameters
-//    in the same group is given by the equation above, and the correlation
-//    between two parameters in different groups is 0.0.  This implementation
-//    provides a way to assign sensor model parameters to groups, to set the
-//    values of the correlation parameters for a given group, and to compute
-//    the equation above.
 //
 //    LIMITATIONS:       None
 //
@@ -31,6 +17,7 @@
 //     -----------   ------   -------
 //     20-Nov-2012   ISK      Initial Release.
 //     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
@@ -90,7 +77,7 @@ void LinearDecayCorrelationModel::setCorrelationParameterGroup(
    checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
 
-   // set the group index for the given sensor model parameter
+   // set the group index for the given model parameter
    theGroupMapping[smParamIndex] = cpGroupIndex;
 }
 

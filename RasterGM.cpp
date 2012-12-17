@@ -1,15 +1,18 @@
 //#############################################################################
 //
-//    FILENAME:   RasterGM.cpp
+//    FILENAME:          RasterGM.cpp
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
 //    This file provides implementation for methods declared in the
-//    csm::RasterGM class.
+//    RasterGM class.
 //
-//>     06-Dec-2012   JPK  Initial Coding
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment
+//     -----------   ------   -------
+//      06-Dec-2012   JPK  Initial Coding
 //                         Changed ParamSet to param::Set.  De-inlined
 //                         destructor and getFamily() methods.
 //                         Replaced vector<double> with EcefLocus for
@@ -17,9 +20,9 @@
 //                         getCovarianceMatrix().  Provided reference
 //                         implementations for computeAllSensorPartials()
 //                         methods.
-//<
+//     17-Dec-2012   BAH   Documentation updates.
+// 
 //    NOTES:
-//
 //
 //    Refer to RasterGM.h for more information.
 //
@@ -67,7 +70,7 @@ RasterGM::computeAllSensorPartials(const EcefCoord& groundPt,
       val.resize(NUM_PARAMS);
 
       //***
-      // The acheived precision should be the MAXIMUM of the achieved
+      // The achieved precision should be the MAXIMUM of the achieved
       // precision values found for each desired index.
       //***
       if (achievedPrecision) *achievedPrecision = 0.0;
@@ -113,7 +116,7 @@ RasterGM::computeAllSensorPartials(const ImageCoord& imagePt,
       val.resize(NUM_PARAMS);
 
       //***
-      // The acheived precision should be the MAXIMUM of the achieved
+      // The achieved precision should be the MAXIMUM of the achieved
       // precision values found for each desired index.
       //***
       if (achievedPrecision) *achievedPrecision = 0.0;

@@ -6,8 +6,9 @@
 //
 //    DESCRIPTION:
 //
-//    Header for abstract base class that is to provide a common interface from
-//    which all Tactical Sensor Model (CSM) plugin models will inherit.
+//    Header for abstract class that is to provide a common interface from
+//    which CSM geometric models will inherit.  It is derived from the Model
+//    base class and may have other CSM API classes derived from it.
 //
 //    LIMITATIONS:       None
 //
@@ -68,15 +69,18 @@
 //                          and setCurrent* to get* and set* respectively.
 //                          Moved Parameter struct inside class definition to
 //                          avoid name clashes.
+//     17-Dec-2012   BAH    Documentation updates.
+//
 //    NOTES:
 //
 //#############################################################################
 
 #ifndef __CSM_GEOMETRICMODEL_H
 #define __CSM_GEOMETRICMODEL_H
+
 #include "csm.h"
-#include "Warning.h"
 #include "Model.h"
+
 #include <vector>
 #include <string>
 
@@ -91,8 +95,8 @@ public:
    //***
    // STRUCT: Parameter
    //> The parameter structure contains the set of properties unique
-   // to a given parmeter.  the variance for the parameter 
-   // is not included here, since it is more appropriate to consider
+   // to a given adjustable parameter.  The variance for the parameter 
+   // is not included here since it is more appropriate to consider
    // a covariance matrix for an entire set of parameters.
    //<
    //***   
@@ -146,17 +150,17 @@ public:
    // Sensor Model Parameters
    //---
    virtual int getNumParameters() const = 0;
-      //> This method returns the number of sensor model parameters.
+      //> This method returns the number of adjustable parameters.
       //<
                                           
    virtual std::string getParameterName(int index) const = 0;
-      //> This method returns the name for the sensor model parameter
+      //> This method returns the name for the adjustable parameter
       //  indicated by the given index.
       //
       //  If the index is out of range, a csm::Error may be thrown.
       //<
    virtual std::string getParameterUnits(int index) const = 0;
-      //> This method returns the units for the sensor model parameter
+      //> This method returns the units for the adjustable parameter
       //  indicated by the given index.  This string is intended for human
       //  consumption, not automated analysis.  Preferred unit names are:
       //
@@ -212,42 +216,40 @@ public:
       //<
 
    virtual bool hasShareableParameters() const = 0;
-      //> This method returns true if there exists at least one parameter on
-      //  the model that is shareable.  See the isParameterShareable() method.
-      //  This method should return false if all calls to
-      //  isParameterShareable() return false.
+      //> This method returns true if there exists at least one adjustable
+      //  parameter on the model that is shareable.  See the
+      //  isParameterShareable() method.  This method should return false if
+      //  all calls to isParameterShareable() return false.
       //<
    virtual bool isParameterShareable(int index) const = 0;
-      //> This method returns a flag to indicate whether or not a sensor
-      //  model parameter adjustments are shareable across images for the
-      //  sensor model adjustable parameter referenced by index.
+      //> This method returns a flag to indicate whether or not the adjustable
+      //  parameter referenced by index is shareable across models.
       //<                                                       
    virtual csm::SharingCriteria getParameterSharingCriteria(int index) const = 0;
-      //> This method returns characteristics to indicate how
-      //  the sensor model adjustable parameter referenced by index
-      //  may be shareable across images.
+      //> This method returns characteristics to indicate how the adjustable
+      //  parameter referenced by index is shareable across models.
       //<
                                                       
    virtual double getParameterValue(int index) const = 0;
-      //> The method returns the value of the adjustable parameter
-      //  referenced by the specified index.
+      //> This method returns the value of the adjustable parameter
+      //  referenced by the given index.
       //<                                                            
    virtual void setParameterValue(int index, double value) = 0;
       //> This method sets the value for the adjustable parameter referenced by
-      //  the specified index.
+      //  the given index.
       //<
   
    virtual param::Type getParameterType(int index) const = 0;
       //> This method returns the type of the adjustable parameter
-      //  referenced by the specified index.
+      //  referenced by the given index.
       //<
    virtual void setParameterType(int index, param::Type pType) = 0;
-      //> The setOriginalParameterType() method sets the original
-      //  type of the parameter for the given by index.
+      //> This method sets the type of the adjustable parameter
+      //  reference by the given index.
       //<
                                                                
    virtual Parameter getParameter(int index) const;
-      //> This method returns the Parameter indicated by the given index.
+      //> This method returns a Parameter object for the given index.
       //  If the index is out of range, a csm::Error may be thrown.
       //  The default implementation simply calls the methods for each of
       //  the components of the Parameter. This method is declared virtual so
@@ -255,25 +257,25 @@ public:
       //  implementation. 
       //<
    virtual void setParameter(int index, const Parameter& parameter);
-     //>  This method sets all of the properties of the Parameter indicated by
-     //   the given index to those of the given Parameter.
-     //   If the index is out of range, a csm::Error may be thrown.
-     //   The default implementation simply calls the methods for each of
-     //   the components of the Parameter.  Note that this precludes setting of
-     //   name, units,  and sharing criteria as these are set only by the 
-     //   derived classes. This method is declared virtual so derived classes
-     //   may opt to provide their own (more efficient) implementation.
-     //<
+      //>  This method sets all of the properties of the Parameter indicated by
+      //   the given index to those of the given parameter.
+      //   If the index is out of range, a csm::Error may be thrown.
+      //   The default implementation simply calls the methods for each of
+      //   the components of the Parameter.  Note that this precludes setting of
+      //   name, units,  and sharing criteria as these are set only by the 
+      //   derived classes. This method is declared virtual so derived classes
+      //   may opt to provide their own (more efficient) implementation.
+      //<
                                                                       
    std::vector<int> getParameterSetIndices(param::Set pSet = param::VALID) const;
-   //> The method returns a vector of indices for the parameters contained in the
-   //  specified ParamSet.
-   //<
+      //> This method returns a vector of indices of the parameters contained in
+      //  the given pSet.
+      //<
   
    std::vector<Parameter> getParameters(param::Set pSet = param::VALID) const;
-   //> This method returns a vector containing all parameters in the specified
-   //  ParamSet.
-   //<
+      //> This method returns a vector containing all parameters in the
+      //  given pSet.  The default is all parameters marked as VALID.
+      //<
 
    //---
    // Uncertainty Propagation
@@ -281,15 +283,17 @@ public:
    virtual double getParameterCovariance(int index1,
                                          int index2) const = 0;
       //> This method returns the covariance between the parameters
-      //  referenced by index1 and index2
+      //  referenced by index1 and index2.  Variance of a single parameter
+      //  is indicated by specifying the samve value for index1 and index2.
       //<
       
    virtual void setParameterCovariance(int index1,
                                        int index2,
                                        double covariance) = 0;
-   //> This method is used to set the covariance between the parameters
-   //  referenced by index1 and index2
-   //<
+      //> This method is used to set the covariance between the parameters
+      //  referenced by index1 and index2.  Variance of a single parameter
+      //  is indicated by specifying the samve value for index1 and index2.
+      //<
 
    //---
    // Error Correction
@@ -300,17 +304,17 @@ public:
       //<
    virtual std::string getGeometricCorrectionName(int index) const = 0;
       //> This method returns the name for the geometric correction switch
-      //  referenced by the specified index.
+      //  referenced by the given index.
       //<
    virtual void setGeometricCorrectionSwitch(int index,
                                              bool value,
                                              param::Type pType) = 0;
       //> This method is used to enable/disable the geometric correction switch
-      //  referenced by the specified index.
+      //  referenced by the given index.
       //<
    virtual bool getGeometricCorrectionSwitch(int index) const = 0;
-      //> The getCurrentGeometricCorrectionSwitch() returns the value of the
-      //  geometric correction switch given by index.
+      //> This method returns the value of the geometric correction switch
+      //  referenced by the given index.
       //<
 
    typedef std::vector<const GeometricModel*> GeometricModelList;
@@ -324,32 +328,36 @@ public:
           const GeometricModel& comparisonModel,
           param::Set pSet = param::VALID,
           const GeometricModelList& otherModels = GeometricModelList()) const = 0;
-      //> The getCurrentCovarianceMatrix() function returns a matrix containing
-      //  all elements of the error cross covariance matrix between the
-      //  instantiated sensor model and a specified second sensor model
-      //  (comparisonModel).  The covariance is computed using the current
-      //  model parameter values.
+      //> This method returns a matrix containing the elements of the error
+      //  cross covariance between this model and a given second model
+      //  (comparisonModel).  The set of cross covariance elements returned is
+      //  indicated by pSet, which, by default, is all VALID parameters.
       //
-      //  Images may be correlated because they are taken by the same sensor or
-      //  from sensors on the same platform. Images may also be correlated due
-      //  to post processing of the sensor models.
+      //  If comparisonModel is the same as this model, the covariance for
+      //  this model will be returned.  It is equivalent to calling
+      //  getParameterCovariance() for the same set of elements.  Note that
+      //  even if the cross covariance for a particular model type is always
+      //  zero, the covariance for this model must still be supported.
       //
-      //  The returned vector will logically be a two dimensional matrix of
-      //  covariances, though for simplicity it is stored in a one dimensional
-      //  vector (STL has no two dimensional structure).  The height (number of
-      //  rows) of this matrix is the number of parameters on the current
-      //  model, and the width (number of columns) is the number of parameters
-      //  on the comparison model.  Thus, to find the covariance between p1 on
-      //  this model and p2 on the comparison model, example the index (N*p1 +
-      //  p2) in the returned vector (where N is the number of parameters in
-      //  the comparison model, retrieved from getNumParameters()).
+      //  The otherModels list contains all of the models in the current
+      //  photogrammetric process; some cross-covariance implementations are
+      //  influenced by other models.  It can be omitted if it is not needed
+      //  by any models being used.
       //
-      //  The data returned here may need to be supplemented with the single
-      //  image covariance from getCurrentParameterCovariance() and
-      //  getUnmodeledError().
+      //  The returned vector will logically be a two-dimensional matrix of
+      //  covariances, though for simplicity it is stored in a one-dimensional
+      //  vector (STL has no two-dimensional structure).  The height (number of
+      //  rows) of this matrix is the number of parameters on the current model,
+      //  and the width (number of columns) is the number of parameters on
+      //  the comparison model.  Thus, the covariance between p1 on this model
+      //  and p2 on the comparison model is found in index (N*p1 + p2)
+      //  in the returned vector.  N is the size of the vector returned by
+      //  getParameterSetIndices() on the comparison model for the given pSet).
       //
-      //  The otherModels optional list may be passed if there are additional
-      //  sensor models that influence the covariance computation.
+      //  Note that cross covariance is often zero.  Non-zero cross covariance
+      //  can occur for models created from the same sensor (or different
+      //  sensors on the same platform).  It can also be present after an
+      //  adjustment involving multiple models.
       //<
       
  };   

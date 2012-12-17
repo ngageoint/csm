@@ -1,14 +1,14 @@
 //#############################################################################
 //
-//    FILENAME:   Isd.h
+//    FILENAME:          Isd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the ISD base class. ISD is encapsulated in a C++ class for
-//    transfer through the CSM interface. ISD is passed as a pointer to a
-//    simple ISD base class (for example, csm::Isd *isd).
+//    Header for the Isd base class. ISD is encapsulated in a C++ class for
+//    transfer through the CSM (Plugin) interface. ISD is passed as the
+//    base class and cast to the appropriate derived class for use.
 //
 //    LIMITATIONS:       None
 //
@@ -25,6 +25,7 @@
 //     11-Oct-2012   SCM      Added clearAllParams() and clearParams().
 //     30-Oct-2012   SCM      Renamed to Isd.h
 //     06-Dec-2012   JPK      Used CSM_UNKNOWN instead of "UNKNOWN"
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -46,7 +47,7 @@ class CSM_EXPORT_API Isd
 public:
    Isd() : theFormat(CSM_UNKNOWN), theFilename() {}
       //> This constructor makes an "unknown" image support data object.  No
-      //  informatino about the image will be available in this mode.
+      //  information about the image will be available in this mode.
       //<
 
    explicit Isd(const std::string& filename)
@@ -56,21 +57,22 @@ public:
       //<
 
    virtual ~Isd() {}
+      //> A virtual destructor is needed so derived class destructors will
+      //  be called when the base class object is destroyed.
+      //<
 
    const std::string& format() const { return theFormat; }
       //> This method returns the format of the image support data.  Each
-      //  class derived from csm::Isd has a different format string.
+      //  derived class has a different format string.
       //<
 
    const std::string filename() const { return theFilename; }
       //> This method returns the filename associated with the image support
-      //  data, if any.  If there is no filename, then this string will be
-      //  empty.
+      //  data, if any.  If there is no filename, this string will be empty.
       //<
    inline void setFilename(const std::string& fn);
-      //> This method sets the filename associated with the image support
-      //  data.  If there is no associated filename, then an empty string
-      //  should be used.
+      //> This method sets the filename associated with the image support data.
+      //  If there is no associated filename, an empty string should be used.
       //<
 
    inline std::string param(const std::string& name, int instance = 0) const;
@@ -87,7 +89,7 @@ public:
       //> This method removes all the parameters added to the parameter map.
       //<
    void clearParams(const std::string& name) { theParameters.erase(name); }
-      //> This method removes all the instances of the given parameter name in
+      //> This method removes all the instances of the given parameter name from
       //  the parameter map.
       //<
    const std::multimap<std::string, std::string>& parameters() const { return theParameters; }
@@ -103,9 +105,10 @@ protected:
 
    std::multimap<std::string, std::string> theParameters;
       //> Data member multimap that organizes additional parameters used to 
-      //  build a particular geometry.  It allows for multiple keys.  Though it
-      //  can be accessed directly, it may be easier to access it through the
-      //  param() and addParam() functions.
+      //  build a particular geometry.  It allows for multiple keys and
+      //  multiple instances of the same key.  Though it can be accessed
+      //  directly, it may be easier to access it through the param and
+      //  addParam methods.
       //<
 };
 
@@ -122,8 +125,8 @@ inline std::string Isd::param(const std::string& name, int instance) const
    std::multimap<std::string, std::string>::const_iterator it = theParameters.find(name);
    while (it != theParameters.end() && (instance || it->first != name))
    {
-      // the iterator is not limited to items whose key is name unfortunately,
-      // so only decrement the instance variable if this matches
+      // Unfortunately, the iterator is not limited to items whose key is named
+      // name, so only decrement the instance variable if this matches
       if (it->first == name) --instance;
 
       ++it;
@@ -148,4 +151,3 @@ inline void Isd::addParam(const std::string& name, const std::string& value)
 } // namespace csm
 
 #endif
-

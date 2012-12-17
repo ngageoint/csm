@@ -1,12 +1,12 @@
 //#####################################################################
 //
-//    FILENAME:   Error.h
+//    FILENAME:          Error.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the error structure used by the CSM.
+//    Header for the error class used by the CSM.
 //
 //    LIMITATIONS:       None
 //
@@ -19,6 +19,7 @@
 //     09 Mar 2010   Don Leonard CCB Change Deleted DATA_NOT_AVAILABLE
 //     02 Mar 2012   SCM         Refactored interface.
 //     30-Oct-2012   SCM         Renamed to Error.h
+//     17-Dec-2012   BAH         Documentation updates.
 //
 //    NOTES:
 //
@@ -78,23 +79,22 @@ public:
                  const std::string& aFunction)
    {
       theError    = aErrorType;
-      theMessage = aMessage;
+      theMessage  = aMessage;
       theFunction = aFunction;
    }
 
 private:
    ErrorType   theError;
-      //> enumeration of the error (for application control),
+      //> This enumeration of the error is used for application control.
       //<
    std::string theMessage;
-      //> string describing the error.
+      //> This string describes the error.
       //<
    std::string theFunction;
-      //> string identifying the function in which the error occurred.
+      //> This string identifies the function in which the error occurred.
       //<
 };
 
 } // namespace csm
 
 #endif
-

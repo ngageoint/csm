@@ -1,6 +1,6 @@
 //####################################################################
 //
-//    FILENAME:   Warning.h
+//    FILENAME:          Warning.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -17,6 +17,7 @@
 //     01-Jun-2004   Kevin Lam CCB Change
 //     02-Mar-2012   SCM       Refactored interface.
 //     30-Oct-2012   SCM       Renamed to Warning.h
+//     17-Dec-2012   BAH       Documentation updates.
 //
 //    NOTES:
 //
@@ -63,22 +64,20 @@ public:
                    const std::string& aMessage,
                    const std::string& aFunction)
    {
-      theWarning = aWarningType;
-      theMessage = aMessage;
+      theWarning  = aWarningType;
+      theMessage  = aMessage;
       theFunction = aFunction;
    }
 
 private:
    WarningType theWarning;
-      //> This data member contains the enumeration of the warning
-      // (used for application control),
+      //> This enumeration of the warning is used for application control.
       //<
    std::string theMessage;
-      //> This data member is a string describing the warning.
+      //> This string describes the warning.
       //<
    std::string theFunction;
-      //> This data member is a string identifying the function in which
-      //  the warning occurred.
+      //> This string identifies the function in which the warning occurred.
       //<
 };
 
@@ -87,4 +86,3 @@ typedef std::list<Warning> WarningList;
 } // namespace csm
 
 #endif
-

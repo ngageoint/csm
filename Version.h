@@ -6,9 +6,9 @@
 //
 //    DESCRIPTION:
 //
-//    This class represents a CSM version.  A version is a series of integers,
-//    like "1.2.3".  Versions can be compared for equality or for relative
-//    position.
+//    This class represents a version designator.  This class consists of a
+//    series of integers, e.g., "1.2.3".  Versions can be compared for
+//    equality or for relative position (which version is most current).
 //
 //    LIMITATIONS:       None
 //
@@ -19,6 +19,7 @@
 //     19-Apr-2012   SCM      Initial creation
 //     30-Oct-2012   SCM      Added version() accessors.
 //     30-Oct-2012   SCM      Renamed to Version.h
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -41,14 +42,13 @@ class CSM_EXPORT_API Version
 {
 public:
    explicit Version(const std::string& version);
-      //> This constructs a Version object with the given string
-      //  version.  The string should be a sequence of numbers separated by
-      //  periods (".").
+      //> This constructor makes a Version object with the given string version.
+      //  The string should be a sequence of numbers separated by periods (".").
       //<
    Version(int major, int minor, int revision = -1);
-      //> This constructs a Version object with the given major, minor, and
-      //  revision version information.  The major and minor versions must be
-      //  greater than or equal to 0, or an exception will be thrown.  If the
+      //> This constructor makes a Version object with the given major, minor,
+      //  and revision version information.  The major and minor versions must
+      //  be greater than or equal to 0, or an exception will be thrown.  If the
       //  revision is less than zero, it will be omitted from the object.
       //
       //  The resulting version string will look like "major.minor.revision".
@@ -64,26 +64,25 @@ public:
       //<
 
    std::string version() const { std::ostringstream s; print(s); return s.str(); }
-      //> This method returns the version as a string.  This method should not
-      //  be called if the result is being sent to an ostream.  It will work,
-      //  but will be inefficient.  Instead, use the operator<< defined below,
-      //  or call print() directly.
+      //> This method returns the version as a string.  If the result is being
+      //  sent to an ostream, use the << operator or print method instead for
+      //  efficiency.
       //<
 
-   int version(unsigned int part) const { return (part < theVersions.size() ? theVersions[part] : -1); }
+   int version(unsigned int part) const
+      { return (part < theVersions.size() ? theVersions[part] : -1); }
       //> This method returns the requested portion of the version.  If the
-      //  requested part does not exist, then this method returns -1.
+      //  requested part does not exist, this method returns -1.
       //<
    int major() const { return version(0); }
-      //> This method returns the major version number of the version.
+      //> This method returns the major version number.
       //<
    int minor() const { return version(1); }
-      //> This method returns the minor version number of the version.
+      //> This method returns the minor version number.
       //<
    int revision() const { return version(2); }
-      //> This method returns the revision version number of the version, if it
-      //  exists.  If there is no revision in this version, this method returns
-      //  -1.
+      //> This method returns the revision version number, if it exists.
+      //  If there is no revision in this version, this method returns -1.
       //<
 
    bool operator==(const Version& rhs);

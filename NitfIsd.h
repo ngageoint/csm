@@ -1,15 +1,14 @@
 //#############################################################################
 //
-//    FILENAME:   NitfIsd.h
+//    FILENAME:          NitfIsd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
 //    Header for the NITF 2.0 and 2.1 ISD classes derived from the csm::Isd
-//    base class.  ISD is encapsulated in a C++ class for transfer through the
-//    CSM interface. ISD is passed as a pointer to a simple ISD base class (for
-//    example, csm::Isd* isd).
+//    base class.  This class provides portions of the NITF file that are
+//    useful for initializing a model.
 //
 //    LIMITATIONS:       None
 //
@@ -26,6 +25,7 @@
 //     30-Oct-2012   SCM      Renamed to NitfIsd.h
 //     06-Dec-2012   JPK      Made Filename parameter optional, replaced
 //                            TRE and DES with Tre and Des for consistency
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -41,6 +41,12 @@
 namespace csm
 {
 
+//***
+// CLASS: Des
+//> NITF Data Extension Segment (DES) class.  DESs can be used to hold overflow
+//  TREs that did not fit in a NITF image segment.
+//<
+//***
 class CSM_EXPORT_API Des
 {
 public:
@@ -60,8 +66,17 @@ public:
 private:
    std::string theSubHeader;
    std::string theData;
+      //> This contains the data in the DES.  It might contain overflow TREs.
+      //<
 };
 
+
+//***
+// CLASS: Tre
+//> NITF Tagged Record Extension (TRE) class.  TREs contain most of the support
+//  data needed to instantiate a model.
+//<
+//***
 class CSM_EXPORT_API Tre
 {
 public:
@@ -80,7 +95,6 @@ public:
    const void setLength(unsigned int aLength)   { theLength = aLength; }
    const void setData(const std::string& aData) { theData = aData; }
 
-   // treData includes TRE name, length and data
    void setTre(const std::string& treData)
    {
       if (treData.length() < 11) return;
@@ -88,21 +102,37 @@ public:
       theLength = atoi(treData.substr(6, 5).c_str());
       theData = treData.substr(11);
    }
+      //> This method extracts the TRE's name, length and data from treData.
+      //
+      //  Note that this function extracts all six characters of the TRE name,
+      //  which might include trailing spaces.
+      //
+      //  Note that theLength is set to the value in the TRE's CEL field,
+      //  which should match the length of theData.
+      //<
 
    void clear() { theName = ""; theLength = 0; theData = ""; }
 
 private:
    std::string theName;
-      //> This contains the 6 character TRE name.
+      //> This string contains the six-character TRE name.
       //<
    unsigned int theLength;
-      //> This contains the tag length, which will be data.length() + 11.
+      //> This integer contains the TRE data length given by the TRE's CEL
+      //  field, which should be same as the length of theData.
       //<
    std::string theData;
-      //> This contains the TRE data.
+      //> This string contains the TRE data.
       //<
 };
 
+//***
+// CLASS: Image
+//> NITF image subheader class.  The image subheader contains the image support
+//  data, including TREs.  The image data section of the NITF file consists of
+// the image pixels and is not part of the CSM API.
+//<
+//***
 class CSM_EXPORT_API Image
 {
 public:
@@ -110,9 +140,7 @@ public:
    Image(const std::string& aSubHeader, const std::vector<Tre>& tres)
       : theSubHeader(aSubHeader), theImageTres(tres) {}
       //> This method constructs the Image object with the given image
-      //  subheader data and list of parsed tagged record extensions (TREs).
-      //
-      //  The image subheader data should include a copy of the TRE data.
+      //  subheader data (including the TRE data) and list of parsed TREs.
       //<
    ~Image() {}
 
@@ -120,25 +148,25 @@ public:
       //> This method returns the entire image subheader, including a copy of
       //  the TRE data.
       //<
+
    const std::vector<Tre>& imageTres() const { return theImageTres; }
-      //> This method returns the list of image subheader tagged record
-      //  extensions (TREs).
+      //> This method returns the list of image subheader TREs.
       //<
 
    void setSubHeader(const std::string& sh) { theSubHeader = sh; }
       //> This method sets the entire image subheader, including a copy of
-      //  the TRE data.  When using this method, it is important to keep the
-      //  list of TREs in sync using the list modification methods below.
+      //  the TRE data.  When using this method, it is important to also set
+      //  the separated TREs as necessary using the methods below.
       //<
 
    void clearImageTres() { theImageTres.clear(); }
-      //> This method remvoes all existing TRE objects from the list.
+      //> This method removes all Tre objects from the list.
       //<
    void addImageTre(const Tre& tre) { theImageTres.push_back(tre); }
-      //> This method adds the given TRE object to the list.
+      //> This method adds the given Tre object to the list.
       //<
    void setImageTres(const std::vector<Tre>& tres) { theImageTres = tres; }
-      //> This method sets the TRE list to the given vector.
+      //> This method sets the Tre list to the given vector.
       //<
 
 private:
@@ -147,9 +175,20 @@ private:
       //  the TRE data.
       //<
    std::vector<Tre> theImageTres;
+      //> This contains the parsed TREs.
+      //<
 };
 
-// this is an intermediary class -- do not construct
+
+//***
+// CLASS: NitfIsd
+//> NITF ISD class.  This is an intermediary class that the NITF 2.0 and
+//  NITF 2.1 ISD classes are derived from.  Do not construct this class
+//  directly.  Construct the appropriate derived class to set the NITF format
+//  that the calling application needs to parse the data.  Then this class
+//  can be used to retrieve the format and access the data.
+//<
+//***
 class CSM_EXPORT_API NitfIsd : public Isd
 {
 public:
@@ -161,50 +200,49 @@ public:
       //<
 
    const std::vector<Tre>& fileTres() const { return theFileTres; }
-      //> This method returns the parsed fileheader tagged record extension
-      //  objects.
+      //> This method returns the file header Tre objects. 
       //<
    const std::vector<Des>& fileDess() const { return theFileDess; }
-      //> This method returns the data extension segment objects in this NITF.
+      //> This method returns the Des objects in this NITF.
       //<
    const std::vector<Image>& images() const { return theImages; }
-      //> This method returns the image objects in this NITF.
+      //> This method returns the Image objects in this NITF.
       //<
 
    void setFileHeader(const std::string& head) { theFileHeader = head; }
-      //> This method sets the entire file header, including a copy of
-      //  the TRE data.  When using this method, it is important to keep the
-      //  list of TREs in sync using the list modification methods below.
+      //> This method sets the file header, which can include TRE data.
+      //  When using this method, it is important to also set the separated
+      //  file header TREs as necessary using the methods below.
       //<
 
    void clearFileTres() { theFileTres.clear(); }
-      //> This method remvoes all existing TRE objects from the list.
+      //> This method removes all file header Tre objects from the list.
       //<
    void addFileTre(const Tre& tre) { theFileTres.push_back(tre); }
-      //> This method adds the given TRE object to the list.
+      //> This method adds the given file header Tre object to the list.
       //<
    void setFileTres(const std::vector<Tre>& tres) { theFileTres = tres; }
-      //> This method sets the TRE list to the given vector.
+      //> This method sets the file header Tre list to the given vector.
       //<
 
    void clearFileDess() { theFileDess.clear(); }
-      //> This method remvoes all existing DES objects from the list.
+      //> This method removes all Des objects from the list.
       //<
    void addFileDes(const Des& des) { theFileDess.push_back(des); }
-      //> This method adds the given DES object to the list.
+      //> This method adds the given Des object to the list.
       //<
    void setFileDess(const std::vector<Des>& dess) { theFileDess = dess; }
-      //> This method sets the DES list to the given vector.
+      //> This method sets the Des list to the given vector.
       //<
 
    void clearImages() { theImages.clear(); }
-      //> This method remvoes all existing DES objects from the list.
+      //> This method removes all Image objects from the list.
       //<
    void addImage(const Image& image) { theImages.push_back(image); }
-      //> This method adds the given DES object to the list.
+      //> This method adds the given Image object to the list.
       //<
    void setImages(const std::vector<Image>& images) { theImages = images; }
-      //> This method sets the DES list to the given vector.
+      //> This method sets the Image list to the given vector.
       //<
 
 protected:

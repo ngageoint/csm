@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:   Plugin.cpp
+//    FILENAME:          Plugin.cpp
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -9,8 +9,12 @@
 //    This file provides implementation for methods declared in the
 //    CSMPlugin class.
 //
-//    NOTES:
+//    SOFTWARE HISTORY:
+//     Date          Author   Comment
+//     -----------   ------   -------
+//     17-Dec-2012   BAH      Documentation updates.
 //
+//    NOTES:
 // 
 //    Refer to Plugin.h for more information.
 //

@@ -1,15 +1,14 @@
 //#############################################################################
 //
-//    FILENAME:   BytestreamIsd.h
+//    FILENAME:          BytestreamIsd.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the byte stream ISD class derived from the csm::Isd base class.
-//    ISD is encapsulated in a C++ class for transfer through the CSM
-//    interface. This class is designed to hold ISD in a std::string of unspecified
-//    format. The field "data" is set with the ISD.
+//    Header for the byte stream ISD class derived from the Isd base class.
+//    This class holds ISD in a string of unspecified format.
+//    The field "data" is set with the ISD.
 //
 //    LIMITATIONS:       None
 //
@@ -22,6 +21,7 @@
 //                            Configuration control board.
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     30-Oct-2012   SCM      Renamed to BytestreamIsd.h
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -45,8 +45,10 @@ public:
 
    const std::string data() const { return theData; }
       //> This method returns the raw bytestream data associated with the image
-      //  support data.  This should not be empty.
+      //  support data.  This should not be empty.  The string can contain null
+      //  characters, so care must be taken when calling std::string::c_str().
       //<
+
    void setData(const std::string& data) { theData = data; }
       //> This method returns the raw bytestream data associated with the image
       //  support data.  This should not be empty.
@@ -62,4 +64,3 @@ private:
 } // namespace csm
 
 #endif
-

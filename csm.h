@@ -1,12 +1,12 @@
 //#############################################################################
 //
-//    FILENAME:   csm.h
+//    FILENAME:          csm.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Header for the constants and other definitions used by the CSM.
+//    Header for constants and other definitions used in the CSM API.
 //
 //    LIMITATIONS:       None
 //
@@ -27,6 +27,7 @@
 //                            Implemented additional constructors for
 //                            ImageCoordCovar and EcefCoordCovar and added
 //                            new struct EcefLocus.
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //
@@ -50,14 +51,14 @@
 #  define CSM_EXPORT_API
 #endif
 
-// The getVersion() and getCsmVersion() methods should use CURRENT_CSM_VERSION to
+// The getCsmVersion method should use CURRENT_CSM_VERSION to
 // return the CSM API version that the sensor model/plugin was written to.
 #define CURRENT_CSM_VERSION csm::Version(3, 0, 1);
 
-// common definition for an unknown name,type,node,etc.
+// Common definition for an unknown name, type, node,etc.
 #define CSM_UNKNOWN "UNKNOWN"
 
-// common sensor types returned from csm::Model::getSensorType()
+// Common sensor types returned from the csm::Model::getSensorType method.
 #define CSM_SENSOR_TYPE_UNKNOWN       CSM_UNKNOWN
 #define CSM_SENSOR_TYPE_EO            "EO"
 #define CSM_SENSOR_TYPE_IR            "IR"
@@ -66,7 +67,7 @@
 #define CSM_SENSOR_TYPE_SAR           "SAR"
 #define CSM_SENSOR_TYPE_EOIRSC        "EO_IR_SPECIAL_CASE"
 
-// common sensor modes returned from csm::Model::getSensorMode()
+// Common sensor modes returned from the csm::Model::getSensorMode method.
 #define CSM_SENSOR_MODE_UNKNOWN       CSM_UNKNOWN
 #define CSM_SENSOR_MODE_FRAME         "FRAME"
 #define CSM_SENSOR_MODE_PULSE         "PULSE"
@@ -84,8 +85,8 @@ namespace csm
    {
       enum Type
       //>
-      // This enumeration lists the possible parameter or characteristic
-      //  types as follows.
+      // This enumeration lists the possible model parameter or characteristic
+      // types as follows.
       //
       //  NONE       - Parameter value has not yet been initialized.
       //  FICTITIOUS - Parameter value has been calculated by resection
@@ -105,12 +106,13 @@ namespace csm
 
       enum Set
       //>
-      // This enumeration lists the set of parameters a user may be interested
-      // in exploiting, and membership in one of these sets is determined by
-      //  parameter type.
-      //  VALID      - Parameters of type NONE are excluded.
+      // This enumeration lists the set of model parameters that a user may be
+      // interested in exploiting.  Membership in one of these sets is
+      // determined by model parameter type.
+      //
+      //  VALID      - Parameters of type NONE are excluded. 
       //               All others are included,
-      //  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included
+      //  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included.
       //  FIXED      - Only EXACT parameters are included.
       {
          VALID = 0,
@@ -122,20 +124,49 @@ namespace csm
 
    //***
    // STRUCT: SharingCriteria
-   //> This structure stores information regarding whether or not parameters
-   // can be "shared", based on common characteristics.
+   //> This structure stores information regarding whether or not a model
+   //  parameter might be "shared" between models of the same type, based on
+   //  common characteristics.
    //<
    //***
    struct SharingCriteria
    {
    public:
       bool      matchesName;
+        //> Requires that the models have the same model name as given by
+        //  the Model::getModelName method.  Will almost always be set to true.
+        //<
+
       bool      matchesSensorID;
+        //> Requires that the models have the same sensor ID as given by
+        //  the Model::getSensorIdentifier method.
+        //<
+
       bool      matchesPlatformID;
+        //> Requires that the models have the same platform ID as given by
+        //  the Model::getPlatformIdentifier method.
+        //<
+
       bool      matchesCollectionID;
+        //> Requires that the models have the same collection ID as given by
+        //  the Model::getCollectionIdentifier method.
+        //<
+
       bool      matchesTrajectoryID;
+        //> Requires that the models have the same trajectory ID as given by
+        //  the Model::getTrajectoryIdentifier method.
+        //<
+
       bool      matchesDateTime;
+        //> Requires that the models' imaging times must be within a certain
+        //  time delta.  It is typically sufficient to compare the times at
+        //  the start of the image.
+        //<
+
       double    maxTimeDelta;
+        //> Maximum time separation, in seconds, for a model parameter to be
+        //  shared when matchesDateTime is true.
+        //<
 
       SharingCriteria()
          :
@@ -168,8 +199,9 @@ namespace csm
 
    //***
    // STRUCT: ImageCoord
-   //> The ImageCoord structure represents a 2 dimensional point in image space.
-   //  Usually, it represents an abolute point location.
+   //> This structure represents a two-dimensional image coordinate
+   //  (line, sample in pixels).
+   //  It typically represents an absolute coordinate.
    //<
    //***
    struct ImageCoord
@@ -185,12 +217,11 @@ namespace csm
 
    //***
    // STRUCT: ImageCoordCovar
-   //> The ImageCoordCovar structure is an image coordinate with covariance
-   //  information.
+   //> This structure represents an image coordinate with a corresponding
+   //  2x2 covariance matrix.
    //
-   //  The covariance vector is always 4 elements.  It can be accessed either
-   //  through the one dimensional covar() method, or the two dimensional
-   //  covar() method.
+   //  The covariance is stored as an array of four elements that can be
+   //  accessed directly or through the two-dimensional covar2d methods.
    //<
    //***
    struct ImageCoordCovar : public ImageCoord
@@ -249,8 +280,8 @@ namespace csm
 
    //***
    // STRUCT: ImageVector
-   //> The ImageCoord structure represents a 2 dimensional vector in image
-   //  space. This can sometimes be used to represent the size of an image.
+   //> This structure represents a two-dimensional vector in image space.
+   //  Units are pixels.  It can be used to represent the size of an image.
    //<
    //***
    struct ImageVector
@@ -266,13 +297,10 @@ namespace csm
 
    //***
    // STRUCT: EcefCoord
-   //> The EcefCoord structure represents a 3 dimensional location in Earth
-   //  Centered Earth Fixed space.  Usually, it will represent an abolute
-   //  point, but some uses of this structure in the SensorModel class call for
-   //  it to represent an ECEF location vector or an ECEF velocity vector.
-   //
-   //  The units of the doubles are meters when the object is used as a
-   //  location, and meters/second when used as a velocity.
+   //> This structure represents a three-dimensional location (x,y,z in meters)
+   //  in the WGS-84 Earth Centered Earth Fixed (ECEF) coordinate system.
+   //  It typically represents an absolute coordinate; the EcefVector structure
+   //  is used for velocity and direction vectors.
    //<
    //***
    struct EcefCoord
@@ -289,12 +317,11 @@ namespace csm
 
    //***
    // STRUCT: EcefCoordCovar
-   //> The EcefCoordCovar structure is an ECEF coordinate with covariance
-   //  information.
+   //> This structure represents an ECEF coordinate with a corresponding
+   //  3x3 covariance matrix.
    //
-   //  The covariance vector is always 9 elements.  It can be accessed either
-   //  through the one dimensional covar() method, or the two dimensional
-   //  covar() method.
+   //  The covariance is stored as an array of nine elements that can be
+   //  accessed directly or through the two-dimensional covar2d methods.
    //<
    //***
    struct EcefCoordCovar : public EcefCoord
@@ -357,9 +384,10 @@ namespace csm
 
    //***
    // STRUCT: EcefVector
-   //> The EcefVector structure represents a 3 dimensional vector in Earth
-   //  Centered Earth Fixed space.  It can represent an ECEF location vector or
-   //  an ECEF velocity vector.
+   //> This structure represents a three-dimensional vector in the WGS-84 Earth
+   //  Centered Earth Fixed coordinate system.
+   //  It can represent an ECEF direction vector (unitless) or
+   //  an ECEF velocity vector (in meters per second).
    //<
    //***
    struct EcefVector
@@ -375,8 +403,8 @@ namespace csm
 
    //***
    // STRUCT: EcefLocus
-   //> The EcefLocus structure contains a point and a direction in Earth
-   //  Centered Earth Fixed space.
+   // > This structure contains an ECEF coordinate (in meters) and
+   //   an ECEF direction vector (unitless).
    //<
    //***
    struct EcefLocus

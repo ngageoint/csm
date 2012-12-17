@@ -1,16 +1,19 @@
 //#############################################################################
 //
-//    FILENAME:   Version.cpp
+//    FILENAME:          Version.cpp
+//
+//    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //     This file provides implementation for methods declared in the
-//     CSMVersion class.
+//     Version class.
 //
 //    SOFTWARE HISTORY:
 //     Date          Author   Comment   
 //     -----------   ------   -------
 //     19-Apr-2012   SCM      Initial creation
 //     30-Oct-2012   SCM      Renamed to Version.cpp
+//     17-Dec-2012   BAH      Documentation updates.
 //
 //    NOTES:
 //     Refer to Version.h for more information.
@@ -134,6 +137,5 @@ bool Version::operator<(const Version& rhs)
    //***
    return (theVersions.size() < rhs.theVersions.size());
 }
-
 
 } // namespace csm
