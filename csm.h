@@ -88,14 +88,15 @@ namespace csm
       // This enumeration lists the possible model parameter or characteristic
       // types as follows.
       //
-      //  NONE       - Parameter value has not yet been initialized.
-      //  FICTITIOUS - Parameter value has been calculated by resection
-      //               or other means.
-      //  REAL       - Parameter value has been measured or read from
-      //               support data.
-      //  EXACT      - Parameter value has been specified and is not
-      //               to be adjusted, but may contribute to error
-      //               propagation.
+      //-  NONE       - Parameter value has not yet been initialized.
+      //-  FICTITIOUS - Parameter value has been calculated by resection
+      //-               or other means.
+      //-  REAL       - Parameter value has been measured or read from
+      //-               support data.
+      //-  EXACT      - Parameter value has been specified and is not
+      //-               to be adjusted, but may contribute to error
+      //-               propagation.
+      //
       {
          NONE = 0 ,
          FICTITIOUS,
@@ -103,17 +104,17 @@ namespace csm
          EXACT
       };
       //<
-
       enum Set
       //>
       // This enumeration lists the set of model parameters that a user may be
       // interested in exploiting.  Membership in one of these sets is
       // determined by model parameter type.
       //
-      //  VALID      - Parameters of type NONE are excluded. 
-      //               All others are included,
-      //  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included.
-      //  FIXED      - Only EXACT parameters are included.
+      //-  VALID      - Parameters of type NONE are excluded. 
+      //-               All others are included,
+      //-  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included.
+      //-  FIXED      - Only EXACT parameters are included.
+      //
       {
          VALID = 0,
          ADJUSTABLE,
@@ -136,33 +137,27 @@ namespace csm
         //> Requires that the models have the same model name as given by
         //  the Model::getModelName method.  Will almost always be set to true.
         //<
-
       bool      matchesSensorID;
         //> Requires that the models have the same sensor ID as given by
         //  the Model::getSensorIdentifier method.
         //<
-
       bool      matchesPlatformID;
         //> Requires that the models have the same platform ID as given by
         //  the Model::getPlatformIdentifier method.
         //<
-
       bool      matchesCollectionID;
         //> Requires that the models have the same collection ID as given by
         //  the Model::getCollectionIdentifier method.
         //<
-
       bool      matchesTrajectoryID;
         //> Requires that the models have the same trajectory ID as given by
         //  the Model::getTrajectoryIdentifier method.
         //<
-
       bool      matchesDateTime;
         //> Requires that the models' imaging times must be within a certain
         //  time delta.  It is typically sufficient to compare the times at
         //  the start of the image.
         //<
-
       double    maxTimeDelta;
         //> Maximum time separation, in seconds, for a model parameter to be
         //  shared when matchesDateTime is true.
