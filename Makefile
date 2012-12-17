@@ -42,7 +42,7 @@ clean::
 	$(RM) $(OBJS) $(LIBRARY) *~
 
 package::
-	$(TAR) -czvf csm-reform.$(shell date '+%Y%m%d').tar.gz Makefile* $(HEADERS) $(OBJS:.o=.cpp) Doxyfile
+	$(TAR) -czvf csm3.$(shell date '+%Y%m%d').tar.gz Makefile* $(HEADERS) $(OBJS:.o=.cpp) Doxyfile scripts/doxygen-filter.pl
 
 DOXYFILE=$(INSTDIR)/include/Doxyfile
 
