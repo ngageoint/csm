@@ -226,10 +226,10 @@ namespace csm
          //> 2x2 line and sample covariance matrix, in pixels squared,
          //  stored as an array of four doubles as follows:
          //
-         //  [0] = line variance
-         //  [1] = line/sample covariance
-         //  [2] = sample/line covariance
-         //  [3] = sample variance
+         //-  [0] = line variance
+         //-  [1] = line/sample covariance
+         //-  [2] = sample/line covariance
+         //-  [3] = sample variance
          //
          //  It can be accessed directly or through the covar2d methods.
          //<
@@ -334,15 +334,15 @@ namespace csm
          //> 3x3 ECEF coordinate covariance matrix, in meters squared,
          //  stored as an array of nine doubles as follows:
          //
-         //  [0] = x  variance
-         //  [1] = xy covariance
-         //  [2] = xz covariance
-         //  [3] = yx covariance
-         //  [4] = y  variance
-         //  [5] = yz covariance
-         //  [6] = zx covariance
-         //  [7] = zy covariance
-         //  [8] = z  variance
+         //-  [0] = x  variance
+         //-  [1] = xy covariance
+         //-  [2] = xz covariance
+         //-  [3] = yx covariance
+         //-  [4] = y  variance
+         //-  [5] = yz covariance
+         //-  [6] = zx covariance
+         //-  [7] = zy covariance
+         //-  [8] = z  variance
          //
          //  It can be accessed directly or through the covar2d methods.
          //<
@@ -420,7 +420,7 @@ namespace csm
    //***
    // STRUCT: EcefLocus
    // > This structure contains an ECEF coordinate (in meters) and
-   //   an ECEF direction vector (unitless).
+   //   an ECEF direction vector (in meters).
    //<
    //***
    struct EcefLocus
