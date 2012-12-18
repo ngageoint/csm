@@ -12,7 +12,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author    Comment   
+//     Date          Author    Comment
 //     -----------   ------    -------
 //     01-Jun-2004   Kevin Lam CCB Change
 //     02-Mar-2012   SCM       Refactored interface.

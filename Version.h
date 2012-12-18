@@ -14,7 +14,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     19-Apr-2012   SCM      Initial creation
 //     30-Oct-2012   SCM      Added version() accessors.
