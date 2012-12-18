@@ -109,7 +109,7 @@ public:
       //> This method returns release date of the plugin.
       //  The returned string follows the ISO 8601 standard.
       //
-      //-    Precision   Format           Example 
+      //-    Precision   Format           Example
       //-    year        yyyy             "1961"
       //-    month       yyyymm           "196104"
       //-    day         yyyymmdd         "19610420"

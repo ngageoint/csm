@@ -145,8 +145,8 @@ public:
       //
       //  Notes:
       //
-      //  Although the getCorrelationParameterGroup methods can return -1 
-      //  as a group index (indicating the group has not been set), 
+      //  Although the getCorrelationParameterGroup methods can return -1
+      //  as a group index (indicating the group has not been set),
       //  it is an error to try to set the group index to -1.
       //<
 
