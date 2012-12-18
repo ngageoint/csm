@@ -11,7 +11,7 @@
 //    LIMITATIONS:       None
 //
 //    SOFTWARE HISTORY:
-//     Date          Author      Comment   
+//     Date          Author      Comment
 //     -----------   ------      -------
 //      1 Jun 2004   Kevin Lam   CCB Change
 //     24 Jun 2005   Len Tomko   CCB Change Added

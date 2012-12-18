@@ -13,8 +13,8 @@
 //    LIMITATIONS:       None
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
-//     -----------   ------   ------- 
+//     Date          Author   Comment
+//     -----------   ------   -------
 //     01-Jul-2003   LMT      Initial version.
 //     06-Feb-2004   KRW      Incorporates changes approved by
 //                            January and February 2004
