@@ -131,13 +131,13 @@ public:
 
    virtual std::string getSensorType() const = 0;
       //> This method returns a description of the sensor type (EO, IR, SAR,
-      //  etc.).  See csm.h for a list of common types.  Should return
+      //  etc).  See csm.h for a list of common types.  Should return
       //  CSM_SENSOR_TYPE_UNKNOWN if the sensor type is unknown.
       //<
 
    virtual std::string getSensorMode() const = 0;
       //> This method returns a description of the sensor mode (FRAME,
-      //  PUSHBROOM, SPOT, SCAN, etc.).  See csm.h for a list of common modes.
+      //  PUSHBROOM, SPOT, SCAN, etc).  See csm.h for a list of common modes.
       //  Should return CSM_SENSOR_MODE_UNKNOWN if the sensor mode is unknown.
       //<
 

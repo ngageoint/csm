@@ -167,7 +167,7 @@ public:
       //  space pixels and corresponding 2x2 covariance in pixels squared)
       //  and given height (in meters relative to the WGS-84 ellipsoid) and
       //  corresponding heightVariance (in meters) to a returned ground
-      //  coordinate with covariance (x,y,z in ECEF meters and corresponding).
+      //  coordinate with covariance (x,y,z in ECEF meters and corresponding
       //  3x3 covariance in ECEF meters squared).
       //
       //  Iterative algorithms will use desiredPrecision, in meters, as the
