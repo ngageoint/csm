@@ -84,6 +84,7 @@ public:
       //  will be the same as the value of numSMParams passed to the
       //  constructor when the object was created.
       //<
+
    virtual size_t getNumCorrelationParameterGroups() const;
       //> Returns the number of correlation parameter groups. The returned
       //  value will be the same as the value of numCPGroups passed to the
@@ -140,8 +141,8 @@ public:
       //
       //  Notes:
       //
-      //  Although the getCorrelationParameterGroup method can return -1 
-      //  as a group index (indicating the group has not been set), 
+      //  Although the getCorrelationParameterGroup method can return -1
+      //  as a group index (indicating the group has not been set),
       //  it is an error to try to set the group index to -1.
       //<
 
