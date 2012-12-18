@@ -87,9 +87,11 @@ private:
    ErrorType   theError;
       //> This enumeration of the error is used for application control.
       //<
+
    std::string theMessage;
       //> This string describes the error.
       //<
+
    std::string theFunction;
       //> This string identifies the function in which the error occurred.
       //<

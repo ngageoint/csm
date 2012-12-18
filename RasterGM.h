@@ -14,7 +14,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     27-Jun-2003   LMT    Initial version.
 //     01-Jul-2003   LMT    Remove constants, error/warning
@@ -91,11 +91,11 @@ class CSM_EXPORT_API RasterGM : public GeometricModel
 public:
    RasterGM() {}
    virtual ~RasterGM();
-   
+
    virtual std::string getFamily() const;
       //> This method returns the Family ID for the current model.
       //<
-   
+
    //---
    // Core Photogrammetry
    //---
@@ -116,6 +116,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual ImageCoordCovar groundToImage(const EcefCoordCovar& groundPt,
                                          double desiredPrecision = 0.001,
                                          double* achievedPrecision = NULL,
@@ -135,6 +136,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual EcefCoord imageToGround(const ImageCoord& imagePt,
                                    double height,
                                    double desiredPrecision = 0.001,
@@ -154,6 +156,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual EcefCoordCovar imageToGround(const ImageCoordCovar& imagePt,
                                         double height,
                                         double heightVariance,
@@ -176,7 +179,7 @@ public:
       //
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
-      //<   
+      //<
 
    virtual EcefLocus imageToProximateImagingLocus(
       const ImageCoord& imagePt,
@@ -203,6 +206,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual EcefLocus imageToRemoteImagingLocus(
       const ImageCoord& imagePt,
       double desiredPrecision = 0.001,
@@ -243,14 +247,16 @@ public:
       //> This method returns the starting coordinate (line, sample in full
       //  image space pixels) for the imaging operation.  Typically (0,0).
       //<
+
    virtual ImageVector getImageSize() const = 0;
       //> This method returns the number of lines and samples in full image
       //  space pixels for the imaging operation.
       //
       //  Note that the model might not be valid over the entire imaging
-      //  operation.  Use getValidImageRange() to get the valid range of image 
+      //  operation.  Use getValidImageRange() to get the valid range of image
       //  coordinates.
       //<
+
    virtual std::pair<ImageCoord,ImageCoord> getValidImageRange() const = 0;
       //> This method returns the minimum and maximum image coordinates
       //  (line, sample in full image space pixels), respectively, over which
@@ -265,6 +271,7 @@ public:
       //  possible to determine the full range of ground coordinates over which
       //  the model is valid.
       //<
+
    virtual std::pair<double,double> getValidHeightRange() const = 0;
       //> This method returns the minimum and maximum heights (in meters
       //  relative to WGS-84 ellipsoid), respectively, over which the model is
@@ -288,11 +295,12 @@ public:
    //---
    virtual double getImageTime(const ImageCoord& imagePt) const = 0;
       //> This method returns the time in seconds at which the pixel at the
-      //  given imagePt (line, sample in full image space pixels) was captured. 
+      //  given imagePt (line, sample in full image space pixels) was captured
       //
       //  The time provided is relative to the reference date and time given
       //  by the Model::getReferenceDateAndTime method.
       //<
+
    virtual EcefCoord getSensorPosition(const ImageCoord& imagePt) const = 0;
       //> This method returns the position of the physical sensor
       // (x,y,z in ECEF meters) when the pixel at the given imagePt
@@ -300,16 +308,19 @@ public:
       //
       // A csm::Error will be thrown if the sensor position is not available.
       //<
+
    virtual EcefCoord getSensorPosition(double time) const = 0;
       //> This method returns the position of the physical sensor
       //  (x,y,z meters ECEF) at the given time relative to the reference date
       //  and time given by the Model::getReferenceDateAndTime method.
       //<
+
    virtual EcefVector getSensorVelocity(const ImageCoord& imagePt) const = 0;
       //> This method returns the velocity of the physical sensor
       // (x,y,z in ECEF meters per second) when the pixel at the given imagePt
       // (line, sample in full image space pixels) was captured.
       //<
+
    virtual EcefVector getSensorVelocity(double time) const = 0;
       //> This method returns the velocity of the physical sensor
       //  (x,y,z in ECEF meters per second ) at the given time relative to the
@@ -321,11 +332,11 @@ public:
    // Uncertainty Propagation
    //---
    typedef std::pair<double,double> SensorPartials;
-      //> This variable is used to hold the partial derivatives of line and
+      //> This type is used to hold the partial derivatives of line and
       //  sample, respectively, with respect to a model parameter.
       //  The units are pixels per the model parameter units.
       //<
-                                                             
+
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const EcefCoord& groundPt,
@@ -357,6 +368,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual SensorPartials computeSensorPartials(
                 int index,
                 const ImageCoord& imagePt,
@@ -389,6 +401,7 @@ public:
       //  If a non-NULL warnings argument is received, it will be populated
       //  as applicable.
       //<
+
    virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const EcefCoord& groundPt,
                 param::Set pSet           = param::VALID,
@@ -420,11 +433,12 @@ public:
       //  for one model parameter in each pair.  The indices of the
       //  corresponding model parameters can be found by calling the
       //  getParameterSetIndices method for the given pSet.
-      //  
+      //
       //  Derived models may wish to implement this directly for efficiency,
       //  but an implementation is provided here that calls the
       //  computeSensorPartials method for each desired parameter index.
       //<
+
    virtual std::vector<SensorPartials> computeAllSensorPartials(
                 const ImageCoord& imagePt,
                 const EcefCoord& groundPt,
@@ -461,12 +475,12 @@ public:
       //  for one model parameter in each pair.  The indices of the
       //  corresponding model parameters can be found by calling the
       //  getParameterSetIndices method for the given pSet.
-      //  
+      //
       //  Derived models may wish to implement this directly for efficiency,
       //  but an implementation is provided here that calls the
       //  computeSensorPartials method for each desired parameter index.
       //<
-   
+
    virtual std::vector<double> computeGroundPartials(const EcefCoord& groundPt) const = 0;
       //> This method returns the partial derivatives of line and sample
       //  (in pixels per meter) with respect to the given groundPt
@@ -474,12 +488,12 @@ public:
       //
       //  The value returned is a vector with six elements as follows:
       //
-      //  [0] = line wrt x
-      //  [1] = line wrt y
-      //  [2] = line wrt z
-      //  [3] = sample wrt x
-      //  [4] = sample wrt y
-      //  [5] = sample wrt z
+      //-  [0] = line wrt x
+      //-  [1] = line wrt y
+      //-  [2] = line wrt z
+      //-  [3] = sample wrt x
+      //-  [4] = sample wrt y
+      //-  [5] = sample wrt z
       //<
 
    virtual const CovarianceModel& getCovarianceModel() const = 0;
@@ -489,7 +503,7 @@ public:
       //  It is primarily used for replacement sensor model generation;
       //  most applications will use the getCrossCovarianceMatrix function.
       //<
-                                                               
+
    inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const
    { return getUnmodeledCrossCovariance(imagePt, imagePt); }
       //> This method returns the 2x2 line and sample covariance (in pixels
@@ -498,10 +512,10 @@ public:
       //
       //  The value returned is a vector of four elements as follows:
       //
-      //  [0] = line variance
-      //  [1] = line/sample covariance
-      //  [2] = sample/line covariance
-      //  [3] = sample variance
+      //-  [0] = line variance
+      //-  [1] = line/sample covariance
+      //-  [2] = sample/line covariance
+      //-  [3] = sample variance
       //<
 
    virtual std::vector<double> getUnmodeledCrossCovariance(

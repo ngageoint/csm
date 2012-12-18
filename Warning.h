@@ -73,9 +73,11 @@ private:
    WarningType theWarning;
       //> This enumeration of the warning is used for application control.
       //<
+
    std::string theMessage;
       //> This string describes the warning.
       //<
+
    std::string theFunction;
       //> This string identifies the function in which the warning occurred.
       //<

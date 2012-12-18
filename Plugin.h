@@ -252,6 +252,7 @@ public:
       //  plugin classes may need.  This directory should be used in preference
       //  to any environment variable.
       //<
+
    static void setDataDirectory(const std::string& dir) { theDataDir = dir; }
       //> This method sets the data directory string.  This directory contains
       //  files provided by plugin implementers that are necessary for the

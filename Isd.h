@@ -14,10 +14,10 @@
 //
 //    SOFTWARE HISTORY:
 //
-//     Date          Author   Comment   
-//     -----------   ------   ------- 
+//     Date          Author   Comment
+//     -----------   ------   -------
 //     01-Jul-2003   LMT      Initial version.
-//     06-Feb-2004   KRW      Incorporates changes approved by 
+//     06-Feb-2004   KRW      Incorporates changes approved by
 //                            January and February 2004 CCB.
 //     02-Mar-2012   SCM      Refactored interfaces.
 //     04-Jun-2012   SCM      Added generic parameters.
@@ -70,6 +70,7 @@ public:
       //> This method returns the filename associated with the image support
       //  data, if any.  If there is no filename, this string will be empty.
       //<
+
    inline void setFilename(const std::string& fn);
       //> This method sets the filename associated with the image support data.
       //  If there is no associated filename, an empty string should be used.
@@ -81,17 +82,21 @@ public:
       //  parameters named name or instance is greater than the number of
       //  parameters named name, then an empty string ("") is returned.
       //<
+
    inline void addParam(const std::string& name, const std::string& value);
       //> This method adds a parameter named name with the value value to the
       //  parameter map.
       //<
+
    void clearAllParams() { theParameters.clear(); }
       //> This method removes all the parameters added to the parameter map.
       //<
+
    void clearParams(const std::string& name) { theParameters.erase(name); }
       //> This method removes all the instances of the given parameter name from
       //  the parameter map.
       //<
+
    const std::multimap<std::string, std::string>& parameters() const { return theParameters; }
       //> This method returns a reference to the parameter map.
       //<
@@ -104,7 +109,7 @@ protected:
    std::string theFilename;
 
    std::multimap<std::string, std::string> theParameters;
-      //> Data member multimap that organizes additional parameters used to 
+      //> Data member multimap that organizes additional parameters used to
       //  build a particular geometry.  It allows for multiple keys and
       //  multiple instances of the same key.  Though it can be accessed
       //  directly, it may be easier to access it through the param and
@@ -133,7 +138,7 @@ inline std::string Isd::param(const std::string& name, int instance) const
    }
 
    if (it == theParameters.end()) return "";
-   
+
    return it->second;
 }
 
@@ -142,7 +147,7 @@ inline void Isd::addParam(const std::string& name, const std::string& value)
    std::multimap<std::string, std::string>::value_type val(name, value);
    theParameters.insert(val);
 }
-   
+
 #define IMAGE_ID_PARAM       "IMAGE_ID"
 #define IMAGE_INDEX_PARAM    "IMAGE_INDEX"
 #define LOGICAL_INDEX_PARAM  "LOGICAL_INDEX"

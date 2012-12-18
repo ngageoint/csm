@@ -14,7 +14,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     02-Mar-2012   SCM      Initial creation
 //     26-Sep-2012   JPK      Removed getModelType() and reference point.
@@ -57,14 +57,17 @@ public:
       //> This method returns the family of this model.  It can be used to cast
       //  to the appropriate derived class for family-specific processing.
       //<
+
    virtual Version getVersion() const = 0;
       //> This method returns the version of the model code.  The Version
       //  object can be compared to other Version objects with its comparison
       //  operators.  Not to be confused with the CSM API version.
       //<
+
    virtual std::string getModelName() const = 0;
       //> This method returns a string identifying the name of the model.
       //<
+
    virtual std::string getPedigree() const = 0;
       //> This method returns a string that identifies the sensor,
       //  the model type, its mode of acquisition and processing path.
@@ -83,6 +86,7 @@ public:
       //
       //  This method may return an empty string if the ID is unknown.
       //<
+
    virtual void setImageIdentifier(const std::string& imageId,
                                    WarningList* warnings = NULL) = 0;
       //> This method sets an identifier to uniquely indicate the imaging
@@ -101,6 +105,7 @@ public:
       //
       //  This method may return an empty string if the sensor ID is unknown.
       //<
+
    virtual std::string getPlatformIdentifier() const = 0;
       //> This method returns an identifier to indicate the specific platform
       //  that was used to acquire the image.  This ID must unique among
@@ -109,33 +114,38 @@ public:
       //
       //  This method may return an empty string if the platform ID is unknown.
       //<
+
    virtual std::string getCollectionIdentifier() const = 0;
       //> This method returns an identifer to indicate a collection activity
       //  common to a set of images.  This ID must be unique among collection
       //  activities for a given model name.  It is used to determine parameter
       //  correlation and sharing.
       //<
+
    virtual std::string getTrajectoryIdentifier() const = 0;
       //> This method returns an identifier to indicate a trajectory common
       //  to a set of images.  This ID must be unique among trajectories
       //  for a given model name.  It is used to determine parameter
       //  correlation and sharing.
       //<
+
    virtual std::string getSensorType() const = 0;
       //> This method returns a description of the sensor type (EO, IR, SAR,
       //  etc.).  See csm.h for a list of common types.  Should return
       //  CSM_SENSOR_TYPE_UNKNOWN if the sensor type is unknown.
       //<
+
    virtual std::string getSensorMode() const = 0;
       //> This method returns a description of the sensor mode (FRAME,
       //  PUSHBROOM, SPOT, SCAN, etc.).  See csm.h for a list of common modes.
       //  Should return CSM_SENSOR_MODE_UNKNOWN if the sensor mode is unknown.
       //<
+
    virtual std::string getReferenceDateAndTime() const = 0;
       //> This method returns an approximate date and time at which the
       //  image was taken.  The returned string follows the ISO 8601 standard.
       //
-      //-    Precision   Format           Example 
+      //-    Precision   Format           Example
       //-    year        yyyy             "1961"
       //-    month       yyyymm           "196104"
       //-    day         yyyymmdd         "19610420"
@@ -156,18 +166,21 @@ public:
       //  An empty string is returned if it is not possible to save the
       //  current state.
       //<
-   
+
    virtual void replaceModelState(const std::string& argState) = 0;
-   //> This method attempts to initialize the current model with the state
-   //  given by argState.  The argState argument can be a string previously
-   //  retrieved from the getModelState method.
-   //  If argState contains a valid state for the current model,
-   //  the internal state of the model is updated.
-   //  If the model cannot be updated to the given state, a csm:Error is
-   //  thrown and the internal state of the model is undefined.
-   //  If the argument state string is empty, the model remains unchanged.
-   //<
- };
+      //> This method attempts to initialize the current model with the state
+      //  given by argState.  The argState argument can be a string previously
+      //  retrieved from the getModelState method.
+      //
+      //  If argState contains a valid state for the current model,
+      //  the internal state of the model is updated.
+      //
+      //  If the model cannot be updated to the given state, a csm::Error is
+      //  thrown and the internal state of the model is undefined.
+      //
+      //  If the argument state string is empty, the model remains unchanged.
+      //<
+};
 
 } // namespace csm
 

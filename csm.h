@@ -110,7 +110,7 @@ namespace csm
       // interested in exploiting.  Membership in one of these sets is
       // determined by model parameter type.
       //
-      //-  VALID      - Parameters of type NONE are excluded. 
+      //-  VALID      - Parameters of type NONE are excluded.
       //-               All others are included,
       //-  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included.
       //-  FIXED      - Only EXACT parameters are included.
@@ -133,32 +133,38 @@ namespace csm
    struct SharingCriteria
    {
    public:
-      bool      matchesName;
+      bool matchesName;
         //> Requires that the models have the same model name as given by
         //  the Model::getModelName method.  Will almost always be set to true.
         //<
-      bool      matchesSensorID;
+
+      bool matchesSensorID;
         //> Requires that the models have the same sensor ID as given by
         //  the Model::getSensorIdentifier method.
         //<
-      bool      matchesPlatformID;
+
+      bool matchesPlatformID;
         //> Requires that the models have the same platform ID as given by
         //  the Model::getPlatformIdentifier method.
         //<
-      bool      matchesCollectionID;
+
+      bool matchesCollectionID;
         //> Requires that the models have the same collection ID as given by
         //  the Model::getCollectionIdentifier method.
         //<
-      bool      matchesTrajectoryID;
+
+      bool matchesTrajectoryID;
         //> Requires that the models have the same trajectory ID as given by
         //  the Model::getTrajectoryIdentifier method.
         //<
-      bool      matchesDateTime;
+
+      bool matchesDateTime;
         //> Requires that the models' imaging times must be within a certain
         //  time delta.  It is typically sufficient to compare the times at
         //  the start of the image.
         //<
-      double    maxTimeDelta;
+
+      double maxTimeDelta;
         //> Maximum time separation, in seconds, for a model parameter to be
         //  shared when matchesDateTime is true.
         //<
@@ -206,7 +212,7 @@ namespace csm
       double samp;
 
       ImageCoord() : line(0.0), samp(0.0) {}
-      
+
       ImageCoord(double aLine, double aSamp) : line(aLine), samp(aSamp) {}
    };
 
@@ -237,18 +243,21 @@ namespace csm
       ImageCoordCovar() : ImageCoord() { memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
          //<
+
       ImageCoordCovar(double aLine, double aSamp)
          : ImageCoord(aLine, aSamp) { memset(covariance, 0, sizeof(covariance)); }
          //> This constructor takes a line and sample in pixels.
          //  The covariance is set to zeroes.
-         //<    
+         //<
+
       ImageCoordCovar(double aLine, double aSamp, double aCovar[4])
          : ImageCoord(aLine, aSamp) { memcpy(covariance, aCovar, sizeof(covariance)); }
          //> This constructor takes a line and sample in pixels and covariance
          //  as an array of four doubles in pixels squared.
          //  Note that no check is made to ensure symmetry of the covariance
          //  matrix.
-         //< 
+         //<
+
       ImageCoordCovar(double aLine,    double aSamp,
                       double aCovar00, double aCovar01,
                                        double aCovar11)
@@ -271,6 +280,7 @@ namespace csm
          //-    ImageCoordCovar coord;
          //-    double A = coord.covar2d(1,1);
          //<
+
       double& covar2d(unsigned int l, unsigned int s)       { return covariance[2*l + s]; }
          //> This method provides a convenient two-dimensional means of setting
          //  the covariance.  For example, the sample variance stored in
@@ -349,19 +359,22 @@ namespace csm
 
       EcefCoordCovar() : EcefCoord() { memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
-         //<   
+         //<
+
       EcefCoordCovar(double aX, double aY, double aZ)
          : EcefCoord(aX, aY, aZ) { memset(covariance, 0, sizeof(covariance)); }
          //> This constructor takes ECEF x, y, and z values in meters.
          //  The covariance is set to zeroes.
-         //<    
+         //<
+
       EcefCoordCovar(double aX, double aY, double aZ, double aCovar[9])
          : EcefCoord(aX, aY, aZ) { memcpy(covariance, aCovar, sizeof(covariance)); }
          //> This constructor takes ECEF x, y, and z values in meters and
          //  covariance as an array of nine doubles in meters squared.
          //  Note that no check is made to ensure symmetry of the covariance
          //  matrix.
-         //< 
+         //<
+
       EcefCoordCovar(double aX,       double aY,       double aZ,
                      double aCovar00, double aCovar01, double aCovar02,
                                       double aCovar11, double aCovar12,
@@ -379,7 +392,7 @@ namespace csm
          //  upper-triangular portion of a covariance matrix in meters squared.
          //  It is assumed that the covariance matrix is symmetric.
          //<
-  
+
       double  covar2d(unsigned int l, unsigned int s) const { return covariance[3*l + s]; }
          //> This method provides a convenient two-dimensional access to
          //  the covariance.  For example, the yz covariance stored in
@@ -388,7 +401,8 @@ namespace csm
          //-    ImageCoordCovar coord;
          //-    double A = coord.covar2d(1,2);
          //<
-      double& covar2d(unsigned int l, unsigned int s)       { return covariance[3*l + s]; } 
+
+      double& covar2d(unsigned int l, unsigned int s) { return covariance[3*l + s]; }
          //> This method provides a convenient two-dimensional means of setting
          //  the covariance.  For example, the yz covariance stored in
          //  covariance[5] could also be set as follows:

@@ -13,8 +13,8 @@
 //    LIMITATIONS:       None
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
-//     -----------   ------   ------- 
+//     Date          Author   Comment
+//     -----------   ------   -------
 //     01-Jul-2003   LMT      Initial version.
 //     06-Feb-2004   KRW      Incorporated changes approved by
 //                             January and February configuration
@@ -117,10 +117,12 @@ private:
    std::string theName;
       //> This string contains the six-character TRE name.
       //<
+
    unsigned int theLength;
       //> This integer contains the TRE data length given by the TRE's CEL
       //  field, which should be same as the length of theData.
       //<
+
    std::string theData;
       //> This string contains the TRE data.
       //<
@@ -159,12 +161,15 @@ public:
       //  the separated TREs as necessary using the methods below.
       //<
 
+
    void clearImageTres() { theImageTres.clear(); }
       //> This method removes all Tre objects from the list.
       //<
+
    void addImageTre(const Tre& tre) { theImageTres.push_back(tre); }
       //> This method adds the given Tre object to the list.
       //<
+
    void setImageTres(const std::vector<Tre>& tres) { theImageTres = tres; }
       //> This method sets the Tre list to the given vector.
       //<
@@ -174,6 +179,7 @@ private:
       //> This string contains the entire image subheader, including a copy of
       //  the TRE data.
       //<
+
    std::vector<Tre> theImageTres;
       //> This contains the parsed TREs.
       //<
@@ -195,19 +201,22 @@ public:
    virtual ~NitfIsd() {}
 
    const std::string& fileHeader() const { return theFileHeader; }
-      //> This method returns the entire image subheader, including a copy of
+      //> This method returns the entire file subheader, including a copy of
       //  the TRE data.
       //<
 
    const std::vector<Tre>& fileTres() const { return theFileTres; }
-      //> This method returns the file header Tre objects. 
+      //> This method returns the file header Tre objects.
       //<
+
    const std::vector<Des>& fileDess() const { return theFileDess; }
       //> This method returns the Des objects in this NITF.
       //<
+
    const std::vector<Image>& images() const { return theImages; }
       //> This method returns the Image objects in this NITF.
       //<
+
 
    void setFileHeader(const std::string& head) { theFileHeader = head; }
       //> This method sets the file header, which can include TRE data.
@@ -215,32 +224,41 @@ public:
       //  file header TREs as necessary using the methods below.
       //<
 
+
    void clearFileTres() { theFileTres.clear(); }
       //> This method removes all file header Tre objects from the list.
       //<
+
    void addFileTre(const Tre& tre) { theFileTres.push_back(tre); }
       //> This method adds the given file header Tre object to the list.
       //<
+
    void setFileTres(const std::vector<Tre>& tres) { theFileTres = tres; }
       //> This method sets the file header Tre list to the given vector.
       //<
 
+
    void clearFileDess() { theFileDess.clear(); }
       //> This method removes all Des objects from the list.
       //<
+
    void addFileDes(const Des& des) { theFileDess.push_back(des); }
       //> This method adds the given Des object to the list.
       //<
+
    void setFileDess(const std::vector<Des>& dess) { theFileDess = dess; }
       //> This method sets the Des list to the given vector.
       //<
 
+
    void clearImages() { theImages.clear(); }
       //> This method removes all Image objects from the list.
       //<
+
    void addImage(const Image& image) { theImages.push_back(image); }
       //> This method adds the given Image object to the list.
       //<
+
    void setImages(const std::vector<Image>& images) { theImages = images; }
       //> This method sets the Image list to the given vector.
       //<

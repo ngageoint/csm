@@ -14,7 +14,7 @@
 //
 //
 //    SOFTWARE HISTORY:
-//     Date          Author   Comment   
+//     Date          Author   Comment
 //     -----------   ------   -------
 //     27-Jun-2003   LMT    Initial version.
 //     01-Jul-2003   LMT    Remove constants, error/warning
@@ -95,11 +95,11 @@ public:
    //***
    // STRUCT: Parameter
    //> The parameter structure contains the set of properties unique
-   // to a given adjustable parameter.  The variance for the parameter 
+   // to a given adjustable parameter.  The variance for the parameter
    // is not included here since it is more appropriate to consider
    // a covariance matrix for an entire set of parameters.
    //<
-   //***   
+   //***
    struct Parameter
    {
    public:
@@ -108,7 +108,7 @@ public:
       std::string      units;
       param::Type      type;
       SharingCriteria  sharingCriteria;
-      
+
       Parameter()
          :
             name            (CSM_UNKNOWN),
@@ -131,34 +131,36 @@ public:
             sharingCriteria (paramSharingCriteria)
       {}
    };
-      
+
    GeometricModel() {}
    virtual ~GeometricModel();
 
    virtual std::string getFamily() const;
-   
+
    virtual EcefCoord getReferencePoint() const = 0;
       //> This method returns the ground point indicating the general
       //  location of the image.
       //<
+
    virtual void setReferencePoint(const EcefCoord& groundPt) = 0;
       //> This method sets the ground point indicating the general location
       //  of the image.
       //<
-   
+
    //---
    // Sensor Model Parameters
    //---
    virtual int getNumParameters() const = 0;
       //> This method returns the number of adjustable parameters.
       //<
-                                          
+
    virtual std::string getParameterName(int index) const = 0;
       //> This method returns the name for the adjustable parameter
       //  indicated by the given index.
       //
       //  If the index is out of range, a csm::Error may be thrown.
       //<
+
    virtual std::string getParameterUnits(int index) const = 0;
       //> This method returns the units for the adjustable parameter
       //  indicated by the given index.  This string is intended for human
@@ -221,57 +223,62 @@ public:
       //  isParameterShareable() method.  This method should return false if
       //  all calls to isParameterShareable() return false.
       //<
+
    virtual bool isParameterShareable(int index) const = 0;
       //> This method returns a flag to indicate whether or not the adjustable
       //  parameter referenced by index is shareable across models.
-      //<                                                       
+      //<
+
    virtual csm::SharingCriteria getParameterSharingCriteria(int index) const = 0;
       //> This method returns characteristics to indicate how the adjustable
       //  parameter referenced by index is shareable across models.
       //<
-                                                      
+
    virtual double getParameterValue(int index) const = 0;
       //> This method returns the value of the adjustable parameter
       //  referenced by the given index.
-      //<                                                            
+      //<
+
    virtual void setParameterValue(int index, double value) = 0;
       //> This method sets the value for the adjustable parameter referenced by
       //  the given index.
       //<
-  
+
    virtual param::Type getParameterType(int index) const = 0;
       //> This method returns the type of the adjustable parameter
       //  referenced by the given index.
       //<
+
    virtual void setParameterType(int index, param::Type pType) = 0;
       //> This method sets the type of the adjustable parameter
       //  reference by the given index.
       //<
-                                                               
+
    virtual Parameter getParameter(int index) const;
       //> This method returns a Parameter object for the given index.
       //  If the index is out of range, a csm::Error may be thrown.
       //  The default implementation simply calls the methods for each of
       //  the components of the Parameter. This method is declared virtual so
-      //  derived classes may opt to provide their own (more efficient) 
-      //  implementation. 
+      //  derived classes may opt to provide their own (more efficient)
+      //  implementation.
       //<
+
    virtual void setParameter(int index, const Parameter& parameter);
       //>  This method sets all of the properties of the Parameter indicated by
       //   the given index to those of the given parameter.
       //   If the index is out of range, a csm::Error may be thrown.
       //   The default implementation simply calls the methods for each of
       //   the components of the Parameter.  Note that this precludes setting of
-      //   name, units,  and sharing criteria as these are set only by the 
+      //   name, units,  and sharing criteria as these are set only by the
       //   derived classes. This method is declared virtual so derived classes
       //   may opt to provide their own (more efficient) implementation.
       //<
-                                                                      
+
    std::vector<int> getParameterSetIndices(param::Set pSet = param::VALID) const;
       //> This method returns a vector of indices of the parameters contained in
       //  the given pSet.
       //<
-  
+
    std::vector<Parameter> getParameters(param::Set pSet = param::VALID) const;
       //> This method returns a vector containing all parameters in the
       //  given pSet.  The default is all parameters marked as VALID.
@@ -286,7 +293,7 @@ public:
       //  referenced by index1 and index2.  Variance of a single parameter
       //  is indicated by specifying the samve value for index1 and index2.
       //<
-      
+
    virtual void setParameterCovariance(int index1,
                                        int index2,
                                        double covariance) = 0;
@@ -302,16 +309,19 @@ public:
       //> This method returns the number of geometric correction switches
       //  implemented for the current model.
       //<
+
    virtual std::string getGeometricCorrectionName(int index) const = 0;
       //> This method returns the name for the geometric correction switch
       //  referenced by the given index.
       //<
+
    virtual void setGeometricCorrectionSwitch(int index,
                                              bool value,
                                              param::Type pType) = 0;
       //> This method is used to enable/disable the geometric correction switch
       //  referenced by the given index.
       //<
+
    virtual bool getGeometricCorrectionSwitch(int index) const = 0;
       //> This method returns the value of the geometric correction switch
       //  referenced by the given index.
@@ -323,7 +333,7 @@ public:
    {
       return getCrossCovarianceMatrix(*this,pSet);
    }
-   
+
    virtual std::vector<double> getCrossCovarianceMatrix(
           const GeometricModel& comparisonModel,
           param::Set pSet = param::VALID,
@@ -359,8 +369,8 @@ public:
       //  sensors on the same platform).  It can also be present after an
       //  adjustment involving multiple models.
       //<
-      
- };   
+};
+
 } // namespace csm
 
 #endif
