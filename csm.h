@@ -416,8 +416,9 @@ namespace csm
    // STRUCT: EcefVector
    //> This structure represents a three-dimensional vector in the WGS-84 Earth
    //  Centered Earth Fixed coordinate system.
-   //  It can represent an ECEF direction vector (unitless) or
-   //  an ECEF velocity vector (in meters per second).
+   //
+   //  Units of meters (distance), meters per second (velocity) and no units
+   //  are appropriate for EcefVector.
    //<
    //***
    struct EcefVector
@@ -433,8 +434,8 @@ namespace csm
 
    //***
    // STRUCT: EcefLocus
-   // > This structure contains an ECEF coordinate (in meters) and
-   //   an ECEF direction vector (in meters).
+   //> This structure contains an ECEF coordinate (in meters) and
+   //  an ECEF direction vector.
    //<
    //***
    struct EcefLocus
