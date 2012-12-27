@@ -19,6 +19,7 @@
 //     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
 //     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
 //     17-Dec-2012   BAH      Documentation updates.
+//     20-Dec-2012   JPK      Fixed bug in constructor.
 //
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
@@ -43,7 +44,7 @@ FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
                                                              size_t numCPGroups)
    :
       theGroupMapping(numSMParams, -1),
-      theCorrParams(numSMParams)
+      theCorrParams(numCPGroups)
 {
    // set the format string in the base class
    theFormat = "Four-parameter model (A, alpha, beta, tau)";

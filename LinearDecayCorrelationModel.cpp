@@ -18,6 +18,7 @@
 //     20-Nov-2012   ISK      Initial Release.
 //     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
 //     17-Dec-2012   BAH      Documentation updates.
+//     20-Dec-2012   JPK      Fixed bug in constructor.
 //
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
@@ -40,7 +41,7 @@ LinearDecayCorrelationModel::LinearDecayCorrelationModel(size_t numSMParams,
                                                          size_t numCPGroups)
    :
       theGroupMapping(numSMParams, -1),
-      theCorrParams(numSMParams)
+      theCorrParams(numCPGroups)
 {
    // set the format string in the base class
    theFormat = "LinearDecayCorrelation";
