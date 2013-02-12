@@ -53,7 +53,7 @@ std::string GeometricModel::getFamily() const
 //*****************************************************************************
 // GeometricModel::getParameterSetIndices()
 //*****************************************************************************
-   std::vector<int> GeometricModel::getParameterSetIndices(param::Set pSet) const
+std::vector<int> GeometricModel::getParameterSetIndices(param::Set pSet) const
 {
    const int NUM_PARMS = getNumParameters();
    
