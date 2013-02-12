@@ -158,7 +158,7 @@ public:
       //
       //  Precondition:
       //  * 0 <= cpGroupIndex < numCPGroups
-      //  * -1.0 <= a <= 1.0
+      //  * 0.0 <= a <= 1.0
       //  * 0.0 <= alpha <= 1.0
       //  * 0.0 <= beta <= 10.0
       //  * 0.0 < tau

@@ -366,8 +366,11 @@ public:
       //
       //  Note that cross covariance is often zero.  Non-zero cross covariance
       //  can occur for models created from the same sensor (or different
-      //  sensors on the same platform).  It can also be present after an
-      //  adjustment involving multiple models.
+      //  sensors on the same platform).  While cross covariances can result
+      //  from a bundle adjustment involving multiple models, no mechanism 
+      //  currently exists within csm to "set" the cross covariance between 
+      //  models.  It should thus be assumed that the returned cross covariance
+      //  reflects the "un-adjusted" state of the models.
       //<
 };
 
