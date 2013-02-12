@@ -28,6 +28,7 @@
 //                            ImageCoordCovar and EcefCoordCovar and added
 //                            new struct EcefLocus.
 //     17-Dec-2012   BAH      Documentation updates.
+//     12-Feb-2013   JPK      Renamed param::EXACT to param::FIXED
 //
 //    NOTES:
 //
@@ -93,7 +94,7 @@ namespace csm
       //-               or other means.
       //-  REAL       - Parameter value has been measured or read from
       //-               support data.
-      //-  EXACT      - Parameter value has been specified and is not
+      //-  FIXED      - Parameter value has been specified and is not
       //-               to be adjusted, but may contribute to error
       //-               propagation.
       //
@@ -101,7 +102,7 @@ namespace csm
          NONE = 0 ,
          FICTITIOUS,
          REAL,
-         EXACT
+         FIXED
       };
       //<
       enum Set
@@ -110,15 +111,15 @@ namespace csm
       // interested in exploiting.  Membership in one of these sets is
       // determined by model parameter type.
       //
-      //-  VALID      - Parameters of type NONE are excluded.
-      //-               All others are included,
-      //-  ADJUSTABLE - Only REAL or FICTICIOUS parameters are included.
-      //-  FIXED      - Only EXACT parameters are included.
+      //-  VALID          - Parameters of type NONE are excluded.
+      //-                   All others are included,
+      //-  ADJUSTABLE     - Only REAL or FICTICIOUS parameters are included.
+      //-  NON_ADJUSTABLE - Only FIXED parameters are included.
       //
       {
          VALID = 0,
          ADJUSTABLE,
-         FIXED
+         NON_ADJUSTABLE
       };
       //<
    }

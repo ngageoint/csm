@@ -23,6 +23,8 @@
 //                         Moved Parameter struct inside class definition to
 //                         avoid name clashes.
 //      17-Dec-2012   BAH  Documentation updates.
+//      12-Feb-2013   JPK  Renamed EXACT to Parameter Type to FIXED,
+//                         Renamed FIXED Parameter Set to NON_ADJUSTABLE
 // 
 //    NOTES:
 //
@@ -53,7 +55,7 @@ std::string GeometricModel::getFamily() const
 //*****************************************************************************
 // GeometricModel::getParameterSetIndices()
 //*****************************************************************************
-std::vector<int> GeometricModel::getParameterSetIndices(param::Set pSet) const
+   std::vector<int> GeometricModel::getParameterSetIndices(param::Set pSet) const
 {
    const int NUM_PARMS = getNumParameters();
    
@@ -63,11 +65,11 @@ std::vector<int> GeometricModel::getParameterSetIndices(param::Set pSet) const
    for (int i = 0; i < NUM_PARMS; ++i)
    {
       param::Type pType = getParameterType(i);
-      if (pType == param::EXACT)
+      if (pType == param::FIXED)
       {
          if (pSet != param::ADJUSTABLE) indices.push_back(i);
       }
-      else if ((pType != param::NONE) && (pSet != param::FIXED))
+      else if ((pType != param::NONE) && (pSet != param::NON_ADJUSTABLE))
       {
          indices.push_back(i);
       }
