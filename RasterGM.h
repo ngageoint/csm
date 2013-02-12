@@ -70,6 +70,7 @@
 //                          methods.  Made getCovarianceModel() pure
 //                          virtual.
 //     17-Dec-2012   BAH    Documentation updates.
+//     12-Feb-2013   JPK    Renamed CovarianceModel to CorrelationModel.
 //
 //    NOTES:
 //
@@ -84,7 +85,7 @@
 
 namespace csm
 {
-class CovarianceModel;
+class CorrelationModel;
 
 class CSM_EXPORT_API RasterGM : public GeometricModel
 {
@@ -496,12 +497,15 @@ public:
       //-  [5] = sample wrt z
       //<
 
-   virtual const CovarianceModel& getCovarianceModel() const = 0;
-      //> This method returns a reference to a covariance model.
-      //  The covariance model is used to determine the correlation between
+   virtual const CorrelationModel& getCorrelationModel() const = 0;
+      //> This method returns a reference to a CorrelationModel.
+      //  The CorrelationModel is used to determine the correlation between
       //  the model parameters of different models of the same type.
-      //  It is primarily used for replacement sensor model generation;
-      //  most applications will use the getCrossCovarianceMatrix function.
+      //  These correlations are used to establish the "a priori" cross-covariance
+      //  between images. While some applications (such as generation of a 
+      //  replacement sensor model) may wish to call this method directly,
+      //  it is reccommended that the inherited method 
+      //  GeometricModel::getCrossCovarianceMatrix() be called instead.
       //<
 
    inline std::vector<double> getUnmodeledError(const ImageCoord& imagePt) const

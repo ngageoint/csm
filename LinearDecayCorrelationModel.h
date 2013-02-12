@@ -7,7 +7,7 @@
 //    DESCRIPTION:
 //
 //    Header the piecewise linear decay correlation model class derived from
-//    the CovarianceModel base class.  This class is used to compute the
+//    the CorrelationModel base class.  This class is used to compute the
 //    correlation between model parameters in a community sensor model (CSM).
 //    Intended for replacement models to recreate cross covariance calculations;
 //    most calling applications will use the CSM cross covariance method.
@@ -35,6 +35,7 @@
 //     20-Nov-2012   ISK      Initial Release.
 //     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
 //     17-Dec-2012   BAH      Documentation updates.
+//     12-Feb-2013   JPK      Renamed CovarianceModel to CorrelationModel.
 //
 //    NOTES:
 //
@@ -43,14 +44,14 @@
 #ifndef __CSM_LINEARDECAYCORRELATIONMODEL_H_
 #define __CSM_LINEARDECAYCORRELATIONMODEL_H_
 
-#include "CovarianceModel.h"
+#include "CorrelationModel.h"
 
 #include <vector>
 
 namespace csm
 {
 
-class CSM_EXPORT_API LinearDecayCorrelationModel : public CovarianceModel
+class CSM_EXPORT_API LinearDecayCorrelationModel : public CorrelationModel
 {
 public:
    // represents a set of correlation parameters to be associated with one group

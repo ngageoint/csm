@@ -7,7 +7,7 @@
 //    DESCRIPTION:
 //
 //    Header the four-parameter correlation model class derived from
-//    the CovarianceModel base class.  This class is used to compute the
+//    the CorrelationModel base class.  This class is used to compute the
 //    correlation between model parameters in a community sensor model (CSM).
 //    Intended for replacement models to recreate cross covariance calculations;
 //    most calling applications will use the CSM cross covariance method.
@@ -37,6 +37,7 @@
 //     30-Oct-2012   SCM      Renamed to FourParameterCorrelationModel.h
 //     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
 //     17-Dec-2012   BAH      Documentation updates.
+//     12-Feb-2013   JPK      Renamed CovarianceModel to CorrelationModel.
 //
 //    NOTES:
 //
@@ -45,14 +46,14 @@
 #ifndef __CSM_FOURPARAMETERCORRELATIONMODEL_H_
 #define __CSM_FOURPARAMETERCORRELATIONMODEL_H_
 
-#include "CovarianceModel.h"
+#include "CorrelationModel.h"
 
 #include <vector>
 
 namespace csm
 {
 
-class CSM_EXPORT_API FourParameterCorrelationModel : public CovarianceModel
+class CSM_EXPORT_API FourParameterCorrelationModel : public CorrelationModel
 {
 public:
    // represents a set of four correlation parameters, grouped to simplify the implementation

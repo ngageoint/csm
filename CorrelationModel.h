@@ -1,6 +1,6 @@
 //##################################################################
 //
-//    FILENAME:          CovarianceModel.h
+//    FILENAME:          CorrelationModel.h
 //
 //    CLASSIFICATION:    Unclassified
 //
@@ -18,17 +18,19 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     29-Mar-2012   SCM      Refactored interface
-//     30-Oct-2012   SCM      Renamed to CovarianceModel.h
-//     14-Nov-2012   SCM      Added NoCovarianceModel.
+//     30-Oct-2012   SCM      Renamed to CorrelationModel.h
+//     14-Nov-2012   SCM      Added NoCorrelationModel.
 //     06-Dec 2012   JPK      Replaced "UNKNOWN" with CSM_UNKNOWN
 //     17-Dec-2012   BAH      Documentation updates.
+//     12-Feb-2013   JPK      Renamed CovarianceModel to
+//                            CorrelationModel
 //
 //    NOTES:
 //
 //#####################################################################
 
-#ifndef __CSM_COVARIANCEMODEL_H
-#define __CSM_COVARIANCEMODEL_H
+#ifndef __CSM_CORRELATIONMODEL_H
+#define __CSM_CORRELATIONMODEL_H
 
 #include <string>
 #include "csm.h"
@@ -37,11 +39,11 @@
 namespace csm
 {
 
-class CSM_EXPORT_API CovarianceModel
+class CSM_EXPORT_API CorrelationModel
 {
 public:
-   CovarianceModel() : theFormat(CSM_UNKNOWN) {}
-   virtual ~CovarianceModel() {}
+   CorrelationModel() : theFormat(CSM_UNKNOWN) {}
+   virtual ~CorrelationModel() {}
       //> A virtual destructor is needed so derived class destructors will
       //  be called when the base class object is destroyed.
       //<
@@ -90,23 +92,23 @@ public:
       //<
 
 protected:
-   CovarianceModel(const std::string& format) : theFormat(format) {}
+   CorrelationModel(const std::string& format) : theFormat(format) {}
 
    std::string theFormat;
 };
 
 //***
-// CLASS: NoCovarianceModel
-//> The NoCovarianceModel class is needed for sensor models that do not have
-//  a covariance model because the RasterGM::getCovarianceModel() method
+// CLASS: NoCorrelationModel
+//> The NoCorrelationModel class is needed for sensor models that do not have
+//  a covariance model because the RasterGM::getCorrelationModel() method
 //  returns a const reference.
 //<
 //***
-class CSM_EXPORT_API NoCovarianceModel : public CovarianceModel
+class CSM_EXPORT_API NoCorrelationModel : public CorrelationModel
 {
 public:
-   NoCovarianceModel() : CovarianceModel("NONE") {}
-   virtual ~NoCovarianceModel() {}
+   NoCorrelationModel() : CorrelationModel("NONE") {}
+   virtual ~NoCorrelationModel() {}
 
    virtual size_t getNumSensorModelParameters() const { return 0; }
    virtual size_t getNumCorrelationParameterGroups() const { return 0; }
@@ -116,7 +118,7 @@ public:
       // there can be no smParamIndex that is less than getNumSensorModelParameters()
       throw Error(Error::INDEX_OUT_OF_RANGE,
                   "Invalid index parameter",
-                  "csm::NoCovarianceModel::getNumSensorModelParameters");
+                  "csm::NoCorrelationModel::getNumSensorModelParameters");
    }
 
    virtual double getCorrelationCoefficient(size_t cpGroupIndex, double deltaTime) const
@@ -124,7 +126,7 @@ public:
       // there can be no cpGroupIndex that is less than getNumCorrelationParameterGroups()
       throw Error(Error::INDEX_OUT_OF_RANGE,
                   "Invalid index parameter",
-                  "csm::NoCovarianceModel::getCorrelationCoefficient");
+                  "csm::NoCorrelationModel::getCorrelationCoefficient");
    }
 };
 
