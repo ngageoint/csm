@@ -6,11 +6,12 @@
 //
 //    DESCRIPTION:
 //
-//    Header for the covariance model base class used in the CSM interface.
-//    Intended for replacement models to recreate cross covariance calculations;
-//    most calling applications will use the CSM cross covariance method.
-//    The covariance model is passed as the base class and cast to the
-//    appropriate derived class for use.
+//    Header for the covariance model base class used in the CSM
+//    interface.  Intended for replacement models to recreate cross
+//    covariance calculations;  most calling applications will use
+//    the CSM cross covariance method.  The covariance model is
+//    passed as the base class and cast to the appropriate derived
+//    class for use.
 //
 //    LIMITATIONS:       None
 //
@@ -24,6 +25,9 @@
 //     17-Dec-2012   BAH      Documentation updates.
 //     12-Feb-2013   JPK      Renamed CovarianceModel to
 //                            CorrelationModel
+//     18-Feb-2013   JPK      Added getDecorrelationEventTime() and
+//                            setDecorrelationEventTime().  Implemented
+//                            getNumCorrelationParameterGroups().
 //
 //    NOTES:
 //
@@ -42,7 +46,7 @@ namespace csm
 class CSM_EXPORT_API CorrelationModel
 {
 public:
-   CorrelationModel() : theFormat(CSM_UNKNOWN) {}
+
    virtual ~CorrelationModel() {}
       //> A virtual destructor is needed so derived class destructors will
       //  be called when the base class object is destroyed.
@@ -56,10 +60,11 @@ public:
       //  constructor when the derived object was created.
       //<
 
-   virtual size_t getNumCorrelationParameterGroups() const = 0;
+   inline size_t getNumCorrelationParameterGroups() const;
+                                                        
       //> Returns the number of correlation parameter groups. The returned
       //  value will be the same as the value of numCPGroups passed to the
-      //  constructor when the derived object was created.
+      //  constructor when this object was created.
       //<
 
    virtual int getCorrelationParameterGroup(size_t smParamIndex) const = 0;
@@ -90,13 +95,72 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
+      
+   const std::string& getDecorrelationEventTime(size_t cpGroupIndex) const;
+   //> This method returns the decorrelation event time for the specified
+   //  parameter group index.  The returned string follows the ISO 8601 standard.
+   //
+   //-    Precision   Format           Example
+   //-    year        yyyy             "1961"
+   //-    month       yyyymm           "196104"
+   //-    day         yyyymmdd         "19610420"
+   //-    hour        yyyymmddThh      "19610420T20"
+   //-    minute      yyyymmddThhmm    "19610420T2000"
+   //-    second      yyyymmddThhmmss  "19610420T200000"
+   //  If no decorrelation event time has been set for the specified
+   //  parameter group, the returned string will be empty.
+   //  If the specified parameter group index is outside the range of available
+   //  parameter groups, an exception will be thrown.
+   //<
+   
+   void setDecorrelationEventTime(const std::string& decorrelationEventTime,
+                                  size_t             cpGroupIndex);
+   //> This method sets the decorrelation event time for the specified
+   //  parameter group index.  The provided string should follow the ISO 8601 
+   //  standard.
+   //
+   //-    Precision   Format           Example
+   //-    year        yyyy             "1961"
+   //-    month       yyyymm           "196104"
+   //-    day         yyyymmdd         "19610420"
+   //-    hour        yyyymmddThh      "19610420T20"
+   //-    minute      yyyymmddThhmm    "19610420T2000"
+   //-    second      yyyymmddThhmmss  "19610420T200000"
+   //  By default, the decorrelation event time for all groups is set to an
+   //  empty string.  If the specified parameter group index is outside the 
+   //  range of available parameter groups, an exception will be thrown.
+   //<
 
 protected:
-   CorrelationModel(const std::string& format) : theFormat(format) {}
+      
+   CorrelationModel(const std::string& format,
+                    size_t numCPGroups);
+   
+ private:
+   CorrelationModel()
+      :
+        theFormat                  (CSM_UNKNOWN),
+        theDecorrelationEventTimes ()
+        {}
+   //> This is the default constructor.  It is declared private to prevent
+   //  its use.
+   //<
 
    std::string theFormat;
+   //> This data member is a string identifying the "format" for the
+   //  current derived CorrelationModel.
+   //<
+   std::vector<std::string> theDecorrelationEventTimes;
+   //> This data member is a vector of strings which represent the
+   //  decorrelation event times for each group of parameters.
+   //<
 };
-
+   
+inline size_t CorrelationModel::getNumCorrelationParameterGroups() const
+{
+   return theDecorrelationEventTimes.size();
+}
+   
 //***
 // CLASS: NoCorrelationModel
 //> The NoCorrelationModel class is needed for sensor models that do not have
@@ -107,12 +171,11 @@ protected:
 class CSM_EXPORT_API NoCorrelationModel : public CorrelationModel
 {
 public:
-   NoCorrelationModel() : CorrelationModel("NONE") {}
+   NoCorrelationModel() : CorrelationModel("NONE",0) {}
    virtual ~NoCorrelationModel() {}
 
    virtual size_t getNumSensorModelParameters() const { return 0; }
-   virtual size_t getNumCorrelationParameterGroups() const { return 0; }
-
+   
    virtual int getCorrelationParameterGroup(size_t smParamIndex) const
    {
       // there can be no smParamIndex that is less than getNumSensorModelParameters()
@@ -129,7 +192,7 @@ public:
                   "csm::NoCorrelationModel::getCorrelationCoefficient");
    }
 };
-
+   
 } // namespace csm
 
 #endif
