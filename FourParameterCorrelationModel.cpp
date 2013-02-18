@@ -20,6 +20,8 @@
 //     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
 //     17-Dec-2012   BAH      Documentation updates.
 //     20-Dec-2012   JPK      Fixed bug in constructor.
+//     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
+//                            now provided on base class.
 //
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
@@ -43,25 +45,18 @@ namespace csm {
 FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
                                                              size_t numCPGroups)
    :
-      theGroupMapping(numSMParams, -1),
-      theCorrParams(numCPGroups)
-{
-   // set the format string in the base class
-   theFormat = "Four-parameter model (A, alpha, beta, tau)";
-}
+      CorrelationModel("Four-parameter model (A, alpha, beta, tau)",
+                       numCPGroups),
+      theGroupMapping (numSMParams, -1),
+      theCorrParams   (numCPGroups)
+{}
 
 FourParameterCorrelationModel::~FourParameterCorrelationModel()
-{
-}
+{}
 
 size_t FourParameterCorrelationModel::getNumSensorModelParameters() const
 {
    return theGroupMapping.size();
-}
-
-size_t FourParameterCorrelationModel::getNumCorrelationParameterGroups() const
-{
-   return theCorrParams.size();
 }
 
 int FourParameterCorrelationModel::getCorrelationParameterGroup(size_t smParamIndex) const

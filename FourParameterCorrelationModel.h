@@ -38,6 +38,8 @@
 //     06-Nov-2012   JPK      Updated equation per CR 2012 10 17 001
 //     17-Dec-2012   BAH      Documentation updates.
 //     12-Feb-2013   JPK      Renamed CovarianceModel to CorrelationModel.
+//     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
+//                            now provided on base class.
 //
 //    NOTES:
 //
@@ -83,12 +85,6 @@ public:
    virtual size_t getNumSensorModelParameters() const;
       //> Returns the number of model parameters. The returned value
       //  will be the same as the value of numSMParams passed to the
-      //  constructor when the object was created.
-      //<
-
-   virtual size_t getNumCorrelationParameterGroups() const;
-      //> Returns the number of correlation parameter groups. The returned
-      //  value will be the same as the value of numCPGroups passed to the
       //  constructor when the object was created.
       //<
 

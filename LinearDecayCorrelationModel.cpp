@@ -19,6 +19,8 @@
 //     30-Oct-2012   SCM      Renamed to LinearDecayCorrelationModel.h
 //     17-Dec-2012   BAH      Documentation updates.
 //     20-Dec-2012   JPK      Fixed bug in constructor.
+//     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
+//                            now provided on base class.
 //
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
@@ -40,12 +42,11 @@ namespace csm {
 LinearDecayCorrelationModel::LinearDecayCorrelationModel(size_t numSMParams,
                                                          size_t numCPGroups)
    :
-      theGroupMapping(numSMParams, -1),
-      theCorrParams(numCPGroups)
-{
-   // set the format string in the base class
-   theFormat = "LinearDecayCorrelation";
-}
+      CorrelationModel ("LinearDecayCorrelation",
+                        numCPGroups),
+      theGroupMapping  (numSMParams, -1),
+      theCorrParams    (numCPGroups)
+{}
 
 LinearDecayCorrelationModel::~LinearDecayCorrelationModel()
 {
@@ -54,11 +55,6 @@ LinearDecayCorrelationModel::~LinearDecayCorrelationModel()
 size_t LinearDecayCorrelationModel::getNumSensorModelParameters() const
 {
    return theGroupMapping.size();
-}
-
-size_t LinearDecayCorrelationModel::getNumCorrelationParameterGroups() const
-{
-   return theCorrParams.size();
 }
 
 int LinearDecayCorrelationModel::getCorrelationParameterGroup(size_t smParamIndex) const
