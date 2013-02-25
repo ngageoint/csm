@@ -29,7 +29,7 @@
 namespace csm {
      
 CorrelationModel::CorrelationModel(const std::string& format,
-`                                  size_t             numCPGroups)
+                                   size_t             numCPGroups)
    :
       theFormat                  (format),
       theDecorrelationEventTimes ()
@@ -47,7 +47,7 @@ CorrelationModel::getDecorrelationEventTime(size_t cpGroupIndex) const
    {
       throw Error(Error::INDEX_OUT_OF_RANGE,
                   "Correlation parameter group index is out of range.",
-                  "csm::CorrelationModel::" + functionName);
+                  "csm::CorrelationModel::getDecorrelationEventTime");
    }
 
    return theDecorrelationEventTimes[cpGroupIndex];
@@ -61,7 +61,7 @@ CorrelationModel::setDecorrelationEventTime(const std::string& decorrEventTime,
    {
       throw Error(Error::INDEX_OUT_OF_RANGE,
                   "Correlation parameter group index is out of range.",
-                  "csm::CorrelationModel::" + functionName);
+                  "csm::CorrelationModel::setDecorrelationEventTime");
    }
 
    theDecorrelationEventTimes[cpGroupIndex] = decorrEventTime;
