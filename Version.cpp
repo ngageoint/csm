@@ -26,6 +26,7 @@
 #include "Error.h"
 
 #include <ostream>
+#include <cstdlib>
 
 namespace csm
 {

@@ -39,6 +39,7 @@
 
 #include <vector>
 #include <string>
+#include <cstring>
 
 #ifdef _WIN32
 # ifdef CSM_LIBRARY
