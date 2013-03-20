@@ -56,9 +56,12 @@ public:
       //  only data available in this mode is the name of the file.
       //<
 
-   virtual ~Isd() {}
+   virtual ~Isd();
       //> A virtual destructor is needed so derived class destructors will
       //  be called when the base class object is destroyed.
+      //
+      //  The impelmentations for the destructors for this class and all the
+      //  derived ISD classes defined in CSM are in the Isd.cpp file.
       //<
 
    const std::string& format() const { return theFormat; }
