@@ -2,7 +2,7 @@
 
 HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h CorrelationModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h
 
-OBJS = Version.o Plugin.o GeometricModel.o RasterGM.o CorrelationModel.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o
+OBJS = Version.o Plugin.o GeometricModel.o RasterGM.o CorrelationModel.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o Isd.o
 
 LIBNAME=libcsmapi
 LIBVERSION=3
