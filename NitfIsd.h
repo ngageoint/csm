@@ -198,7 +198,7 @@ private:
 class CSM_EXPORT_API NitfIsd : public Isd
 {
 public:
-   virtual ~NitfIsd() {}
+   virtual ~NitfIsd();
 
    const std::string& fileHeader() const { return theFileHeader; }
       //> This method returns the entire file subheader, including a copy of
@@ -282,14 +282,14 @@ class CSM_EXPORT_API Nitf20Isd : public NitfIsd
 {
 public:
    Nitf20Isd(const std::string& filename = "") : NitfIsd("NITF2.0", filename) {}
-   virtual ~Nitf20Isd() {}
+   virtual ~Nitf20Isd();
 };
 
 class CSM_EXPORT_API Nitf21Isd : public NitfIsd
 {
 public:
    Nitf21Isd(const std::string& filename = "") : NitfIsd("NITF2.1", filename) {}
-   virtual ~Nitf21Isd() {}
+   virtual ~Nitf21Isd();
 };
 
 } // namespace csm

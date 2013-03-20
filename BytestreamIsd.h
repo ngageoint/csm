@@ -41,7 +41,7 @@ public:
    explicit BytestreamIsd(const std::string& data,
                           const std::string& filename = "")
       : Isd("BYTESTREAM", filename), theData(data) {}
-   virtual ~BytestreamIsd() {}
+   virtual ~BytestreamIsd();
 
    const std::string data() const { return theData; }
       //> This method returns the raw bytestream data associated with the image
