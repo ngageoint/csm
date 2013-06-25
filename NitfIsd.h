@@ -37,6 +37,7 @@
 #include "Isd.h"
 
 #include <vector>
+#include <cstdlib>
 
 namespace csm
 {
