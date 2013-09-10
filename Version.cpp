@@ -14,6 +14,7 @@
 //     19-Apr-2012   SCM      Initial creation
 //     30-Oct-2012   SCM      Renamed to Version.cpp
 //     17-Dec-2012   BAH      Documentation updates.
+//     10-Sep-2013   SCM      Added std namespace to atoi() calls.
 //
 //    NOTES:
 //     Refer to Version.h for more information.
