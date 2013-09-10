@@ -242,18 +242,18 @@ namespace csm
          //  It can be accessed directly or through the covar2d methods.
          //<
 
-      ImageCoordCovar() : ImageCoord() { memset(covariance, 0, sizeof(covariance)); }
+      ImageCoordCovar() : ImageCoord() { std::memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
          //<
 
       ImageCoordCovar(double aLine, double aSamp)
-         : ImageCoord(aLine, aSamp) { memset(covariance, 0, sizeof(covariance)); }
+         : ImageCoord(aLine, aSamp) { std::memset(covariance, 0, sizeof(covariance)); }
          //> This constructor takes a line and sample in pixels.
          //  The covariance is set to zeroes.
          //<
 
       ImageCoordCovar(double aLine, double aSamp, double aCovar[4])
-         : ImageCoord(aLine, aSamp) { memcpy(covariance, aCovar, sizeof(covariance)); }
+         : ImageCoord(aLine, aSamp) { std::memcpy(covariance, aCovar, sizeof(covariance)); }
          //> This constructor takes a line and sample in pixels and covariance
          //  as an array of four doubles in pixels squared.
          //  Note that no check is made to ensure symmetry of the covariance
@@ -359,18 +359,18 @@ namespace csm
          //  It can be accessed directly or through the covar2d methods.
          //<
 
-      EcefCoordCovar() : EcefCoord() { memset(covariance, 0, sizeof(covariance)); }
+      EcefCoordCovar() : EcefCoord() { std::memset(covariance, 0, sizeof(covariance)); }
          //> Default Constructor
          //<
 
       EcefCoordCovar(double aX, double aY, double aZ)
-         : EcefCoord(aX, aY, aZ) { memset(covariance, 0, sizeof(covariance)); }
+         : EcefCoord(aX, aY, aZ) { std::memset(covariance, 0, sizeof(covariance)); }
          //> This constructor takes ECEF x, y, and z values in meters.
          //  The covariance is set to zeroes.
          //<
 
       EcefCoordCovar(double aX, double aY, double aZ, double aCovar[9])
-         : EcefCoord(aX, aY, aZ) { memcpy(covariance, aCovar, sizeof(covariance)); }
+         : EcefCoord(aX, aY, aZ) { std::memcpy(covariance, aCovar, sizeof(covariance)); }
          //> This constructor takes ECEF x, y, and z values in meters and
          //  covariance as an array of nine doubles in meters squared.
          //  Note that no check is made to ensure symmetry of the covariance
