@@ -52,7 +52,7 @@ Version::Version(const std::string& version)
                      MODULE);
       }
 
-      theVersions.push_back(atoi(v.c_str()));
+      theVersions.push_back(std::atoi(v.c_str()));
       pos = dotPos + 1;
    }
 
@@ -63,7 +63,7 @@ Version::Version(const std::string& version)
       throw Error(Error::INVALID_USE, "Invalid version component: " + v,
                   MODULE);
    }
-   theVersions.push_back(atoi(v.c_str()));
+   theVersions.push_back(std::atoi(v.c_str()));
 }
 
 //*****************************************************************************

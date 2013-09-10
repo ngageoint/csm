@@ -100,7 +100,7 @@ public:
    {
       if (treData.length() < 11) return;
       theName = treData.substr(0, 6);
-      theLength = atoi(treData.substr(6, 5).c_str());
+      theLength = std::atoi(treData.substr(6, 5).c_str());
       theData = treData.substr(11);
    }
       //> This method extracts the TRE's name, length and data from treData.
