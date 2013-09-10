@@ -29,6 +29,7 @@
 //                            new struct EcefLocus.
 //     17-Dec-2012   BAH      Documentation updates.
 //     12-Feb-2013   JPK      Renamed param::EXACT to param::FIXED
+//     10-Sep-2013   SCM      Added std namespace to memory function calls.
 //
 //    NOTES:
 //
