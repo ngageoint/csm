@@ -1,6 +1,6 @@
 //#############################################################################
 //
-//    FILENAME:          CorrelationModel.cpp
+//    FILENAME:          Isd.cpp
 //
 //    CLASSIFICATION:    Unclassified
 //
