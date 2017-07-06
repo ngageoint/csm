@@ -4,5 +4,5 @@ CC=clang++
 #CXXFLAGS=-stdlib=libstdc++
 #CPPFAGS=-stdlib=libstdc++
 COPTS=-fPIC -O2 -m64 -Wall -stdlib=libc++ -std=c++11
-LDOPTS=-shared -Wl,-install_name,$(LIBRARY)
+LDOPTS=-dynamiclib -Wl,-install_name,@rpath/$(LIBRARY)
 INSTDIR=$(PWD)/mac
