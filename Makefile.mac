@@ -3,6 +3,9 @@ include Makefile
 CC=clang++
 #CXXFLAGS=-stdlib=libstdc++
 #CPPFAGS=-stdlib=libstdc++
+
+LIBRARY=$(LIBNAME).dylib.$(LIBVERSION)
+
 COPTS=-fPIC -O2 -m64 -Wall -stdlib=libc++ -std=c++11
 LDOPTS=-dynamiclib -Wl,-install_name,@rpath/$(LIBRARY)
 INSTDIR=$(PWD)/mac
