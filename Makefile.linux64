@@ -1,6 +1,7 @@
 include Makefile
 
 CC=g++
-COPTS=-fPIC -O2 -m64 -Wall
-LDOPTS=-shared -Wl,-soname,$(LIBRARY)
+#CXXFLAGS=-std=c++11
+COPTS=-fPIC -O2 -m64 -Wall -std=c++11 -c
+LDOPTS=-shared -Wl,-install_name,$(LIBRARY)
 INSTDIR=$(PWD)/linux64
