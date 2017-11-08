@@ -4,9 +4,12 @@ CC=clang++
 
 LIBRARY=$(LIBNAME).dylib.$(LIBVERSION)
 
-COPTS=-fPIC -O2 -m64 -Wall -stdlib=libc++ -std=c++11
+COPTS=-fPIC -O2 -m64 -Wall -stdlib=libc++ -std=c++11 
 LDOPTS=-dynamiclib -Wl,-install_name,@rpath/$(LIBRARY)
 INSTDIR=$(PWD)/mac
+
+clean::
+	$(RM) $(OBJS) $(LIBRARY) *~
 
 install::
 	$(RM) $(INSTDIR)/lib/$(LIBNAME).so && $(LN) $(LIBRARY) $(INSTDIR)/lib/$(LIBNAME).dylib
