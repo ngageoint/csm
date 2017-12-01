@@ -27,11 +27,31 @@
 #ifndef __CSM_CSM_POINT_CLOUD_H
 #define __CSM_CSM_POINT_CLOUD_H
 
+#include <cstring>
 #include <string>
+
+// This include ensures that CURRENT_CSM_VERSION below isn't overwritten by
+// csm.h.
 #include "csm.h"
 
-namespace csm
-{
+#ifdef _WIN32
+# ifdef CSM_POINT_CLOUD_LIBRARY
+#  define CSM_POINT_CLOUD_EXPORT_API __declspec(dllexport)
+# else
+#  define CSM_POINT_CLOUD_EXPORT_API __declspec(dllimport)
+# endif
+#elif LINUX_BUILD
+# define CSM_POINT_CLOUD_EXPORT_API __attribute__ ((visibility("default")))
+#else
+#  define CSM_POINT_CLOUD_EXPORT_API
+#endif
+
+// The getCsmVersion method should use CURRENT_CSM_VERSION to
+// return the CSM API version that the sensor model/plugin was written to.
+#undef  CURRENT_CSM_VERSION
+#define CURRENT_CSM_VERSION csm::Version(3, 0, 2);
+
+namespace csm {
    //***
    // STRUCT: ModelCoord
    //> This structure represents a three-dimensional location (m0,m1,m2 in
