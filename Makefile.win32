@@ -11,7 +11,7 @@ LIBRARY=$(LIBNAME).dll
 
 INSTDIR=$(PWD)/win32
 
-all: $(LIBRARY)
+all: $(HEADERS) $(LIBRARY)
 
 %.o: %.cpp
 	$(CC) -c $(COPTS) $< -Fo$@
@@ -26,6 +26,6 @@ $(LIBRARY): $(OBJS)
 install::
 	$(RM) $(INSTDIR)/lib/$(LIBNAME).so
 	$(CP) $(LIBRARY:%.dll=%.lib) $(INSTDIR)/lib
-
+	$(CP) $(HEADERS) $(INSTDIR)/include/csm 
 clean::
 	$(RM) $(LIBRARY).manifest $(LIBRARY:%.dll=%.ldf) $(LIBRARY:%.dll=%.lib) $(LIBRARY:%.dll=%.exp)
