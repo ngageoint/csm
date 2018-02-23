@@ -10,5 +10,5 @@ By default, the built files are placed in an architecture subdirectory in the bu
 
   make -f Makefile.linux64 all install clean INSTDIR=/path/to/csm3/install/dir
 
-Compiling makes a 'csmapi' shared library (libcsmapi.so.3 on UNIX, csmapi.dll on Windows).  This library must be used when creating both CSM plugins and Sensor Exploitation Tools (SETs) that use CSM.
+Compiling makes a 'csmapi' shared library (libcsmapi.so.3.0.3 on UNIX, csmapi.dll on Windows).  This library must be used when creating both CSM plugins and Sensor Exploitation Tools (SETs) that use CSM.
 
