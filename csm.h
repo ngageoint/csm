@@ -30,6 +30,7 @@
 //     17-Dec-2012   BAH      Documentation updates.
 //     12-Feb-2013   JPK      Renamed param::EXACT to param::FIXED
 //     10-Sep-2013   SCM      Added std namespace to memory function calls.
+//     22-Feb-2018   JPK      Updated version to 3.0.3
 //
 //    NOTES:
 //
@@ -56,7 +57,7 @@
 
 // The getCsmVersion method should use CURRENT_CSM_VERSION to
 // return the CSM API version that the sensor model/plugin was written to.
-#define CURRENT_CSM_VERSION csm::Version(3, 0, 1);
+#define CURRENT_CSM_VERSION csm::Version(3, 0, 3);
 
 // Common definition for an unknown name, type, node,etc.
 #define CSM_UNKNOWN "UNKNOWN"
