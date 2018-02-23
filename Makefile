@@ -23,6 +23,7 @@ LD=$(CC)
 
 # compute the "major" version from the library version
 MAJORLIBVERSION=$(word 1,$(subst ., ,$(LIBVERSION)))
+SONAME=$(LIBNAME).so.$(MAJORLIBVERSION)
 
 %.o: %.cpp
 	$(CC) -c $(COPTS) $< -o $@

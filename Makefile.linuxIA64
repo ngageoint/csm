@@ -2,5 +2,5 @@ include Makefile
 
 CC=g++
 COPTS=-fPIC -O3
-LDOPTS=-shared -Wl,-soname,$(LIBRARY)
+LDOPTS=-shared -Wl,-soname,$(SONAME)
 INSTDIR=$(PWD)/linux-ia64
