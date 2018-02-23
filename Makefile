@@ -1,11 +1,12 @@
 
 
-HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h CorrelationModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h
+HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h CorrelationModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h csmPointCloud.h PointCloudIsd.h PointCloudGM.h ModelIdentifier.h BundleGM.h Ellipsoid.h SettableEllipsoid.h
 
-OBJS = Version.o Plugin.o GeometricModel.o RasterGM.o CorrelationModel.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o Isd.o
+OBJS = Version.o Isd.o Plugin.o GeometricModel.o RasterGM.o CorrelationModel.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o csmPointCloud.o PointCloudIsd.o PointCloudGM.o ModelIdentifier.o BundleGM.o Ellipsoid.o SettableEllipsoid.o
+
 
 LIBNAME=libcsmapi
-LIBVERSION=3
+LIBVERSION=3.0.3
 
 DOXYGEN_OUT=/programs/origin/html/doxygen/csm3
 DOXYGEN_FILTER=$(PWD)/scripts/doxygen-filter.pl
