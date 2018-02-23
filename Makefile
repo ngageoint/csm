@@ -21,6 +21,9 @@ TAR=tar
 
 LD=$(CC)
 
+# compute the "major" version from the library version
+MAJORLIBVERSION=$(word 1,$(subst ., ,$(LIBVERSION)))
+
 %.o: %.cpp
 	$(CC) -c $(COPTS) $< -o $@
 
@@ -36,6 +39,7 @@ install::
 	$(MKDIR) -p $(INSTDIR)/lib
 	$(CP) $(LIBRARY) $(INSTDIR)/lib
 	$(RM) $(INSTDIR)/lib/$(LIBNAME).so && $(LN) $(LIBRARY) $(INSTDIR)/lib/$(LIBNAME).so
+	@if [ "$(LIBVERSION)" != "$(MAJORLIBVERSION)" ]; then $(RM) $(INSTDIR)/lib/$(LIBNAME).so.$(MAJORLIBVERSION) && $(LN) $(LIBRARY) $(INSTDIR)/lib/$(LIBNAME).so.$(MAJORLIBVERSION); fi
 	$(MKDIR) -p $(INSTDIR)/include/csm
 	$(CP) $(HEADERS) $(INSTDIR)/include/csm
 
