@@ -21,11 +21,15 @@ add_library(csmapi SHARED
 )
 
 file(GLOB HEADER_FILES ${PROJECT_SOURCE_DIR}/*.h)
-
+message("${HEADER_FILES}")
 set_target_properties(csmapi PROPERTIES
                     VERSION ${PROJECT_VERSION}
                     SOVERSION 3
-                    PUBLIC_HEADER ${HEADER_FILES}
+                    PUBLIC_HEADER "${HEADER_FILES}"
 )
 
 target_include_directories(csmapi PUBLIC ${PROJECT_SOURCE_DIR})
+
+install(TARGETS csmapi
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/csm)
