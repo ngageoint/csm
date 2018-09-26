@@ -11,6 +11,8 @@ LIBRARY=$(LIBNAME).dll
 
 INSTDIR=$(PWD)/win32
 
+# warning -- this target does not work because it ends up running the linker command from Makefile
+# instead make 'csmapi.dll'
 all: $(LIBRARY)
 
 %.o: %.cpp

@@ -25,10 +25,13 @@
 //                            getValidModelBounds function.
 //     22-Feb-2018   JPK      Replaced macros for inclusion in a single
 //                            library.  Reformatted for readability
+//     26-Sep-2018   SCM      Added define of CSM_LIBRARY for Windows.
 //
 //    NOTES:
 //
 //#############################################################################
+
+#define CSM_LIBRARY
 
 #include <algorithm>
 #include "PointCloudGM.h"
