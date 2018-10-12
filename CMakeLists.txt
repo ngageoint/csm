@@ -30,6 +30,17 @@ set_target_properties(csmapi PROPERTIES
 
 target_include_directories(csmapi PUBLIC ${PROJECT_SOURCE_DIR})
 
-install(TARGETS csmapi
-        LIBRARY DESTINATION lib
-        PUBLIC_HEADER DESTINATION include/csm)
+if(WIN32)
+  option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
+  option(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
+  install(TARGETS csmapi 
+            RUNTIME 
+              DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            PUBLIC_HEADER
+              DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+          )
+  message(${CMAKE_INSTALL_INCLUDEDIR})
+else()
+  install(TARGETS csmapi LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  install(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/csm)
+endif()
