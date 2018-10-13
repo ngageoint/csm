@@ -21,7 +21,6 @@ add_library(csmapi SHARED
 )
 
 file(GLOB HEADER_FILES ${PROJECT_SOURCE_DIR}/*.h)
-message("${HEADER_FILES}")
 set_target_properties(csmapi PROPERTIES
                     VERSION ${PROJECT_VERSION}
                     SOVERSION 3
@@ -39,7 +38,6 @@ if(WIN32)
             PUBLIC_HEADER
               DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
           )
-  message(${CMAKE_INSTALL_INCLUDEDIR})
 else()
   install(TARGETS csmapi LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
   install(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/csm)
