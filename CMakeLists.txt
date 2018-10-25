@@ -34,11 +34,11 @@ if(WIN32)
   option(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
   install(TARGETS csmapi
           LIBRARY
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/lib
           RUNTIME
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/bin
           PUBLIC_HEADER
-            DESTINATION CMAKE_INSTALL_PREFIX}/include/csm
+            DESTINATION CMAKE_INSTALL_PREFIX}/Library/include/csm
           )
 else()
 	message(STATUS "CMAKE INSTALL LIBDIR: ${CMAKE_INSTALL_PREFIX}")
