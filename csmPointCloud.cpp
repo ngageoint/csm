@@ -21,10 +21,13 @@
 //    22FEB2018     JPK       Modified to use existing csm macros (since
 //                            point cloud is no longer in a separate library).
 //                            Other minor cleanup for consistency of code.
+//     26-Sep-2018   SCM      Added define of CSM_LIBRARY for Windows.
+//
 //    NOTES:
 //
 //#############################################################################
 
+#define CSM_LIBRARY
 #include "csmPointCloud.h"
 #include "Error.h"
 #include <cmath>
