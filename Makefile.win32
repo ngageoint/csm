@@ -1,7 +1,7 @@
 include Makefile
 
-CC=mscc
-LD=mslink
+CC=./scripts/mscc
+LD=./scripts/mslink
 CDEBUGFLAGS=-O2
 COPTS=/nologo $(CDEBUGFLAGS) /Zm800 /MD /GR /W1 /EHa $(DEFINES)
 DEFINES=-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE
@@ -22,7 +22,7 @@ all: $(LIBRARY)
 	$(CC) -c $(COPTS) $< -Fo$@
 
 $(LIBRARY): $(OBJS)
-	objects_to_def -dir . -proj $(@:%.dll=%) > $(@:%.dll=%.ldf)
+	./scripts/objects_to_def -dir . -proj $(@:%.dll=%) > $(@:%.dll=%.ldf)
 	$(LD) $(COPTS) $(LDOPTS) /DEF:$(@:%.dll=%.ldf) -o $@ $^
 
 install::
