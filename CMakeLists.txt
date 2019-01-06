@@ -39,6 +39,8 @@ if(WIN32)
             DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/lib
           PUBLIC_HEADER
             DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/include/csm
+	  FILES ${HEADER_FILES}
+	    DESTINATION ${CMAKE_INSTALL_PREFIX}/include/csm
           )
 else()
 	message(STATUS "CMAKE INSTALL LIBDIR: ${CMAKE_INSTALL_PREFIX}")
