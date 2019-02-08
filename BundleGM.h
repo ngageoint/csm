@@ -21,6 +21,7 @@
 //     20-Feb-2017   JPK      Initial Coding
 //     01-Mar-2017   JPK      Moved implementations to BundleGM.cpp
 //     21-Mar-2017   JPK      Deinlined BundleGM default constructor
+//     08-Feb-2019   SCM      Made theDescription protected.
 //<
 //#############################################################################
 
@@ -43,37 +44,39 @@ public:
    BundleGM();
    
    virtual ~BundleGM();
-   //> This is the destructor;
-   //<
-   virtual std::string getFamily() const {return CSM_BUNDLE_GM_FAMILY;}
-   
-   //> This method returns the Family ID
-   //<
+      //> This is the destructor;
+      //<
+   virtual std::string getFamily() const { return CSM_BUNDLE_GM_FAMILY; }
+      //> This method returns the Family ID
+      //<
    
    std::vector<std::string> componentNames() const;
-   //> This method returns the list of names of the "components" used to
-   //  uniquely identify a GeometricModel in this "bundle".
-   //<
+      //> This method returns the list of names of the "components" used to
+      //  uniquely identify a GeometricModel in this "bundle".
+      //<
    
    const MIC::RangeList& rangesFor(const std::string& argName) const;
-   //> This method returns the valid set of ranges for the value associated
-   //  with the specified component name.
-   //<
+      //> This method returns the valid set of ranges for the value associated
+      //  with the specified component name.
+      //<
    
-   const MIDescription& idDescription() const {return theDescription;}
-   //> This method returns all of the descriptions for all of the components
-   //  associated with this "bundle".
-   //<
+   const MIDescription& idDescription() const { return theDescription; }
+      //> This method returns all of the descriptions for all of the components
+      //  associated with this "bundle".
+      //<
    
    virtual csm::GeometricModel* geometricModel(const ModelIdentifier& id) = 0;
-   //> This method returns a pointer to a GeometricModel, which is actually
-   //  just a thin wrapper around this Bundle, corresponding to the
-   //  provided ModelIdentifier. The pointer is only valid as long as this
-   //  BundleGM stays in scope.
-   //<
-private:
+      //> This method returns a pointer to a GeometricModel, which is actually
+      //  just a thin wrapper around this Bundle, corresponding to the
+      //  provided ModelIdentifier. The pointer is only valid as long as this
+      //  BundleGM stays in scope.
+      //<
 
-  MIDescription theDescription;
+protected:
+   MIDescription theDescription;
+      //> This data member contains the component descriptions returned by the
+      //  idDescription() method.  It must be set by the derived class.
+      //<
 };
 } // namespace csm
 
