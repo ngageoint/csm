@@ -16,7 +16,7 @@
 //     -----------   ------   -------
 //     18-Feb-2013   JPK      Initial Coding
 //     20-Sep-2019   JPK      Added setFormat() and
-//                            setNumCorrelationGroups()
+//                            setNumCorrelationParameterGroups()
 //
 //    NOTES:
 //     Refer to CorrelationModel.h for more information.
