@@ -15,6 +15,8 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     18-Feb-2013   JPK      Initial Coding
+//     20-Sep-2019   JPK      Added setFormat() and
+//                            setNumCorrelationGroups()
 //
 //    NOTES:
 //     Refer to CorrelationModel.h for more information.
@@ -36,8 +38,25 @@ CorrelationModel::CorrelationModel(const std::string& format,
 {
    if (numCPGroups)
    {
-      theDecorrelationEventTimes.resize(numCPGroups,"");
+      setNumCorrelationGroups(numCPGroups);
    }
+}
+
+void CorrelationModel::setNumCorrelationGroups(size_t numCPGroups)
+{
+   if (numCPGroups)
+   {
+     theDecorrelationEventTimes.resize(numCPGroups,"");
+   }
+   else
+   {
+      theDecorrelationEventTimes.clear();
+   }
+}
+
+void CorrelationModel::setFormat(const std::string& format)
+{
+   theFormat = format;
 }
 
 const std::string&
