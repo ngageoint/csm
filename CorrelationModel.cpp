@@ -38,11 +38,11 @@ CorrelationModel::CorrelationModel(const std::string& format,
 {
    if (numCPGroups)
    {
-      setNumCorrelationGroups(numCPGroups);
+      setNumCorrelationParameterGroups(numCPGroups);
    }
 }
 
-void CorrelationModel::setNumCorrelationGroups(size_t numCPGroups)
+void CorrelationModel::setNumCorrelationParameterGroups(size_t numCPGroups)
 {
    if (numCPGroups)
    {

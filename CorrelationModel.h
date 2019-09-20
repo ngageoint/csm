@@ -29,7 +29,7 @@
 //                            setDecorrelationEventTime().  Implemented
 //                            getNumCorrelationParameterGroups().
 //     20-Sep-2019   JPK      Added setFormat() and
-//                            setNumCorrelationGroups()
+//                            setNumCorrelationParameterGroups()
 //
 //    NOTES:
 //
@@ -140,7 +140,7 @@ protected:
 
    void setFormat(const std::string& format);
 
-   void setNumCorrelationGroups(size_t numCorrGroups);
+   void setNumCorrelationParameterGroups(size_t numCorrGroups);
    
  private:
    CorrelationModel()
