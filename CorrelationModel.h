@@ -28,6 +28,8 @@
 //     18-Feb-2013   JPK      Added getDecorrelationEventTime() and
 //                            setDecorrelationEventTime().  Implemented
 //                            getNumCorrelationParameterGroups().
+//     20-Sep-2019   JPK      Added setFormat() and
+//                            setNumCorrelationParameterGroups()
 //
 //    NOTES:
 //
@@ -135,6 +137,10 @@ protected:
       
    CorrelationModel(const std::string& format,
                     size_t numCPGroups);
+
+   void setFormat(const std::string& format);
+
+   void setNumCorrelationParameterGroups(size_t numCorrGroups);
    
  private:
    CorrelationModel()
