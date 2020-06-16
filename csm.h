@@ -315,7 +315,7 @@ namespace csm
    //***
    // STRUCT: EcefCoord
    //> This structure represents a three-dimensional location (x,y,z in meters)
-   //  in the WGS-84 Earth Centered Earth Fixed (ECEF) coordinate system.
+   //  in the Earth-Centered Earth-Fixed (ECEF) coordinate system.
    //  It typically represents an absolute coordinate; the EcefVector structure
    //  is used for velocity and direction vectors.
    //<
