@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 project(csmapi VERSION 3.0.3 DESCRIPTION "Community Sensor Model API")
-set(CMAKE_CXX_STANDARD 11)
 
 add_library(csmapi SHARED
              BundleGM.cpp
@@ -29,21 +28,8 @@ set_target_properties(csmapi PROPERTIES
 
 target_include_directories(csmapi PUBLIC ${PROJECT_SOURCE_DIR})
 
-if(WIN32)
-  option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
-  option(gtest_disable_pthreads "Disable uses of pthreads in gtest." ON)
-  install(TARGETS csmapi
-          LIBRARY
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/lib
-          RUNTIME
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/lib
-          PUBLIC_HEADER
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/Library/include/csm
-	  FILES ${HEADER_FILES}
-	    DESTINATION ${CMAKE_INSTALL_PREFIX}/include/csm
-          )
-else()
-	message(STATUS "CMAKE INSTALL LIBDIR: ${CMAKE_INSTALL_PREFIX}")
-	install(TARGETS csmapi LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-	install(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/csm)
-endif()
+set(WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+message(STATUS "CMAKE INSTALL LIBDIR: ${CMAKE_INSTALL_PREFIX}")
+install(TARGETS csmapi LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(FILES ${HEADER_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/csm)

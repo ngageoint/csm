@@ -1,0 +1,48 @@
+language: cpp
+sudo: false
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CXX=g++-7 && CC=gcc-7"
+    - os: osx
+      osx_image: xcode9.4
+      env:
+        - MATRIX_EVAL="CXX=clang++ && CC=clang"
+
+before_install:
+  - echo "$TRAVIS_PULL_REQUEST"
+  - eval "${MATRIX_EVAL}"
+
+install:
+  # Install a supported cmake version (>= 3.10)
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      curl -o miniconda.sh  https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - source $HOME/miniconda/etc/profile.d/conda.sh
+  - conda config --set always_yes yes
+  - conda update -q conda
+  - conda create -n csm
+  - conda activate csm
+  - conda install -c conda-forge cmake
+
+script:
+  - mkdir -p build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+  - cmake --build .
