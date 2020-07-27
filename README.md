@@ -19,7 +19,7 @@ Compiling makes a 'csmapi' shared library (libcsmapi.so.3.1.0 on UNIX, csmapi.dl
 
 Building CSM Cmake
 ------------------
-This repo uses a CMake based build configuration. Run CMake with the desirge configurations and generator to configure your build. Then, run your build system or use cmake. For example:
+This repo uses a CMake based build configuration. Run CMake with the desired configurations and generator to configure your build. Then, run your build system or use cmake. For example:
 
 ```
 mkdir build install
