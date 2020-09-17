@@ -345,7 +345,7 @@ public:
                 double* achievedPrecision = NULL,
                 WarningList* warnings     = NULL) const = 0;
       //> This is one of two overloaded methods.  This method takes only
-      //  the necessary inputs.  Some effieciency can be obtained by using the
+      //  the necessary inputs.  Some efficiency can be obtained by using the
       //  other method.  Even more efficiency can be obtained by using the
       //  computeAllSensorPartials method.
       //
@@ -410,7 +410,7 @@ public:
                 double* achievedPrecision = NULL,
                 WarningList* warnings     = NULL) const;
       //> This is one of two overloaded methods.  This method takes only
-      //  the necessary inputs.  Some effieciency can be obtained by using the
+      //  the necessary inputs.  Some efficiency can be obtained by using the
       //  other method.
       //
       //  This method returns the partial derivatives of line and sample
