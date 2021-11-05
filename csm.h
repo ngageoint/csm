@@ -116,7 +116,7 @@ namespace csm
       //
       //-  VALID          - Parameters of type NONE are excluded.
       //-                   All others are included,
-      //-  ADJUSTABLE     - Only REAL or FICTICIOUS parameters are included.
+      //-  ADJUSTABLE     - Only REAL or FICTITIOUS parameters are included.
       //-  NON_ADJUSTABLE - Only FIXED parameters are included.
       //
       {
