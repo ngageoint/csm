@@ -22,8 +22,7 @@
 //     20-Dec-2012   JPK      Fixed bug in constructor.
 //     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
 //                            now provided on base class.
-//     03-Sep-2021   SCM      Removed IRIX support.
-//
+//     01-Dec-2021   JPK      Modified to use FourParameterCorrelationFunction
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
 //
@@ -31,11 +30,16 @@
 
 #define CSM_LIBRARY
 #include "FourParameterCorrelationModel.h"
+#include "FourParameterCorrelationFunction.h"
 #include "Error.h"
 
+#ifdef IRIXN32
+#include "math.h"
+#else
 #include <cmath>
 using std::exp;
 using std::fabs;
+#endif
 
 namespace csm {
      
@@ -85,41 +89,12 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
 void FourParameterCorrelationModel::setCorrelationGroupParameters(
    size_t cpGroupIndex, const Parameters& params)
 {
-   static const char* const MODULE =
-      "csm::FourParameterCorrelationModel::setCorrelationGroupParameters";
-
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
 
    // make sure the values of each correlation model parameter fall within acceptable ranges
-   if ((params.a < 0.0) || (params.a > 1.0))
-   {
-      throw Error(Error::BOUNDS,
-                  "Correlation parameter A must be in the range [-1, 1].",
-                  MODULE);
-   }
-
-   if ((params.alpha < 0.0) || (params.alpha > 1.0))
-   {
-      throw Error(Error::BOUNDS,
-                  "Correlation parameter alpha must be in the range [0, 1].",
-                  MODULE);
-   }
-
-   if ((params.beta < 0.0) || (params.beta > 10.0))
-   {
-      throw Error(Error::BOUNDS,
-                  "Correlation parameter beta must be non-negative.",
-                  MODULE);
-   }
-
-   if (params.tau <= 0.0)
-   {
-      throw Error(Error::BOUNDS,
-                  "Correlation parameter tau must be positive.",
-                  MODULE);
-   }
-
+   FourParameterCorrelationFunction::checkParameters(params);
+   
    // store the correlation parameter values
    theCorrParams[cpGroupIndex] = params;
 }
@@ -131,22 +106,9 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
    checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
 
    // compute the value of the correlation coefficient
-   const Parameters& cp = theCorrParams[cpGroupIndex];
-   double corrCoeff = cp.a *
-                      (cp.alpha + ((1.0 - cp.alpha) * (1.0 + cp.beta) /
-                                   (cp.beta + exp(fabs(deltaTime) / cp.tau))));
-
-   // if necessary, clamp the coefficient value to the acceptable range
-   if (corrCoeff < -1.0)
-   {
-      corrCoeff = -1.0;
-   }
-   else if (corrCoeff > 1.0)
-   {
-      corrCoeff = 1.0;
-   }
-   
-   return corrCoeff;
+   return FourParameterCorrelationFunction::
+          correlationCoefficientFor(theCorrParams[cpGroupIndex],
+                                    deltaTime);
 }
 
 const FourParameterCorrelationModel::Parameters&
