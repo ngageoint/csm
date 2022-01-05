@@ -114,7 +114,7 @@ public:
    //< 
 protected:
 
-      LinearDecayCorrelationModel::Parameters theCorrParams;
+   LinearDecayCorrelationModel::Parameters theCorrParams;
       //> This data member stores the values of the correlation parameters.
       //<
 

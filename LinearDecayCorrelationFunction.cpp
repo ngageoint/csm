@@ -100,20 +100,21 @@ double LinearDecayCorrelationFunction::
 
    for(size_t s = 1; s < size; ++s)
    {
-      const double corr = params.theInitialCorrsPerSegment[s];
-      const double time = params.theTimesPerSegment[s];
-      if (adt <= time)
+      const double currentCorr = params.theInitialCorrsPerSegment[s];
+      const double currTime = params.theTimesPerSegment[s];
+      if (adt <= currTime)
       {
-         if (time - prevTime != 0.0)
+         if (currTime - prevTime != 0.0)
          {
             correlation =
                prevCorr +
-               (adt - prevTime) / (time - prevTime) * (corr - prevCorr);
+               (adt - prevTime) / (currTime    - prevTime) *
+                                  (currentCorr - prevCorr);
          }
          break;
       }
-      prevCorr = corr;
-      prevTime = time;
+      prevCorr = currentCorr;
+      prevTime = currTime;
       correlation = prevCorr;
    }
 
@@ -146,16 +147,16 @@ void LinearDecayCorrelationFunction::
          MODULE);
    }
 
-   double corr, prevCorr;
-   double time, prevTime;
+   double currentCorr, prevCorr;
+   double currTime, prevTime;
 
    if (size > 1)
    {
       for(size_t i = 0; i < size; ++i)
       {
-         corr = params.theInitialCorrsPerSegment[i];
-         time = params.theTimesPerSegment[i];
-         if (corr < 0.0 || corr > 1.0)
+         currentCorr = params.theInitialCorrsPerSegment[i];
+         currTime = params.theTimesPerSegment[i];
+         if (currentCorr < 0.0 || currentCorr > 1.0)
          {
             throw Error(
                Error::BOUNDS,
@@ -167,14 +168,14 @@ void LinearDecayCorrelationFunction::
          {
             prevCorr = params.theInitialCorrsPerSegment[i-1];
             prevTime = params.theTimesPerSegment[i-1];
-            if (corr > prevCorr)
+            if (currentCorr > prevCorr)
             {
                throw Error(
                   Error::BOUNDS,
                   "Correlation must be monotomically decreasing.",
                   MODULE);
             }
-            if (time < prevTime)
+            if (currTime < prevTime)
             {
                throw Error(
                   Error::BOUNDS,

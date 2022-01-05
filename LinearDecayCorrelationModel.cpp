@@ -21,6 +21,7 @@
 //     20-Dec-2012   JPK      Fixed bug in constructor.
 //     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
 //                            now provided on base class.
+//     03-Sep-2021   SCM      Removed IRIX support.
 //     01Dec-2021    JPK      Modified to use LinearDecayCorrelationFunction
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
@@ -30,13 +31,9 @@
 #include "LinearDecayCorrelationFunction.h"
 #include "Error.h"
 
-#ifdef IRIXN32
-#include "math.h"
-#else
 #include <cmath>
 using std::exp;
 using std::fabs;
-#endif
 
 namespace csm {
 

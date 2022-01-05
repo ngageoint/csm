@@ -59,9 +59,9 @@ FourParameterCorrelationFunction::~FourParameterCorrelationFunction()
 {}
 
 void FourParameterCorrelationFunction::setCorrelationParameters(double a,
-                                                             double alpha,
-                                                             double beta,
-                                                             double tau)
+                                                                double alpha,
+                                                                double beta,
+                                                                double tau)
 {
    setCorrelationParameters(FourParameterCorrelationModel::
                             Parameters(a, alpha, beta, tau));
