@@ -2,13 +2,23 @@ This is the Community Sensor Model base interface library.
 
 Compilation
 -----------
-The CSM library can be compiled on Linux (tested on RHEL5) i386, x86_64, or IA-64, Solaris SPARC (32 or 64 bit, with or without the "stlport" mode) and x86, and Windows.  Use the appropriate Makefile when building.  For example:
+The CSM library uses `cmake` for compilation.  You can build directly in the source area, but it may be better to build in a separate build directory.  For example,
 
-  make -f Makefile.linux64 all install clean
+```
+mkdir linux7_64
+cd linux7_64
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD ..
+make all install clean
+```
 
-By default, the built files are placed in an architecture subdirectory in the build area.  This allows multiple architectures to be built.  To specify a different installation directory, set the INSTDIR make variable:
+or for 32 bit:
 
-  make -f Makefile.linux64 all install clean INSTDIR=/path/to/csm3/install/dir
+```
+mkdir linux7_32
+cd linux7_32
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD -DCMAKE_CXX_FLAGS=-m32 ..
+make all install clean
+```
 
 Compiling makes a 'csmapi' shared library (libcsmapi.so.3.0.3 on UNIX, csmapi.dll on Windows).  This library must be used when creating both CSM plugins and Sensor Exploitation Tools (SETs) that use CSM.
 
