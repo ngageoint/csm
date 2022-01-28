@@ -1,12 +1,12 @@
 //####################################################################
 //
-//    FILENAME:          WGS84ReferenceFrame.cpp
+//    FILENAME:          WGS84ReferenceFrame.h
 //
 //    CLASSIFICATION:    Unclassified
 //
 //    DESCRIPTION:
 //
-//    Implementation for WGS84 reference frame realization and epoch.
+//    Header for WGS84 reference frame realization and epoch.
 //
 //    LIMITATIONS:       None
 //
@@ -26,34 +26,67 @@
 //    G1762          2005.0
 //
 //###################################################################
-#define CSM_LIBRARY
+
+#ifndef __CSM_WGS84REFERENCEFRAME_H
+#define __CSM_WGS84REFERENCEFRAME_H
 
 #include "csm.h"
-#include "WGS84ReferenceFrame.h"
+#include <string>
+
+#define WGS84_ORIGINAL "WGS84 ORIGINAL"
+#define WGS84_G730 "G730"
+#define WGS84_G873 "G873"
+#define WGS84_G1150 "G1150"
+#define WGS84_G1674 "G1674"
+#define WGS84_G1762 "G1762"
 
 namespace csm
 {
-	//****************************************************************************
-	// WGS84ReferenceFrame::setDefinition()
-	//****************************************************************************
-	void WGS84ReferenceFrame::setDefinition(std::string name, const float epoch)
-	{
-		m_realization = realizationDefinition(name, epoch);
-	}
 
-	//****************************************************************************
-	// WGS84ReferenceFrame::setDefinition()
-	//****************************************************************************
-	void WGS84ReferenceFrame::setDefinition(const realizationDefinition& rd)
-	{
-		m_realization = rd;
-	}
+class CSM_EXPORT_API WGS84ReferenceFrame
+{
+public:
+        
+    struct CSM_EXPORT_API RealizationDefinition 
+    {
+    public:
+        RealizationDefinition() : m_name("WGS84_ORIGINAL"), m_epoch(1984.0) {};
+        RealizationDefinition(const std::string &name, float epoch) : m_name(name), m_epoch(epoch) {};
+        std::string m_name;
+        float m_epoch;
+    };
+    //> Realizations are defined by a string name and a float epoch which is in terms of years since 0AD.
+    // The default realization is the original one from 1984.0
+    //<
 
-	//****************************************************************************
-	// WGS84ReferenceFrame::getDefinition()
-	//****************************************************************************
-	csm::WGS84ReferenceFrame::realizationDefinition WGS84ReferenceFrame::getDefinition() const
-	{
-		return m_realization;
-	}
-}
+    WGS84ReferenceFrame() {};
+    //> construct default realization
+    //<
+
+    WGS84ReferenceFrame(const std::string &name, const float epoch) : m_realization(name,epoch) {};
+    //> construct custom realization
+    //<
+
+    void setDefinition(const std::string &name, const float epoch);
+    //> convenience to set the internal structure (it is public)
+    //<
+    
+    void setDefinition(const RealizationDefinition& rd);
+    //> convenience to set the internal structure (it is public)
+    //<
+
+    RealizationDefinition getDefinition() const;
+    //> convenience to get the internal structure (it is public)
+    //<
+        
+private:
+    RealizationDefinition m_realization;
+    //> the name and epoch of the realization are here
+    //<
+
+};
+
+} // namespace csm
+
+#endif // __CSM_WGS84REFERENCEFRAME_H
+
