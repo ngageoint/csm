@@ -43,46 +43,48 @@
 namespace csm
 {
 
-	class CSM_EXPORT_API WGS84ReferenceFrame
-	{
-	public:
-		
-		struct CSM_EXPORT_API realizationDefinition {
-		public:
-			realizationDefinition() : m_name("WGS84_ORIGINAL"), m_epoch(1984.0) {};
-			realizationDefinition(std::string name, float epoch) : m_name(name), m_epoch(epoch) {};
-			std::string m_name;
-			float m_epoch;
-		};
-		//> Realizations are defined by a string name and a float epoch which is in terms of years since 0AD.
-		// The default realization is the original one from 1984.0
-		//<
+class CSM_EXPORT_API WGS84ReferenceFrame
+{
+public:
+        
+    struct CSM_EXPORT_API RealizationDefinition 
+    {
+    public:
+        RealizationDefinition() : m_name("WGS84_ORIGINAL"), m_epoch(1984.0) {};
+        RealizationDefinition(const std::string &name, float epoch) : m_name(name), m_epoch(epoch) {};
+        std::string m_name;
+        float m_epoch;
+    };
+    //> Realizations are defined by a string name and a float epoch which is in terms of years since 0AD.
+    // The default realization is the original one from 1984.0
+    //<
 
-		realizationDefinition m_realization;
+    WGS84ReferenceFrame() {};
+    //> construct default realization
+    //<
 
-		WGS84ReferenceFrame() {};
-		//> construct default realization
-		//<
+    WGS84ReferenceFrame(const std::string &name, const float epoch) : m_realization(name,epoch) {};
+    //> construct custom realization
+    //<
 
-		WGS84ReferenceFrame(std::string name, const float epoch) : m_realization(name,epoch) {};
-		//> construct custom realization
-		//<
+    void setDefinition(const std::string &name, const float epoch);
+    //> convenience to set the internal structure (it is public)
+    //<
+    
+    void setDefinition(const RealizationDefinition& rd);
+    //> convenience to set the internal structure (it is public)
+    //<
 
-		void setDefinition(std::string name, const float epoch);
-		//> convenience to set the internal structure (it is public)
-		//<
-	
-		void setDefinition(const realizationDefinition& rd);
-		//> convenience to set the internal structure (it is public)
-		//<
+    RealizationDefinition getDefinition() const;
+    //> convenience to get the internal structure (it is public)
+    //<
+        
+private:
+    RealizationDefinition m_realization;
+    //> the name and epoch of the realization are here
+    //<
 
-		realizationDefinition getDefinition() const;
-		//> convenience to get the internal structure (it is public)
-		//<
-		
-	private:
-		
-	};
+};
 
 } // namespace csm
 
