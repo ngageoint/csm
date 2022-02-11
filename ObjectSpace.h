@@ -23,8 +23,6 @@
 #ifndef __CSM_OBJECTSPACE_H
 #define __CSM_OBJECTSPACE_H
 
-#include <cstring>
-
 namespace csm
 {
 enum class CSM_EXPORT_API ObjectSpaceType : unsigned char
@@ -61,6 +59,17 @@ public:
     ObjectSpaceCoordinate(double aX, double aY, double aZ) :  x(aX), y(aY), z(aZ) {}
     //> constructor that initializes with the values given
     //<
+
+    ObjectSpaceCoordinate(const ObjectSpaceCoordinate& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceCoordinate& operator=(const ObjectSpaceCoordinate& other);
+    //>
+    // assignment operator
+    //<
+
 }; // ObjectSpaceCoordinate
 
 //***
@@ -71,9 +80,15 @@ public:
 //  Coordinate values are in units of meters and covariances are in units of meters-squared.
 //<
 //***
-struct CSM_EXPORT_API ObjectSpaceCoordinateCovar : public ObjectSpaceCoordinate
+struct CSM_EXPORT_API ObjectSpaceCoordinateCovar
 {
 public:
+    double x;
+    double y;
+    double z;
+    //> three coordinate values
+    //<
+
     double covariance[9];
 //> 3x3 coordinate covariance matrix, in meters squared,
 //  stored as an array of nine doubles as follows:
@@ -88,7 +103,6 @@ public:
 //-  [7] = zy covariance
 //-  [8] = z  variance
 //<
-
 
     ObjectSpaceCoordinateCovar();
     //> Default Constructor
@@ -115,6 +129,16 @@ public:
     //  It is assumed that the covariance matrix is symmetric.
     //<	   
 
+    ObjectSpaceCoordinateCovar(const ObjectSpaceCoordinateCovar& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceCoordinateCovar& operator=(const ObjectSpaceCoordinateCovar& other);
+    //>
+    // assignment operator
+    //<
+
 }; // ObjectSpaceCoordinateCovar
 
 //***
@@ -139,6 +163,16 @@ public:
     //<
     ObjectSpaceVector(double aX, double aY, double aZ) :  x(aX), y(aY), z(aZ) {}
     //> constructor that initializes with the values given
+    //<
+
+    ObjectSpaceVector(const ObjectSpaceVector& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceVector& operator=(const ObjectSpaceVector& other);
+    //>
+    // assignment operator
     //<
 };
 
@@ -190,6 +224,16 @@ public:
     //  upper-triangular portion of a covariance matrix in meters squared.
     //  It is assumed that the covariance matrix is symmetric.
     //<	   
+
+    ObjectSpaceVectorCovar(const ObjectSpaceVectorCovar& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceVectorCovar& operator=(const ObjectSpaceVectorCovar& other);
+    //>
+    // assignment operator
+    //<
 };
 
 //***
@@ -231,6 +275,16 @@ public:
     {}
     //> construct with the coordinate values and vector components given.
     //<
+
+    ObjectSpaceLocus(const ObjectSpaceLocus& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceLocus& operator=(const ObjectSpaceLocus& other);
+    //>
+    // assignment operator
+    //<
 };
 
 
@@ -255,7 +309,6 @@ public:
     //< the default constructors set all of the initial values to 0.0.
     //>
 
-
     ObjectSpaceLocusCovar(const ObjectSpaceCoordinateCovar& argPoint,
         const ObjectSpaceVectorCovar& argDirection)
         :
@@ -273,6 +326,17 @@ public:
     {}
     //> construct with the coordinate values and vector components given.
     //<
+
+    ObjectSpaceLocusCovar(const ObjectSpaceLocusCovar& other);
+    //>
+    // copy constructor
+    //<
+
+    ObjectSpaceLocusCovar& operator=(const ObjectSpaceLocusCovar& other);
+    //>
+    // assignment operator
+    //<
+
 };
 
 } // namespace csm

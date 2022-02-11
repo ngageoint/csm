@@ -31,21 +31,6 @@ std::string ObjectSpacePointCloudGM::getFamily()const {
     return (GeometricModel::getFamily() + CSM_OSPC_FAMILY);
 }
 
-//*****************************************************************************
-// 	   ObjectSpacePointCloudGM::getObjectSpaceDefinition
-//*****************************************************************************
-ObjectSpaceType ObjectSpacePointCloudGM::getObjectSpaceDefinition() const
-{
-    return m_objectSpaceDefinition;
-}
-
-//*****************************************************************************
-// 	   ObjectSpacePointCloudGM::setObjectSpaceDefinition
-//*****************************************************************************
-void ObjectSpacePointCloudGM::setObjectSpaceDefinition(const ObjectSpaceType &type)
-{
-    m_objectSpaceDefinition = type;
-}
 
 //*****************************************************************************
 // ObjectSpacePointCloudGM::computeAllSensorPartials()

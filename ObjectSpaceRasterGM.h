@@ -32,7 +32,6 @@
 #include "Error.h"
 #include "GeometricModel.h"
 #include "ObjectSpace.h"
-#include "csmMultiPoint.h"
 #define CSM_OSRASTER_FAMILY "ObjectSpaceRasterGM"
 
 namespace csm
@@ -42,11 +41,15 @@ class CorrelationModel;
 class CSM_EXPORT_API ObjectSpaceRasterGM : public GeometricModel
 {
 public:
-    ObjectSpaceRasterGM();      
-    // need a desctructor realization so that subclass destructors have
-    // something to call when they are destroyed.
+    ObjectSpaceRasterGM();
+    //> 
+    // default ctor does nothing
+    //<
 
     virtual ~ObjectSpaceRasterGM() {};
+    //>
+    //  need a desctructor realization so that subclass destructors have
+    //< something to call when they are destroyed.
 
     std::string getFamily()const;
     //> This method returns the Family ID for the current model.
@@ -58,25 +61,25 @@ public:
     //  operators.  Not to be confused with the CSM API version.
     //<
     
-    // these two method supplements the methods in GeometricModel which work
+    // these two methods supplement the methods in GeometricModel which work
     // in ECEF space.
     virtual ObjectSpaceCoordinate getObjectSpaceReferencePoint() const = 0;
-    //> This method returns the ground point indicating the general
+    //> This method returns the object space point indicating the general
     //  location of the image.
     //<
 
-    virtual void setObjectSpaceReferencePoint(const ObjectSpaceCoordinate& groundPt) = 0;
-    //> This method sets the ground point indicating the general location
+    virtual void setObjectSpaceReferencePoint(const ObjectSpaceCoordinate& objectSpacePt) = 0;
+    //> This method sets the object space point indicating the general location
     //  of the image.
     //<
     //---
     // Core Photogrammetry
     //---
-    virtual ImageCoord objectSpaceToImage(const ObjectSpaceCoordinate& groundPt,
+    virtual ImageCoord objectSpaceToImage(const ObjectSpaceCoordinate& objectSpacePt,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
         WarningList* warnings = NULL) const = 0;
-    //> This method converts the given groundPt (x,y,z in Object Space meters) to a
+    //> This method converts the given objectSpacePt (x,y,z in Object Space meters) to a
     //  returned image coordinate (line, sample in full image space pixels).
     //
     //  Iterative algorithms will use desiredPrecision, in meters, as the
@@ -90,11 +93,11 @@ public:
     //  as applicable.
     //<
 
-    virtual ImageCoordCovar objectSpaceToImageCovar(const ObjectSpaceCoordinateCovar &groundPt,
+    virtual ImageCoordCovar objectSpaceToImageCovar(const ObjectSpaceCoordinateCovar & objectSpacePt,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
         WarningList* warnings = NULL) const = 0;
-    //> This method converts the given groundPt (x,y,z in meters and
+    //> This method converts the given objectSpacePt (x,y,z in meters and
     //  corresponding 3x3 covariance in meters squared) to a returned
     //  image coordinate with covariance (line, sample in full image space
     //  pixels and corresponding 2x2 covariance in pixels squared).
@@ -117,7 +120,7 @@ public:
         WarningList* warnings = NULL) const = 0;
     //> This method converts the given imagePt (line,sample in full image
     //  space pixels) and given projection parameters to a returned
-    //  ground coordinate (x,y,z in Object Space meters).
+    //  object space coordinate (x,y,z in Object Space meters).
     //
     //  Iterative algorithms will use desiredPrecision, in meters, as the
     //  convergence criterion, otherwise it will be ignored.
@@ -137,7 +140,7 @@ public:
         WarningList* warnings = NULL) const = 0;
     //> This method converts the given imagePt (line, sample in full image
     //  space pixels and corresponding 2x2 covariance in pixels squared)
-    //  and given projetion parameters with covariances to a returned ground
+    //  and given projetion parameters with covariances to a returned object space
     //  coordinate with covariance (x,y,z in Object Space meters and corresponding
     //  3x3 covariance in Object Space meters squared).
     //
@@ -154,13 +157,13 @@ public:
 
     virtual ObjectSpaceLocus imageToProximateObjectSpaceImagingLocus(
         const ImageCoord& imagePt,
-        const ObjectSpaceCoordinate& groundPt,
+        const ObjectSpaceCoordinate& objectSpacePt,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
         WarningList* warnings = NULL) const = 0;
     //> This method, for the given imagePt (line, sample in full image space
     //  pixels), returns the position and direction of the imaging locus
-    //  nearest the given groundPt (x,y,z in Object Space meters).
+    //  nearest the given objectSpacePt (x,y,z in Object Space meters).
     //
     //  Note that there are two opposite directions possible.  Both are
     //  valid, so either can be returned; the calling application can convert
@@ -227,7 +230,7 @@ public:
     //  operation.  Use getValidImageRange() to get the valid range of image
     //  coordinates.
     //<
-
+    using ImageCoordPair = std::pair<ImageCoord, ImageCoord>;
     virtual ImageCoordPair getValidImageRange() const = 0;
     //> This method returns the minimum and maximum image coordinates
     //  (line, sample in full image space pixels), respectively, over which
@@ -243,19 +246,18 @@ public:
     //  the model is valid.
     //<
 
-    virtual std::pair<double, double> getValidHeightRange() const = 0;
-    //> This method returns the minimum and maximum heights (in meters
-    //  relative to WGS-84 ellipsoid), respectively, over which the model is
-    //  valid.  For example, a model for an airborne platform might not be
-    //  designed to return valid coordinates for heights above the aircraft.
+    virtual std::pair<double, double> getValidRangeRange() const = 0;
+    //> This method returns the minimum and maximum range (in meters
+    //  relative to the sensor position), respectively, over which the model is
+    //  valid.  
     //
     //  If there are no limits defined for the model, (-99999.0,99999.0)
     //  will be returned.
     //<
 
-    virtual ObjectSpaceVector getIlluminationDirection(const ObjectSpaceCoordinate& groundPt) const = 0;
+    virtual ObjectSpaceVector getIlluminationDirection(const ObjectSpaceCoordinate& objectSpacePt) const = 0;
     //> This method returns a vector defining the direction of
-    //  illumination at the given groundPt (x,y,z in Object Space meters).
+    //  illumination at the given objectSpacePt (x,y,z in Object Space meters).
     //  Note that there are two opposite directions possible.  Both are
     //  valid, so either can be returned; the calling application can convert
     //  to the other as necessary.
@@ -282,7 +284,7 @@ public:
 
     virtual ObjectSpaceCoordinate getSensorPosition(double time) const = 0;
     //> This method returns the position of the physical sensor
-    //  (x,y,z meters Object Space) at the given time relative to the reference date
+    //  (x,y,z Object Space meters) at the given time relative to the reference date
     //  and time given by the Model::getReferenceDateAndTime method.
     //<
 
@@ -314,7 +316,7 @@ public:
 
     virtual SensorPartials computeSensorPartials(
         int index,
-        const ObjectSpaceCoordinate& groundPt,
+        const ObjectSpaceCoordinate& objectSpacePt,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
         WarningList* warnings = NULL) const = 0;
@@ -326,7 +328,7 @@ public:
     //  This method returns the partial derivatives of line and sample
     //  (in pixels per the applicable model parameter units), respectively,
     //  with respect to the model parameter given by index at the given
-    //  groundPt (x,y,z in Object Space meters).
+    //  objectSpacePt (x,y,z in Object Space meters).
     //
     //  Derived model implementations may wish to implement this method by
     //  calling the groundToImage method and passing the resulting image
@@ -347,7 +349,7 @@ public:
     virtual SensorPartials computeSensorPartials(
         int index,
         const ImageCoord& imagePt,
-        const ObjectSpaceCoordinate& groundPt,
+        const ObjectSpaceCoordinate& objectSpacePt,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
         WarningList* warnings = NULL) const = 0;
@@ -358,12 +360,12 @@ public:
     //  This method returns the partial derivatives of line and sample
     //  (in pixels per the applicable model parameter units), respectively,
     //  with respect to the model parameter given by index at the given
-    //  groundPt (x,y,z in Object Space meters).
+    //  objectSpacePt (x,y,z in Object Space meters).
     //
-    //  The imagePt, corresponding to the groundPt, is given so that it does
+    //  The imagePt, corresponding to the objectSpacePt, is given so that it does
     //  not need to be computed by the method.  Results are unpredictable if
     //  the imagePt provided does not correspond to the result of calling the
-    //  groundToImage method with the given groundPt.
+    //  groundToImage method with the given objectSpacePt.
     //
     //  Implementations with iterative algorithms (typically ground-to-image
     //  calls) will use desiredPrecision, in meters, as the convergence
@@ -378,7 +380,7 @@ public:
     //<
 
     virtual std::vector<ObjectSpaceRasterGM::SensorPartials> computeAllSensorPartials(
-        const ObjectSpaceCoordinate& groundPt,
+        const ObjectSpaceCoordinate& objectSpacePt,
         param::Set pSet = param::VALID,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
@@ -390,7 +392,7 @@ public:
     //  This method returns the partial derivatives of line and sample
     //  (in pixels per the applicable model parameter units), respectively,
     //  with respect to to each of the desired model parameters at the given
-    //  groundPt (x,y,z in Object Space meters).  Desired model parameters are
+    //  objectSpacePt (x,y,z in Object Space meters).  Desired model parameters are
     //  indicated by the given pSet.
     //
     //  Implementations with iterative algorithms (typically ground-to-image
@@ -416,7 +418,7 @@ public:
 
     virtual std::vector<ObjectSpaceRasterGM::SensorPartials> computeAllSensorPartials(
         const ImageCoord& imagePt,
-        const ObjectSpaceCoordinate& groundPt,
+        const ObjectSpaceCoordinate& objectSpacePt,
         param::Set pSet = param::VALID,
         double desiredPrecision = 0.001,
         double* achievedPrecision = NULL,
@@ -427,13 +429,13 @@ public:
     //  This method returns the partial derivatives of line and sample
     //  (in pixels per the applicable model parameter units), respectively,
     //  with respect to to each of the desired model parameters at the given
-    //  groundPt (x,y,z in Object Space meters).  Desired model parameters are
+    //  objectSpacePt (x,y,z in Object Space meters).  Desired model parameters are
     //  indicated by the given pSet.
     //
-    //  The imagePt, corresponding to the groundPt, is given so that it does
+    //  The imagePt, corresponding to the objectSpacePt, is given so that it does
     //  not need to be computed by the method.  Results are unpredictable if
     //  the imagePt provided does not correspond to the result of calling the
-    //  groundToImage method with the given groundPt.
+    //  groundToImage method with the given objectSpacePt.
     //
     //  Implementations with iterative algorithms (typically ground-to-image
     //  calls) will use desiredPrecision, in meters, as the convergence
@@ -457,9 +459,9 @@ public:
     //<
 
     virtual std::vector<double> computeGroundPartials(
-        const ObjectSpaceCoordinate& groundPt) const = 0;
+        const ObjectSpaceCoordinate& objectSpacePt) const = 0;
     //> This method returns the partial derivatives of line and sample
-    //  (in pixels per meter) with respect to the given groundPt
+    //  (in pixels per meter) with respect to the given objectSpacePt
     //  (x,y,z in Object Space meters).
     //
     //  The value returned is a vector with six elements as follows:
@@ -502,7 +504,6 @@ public:
     virtual std::vector<double> getUnmodeledCrossCovariance(
         const ImageCoord& pt1,
         const ImageCoord& pt2) const = 0;
-
     //> This method returns the 2x2 line and sample cross covariance
     //  (in pixels squared) between the given imagePt1 and imagePt2 for any
     //  model error not accounted for by the model parameters.  The error is
@@ -510,13 +511,11 @@ public:
     //  vector.
     //< };
 
-    ObjectSpaceType getObjectSpaceDefinition() const;
-    //> get the protected data member that defines the specifics
-    // of the LSR object space being used by the model.
+    virtual ObjectSpaceType getObjectSpaceDefinition() const = 0;
+    //> get the protected data member that defines which
+    //  object space being used by the model.
     //<
-protected:
-    ObjectSpaceType m_objectSpaceDefinition;
-    void setObjectSpaceDefinition(const ObjectSpaceType& osd);
+
 };
 
 } // namespace csm

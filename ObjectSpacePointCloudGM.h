@@ -28,8 +28,6 @@
 #define __CSM_OBJECT_POINTCLOUD_GM_H
 
 #include "csm.h"
-#include "Error.h"
-#include "GeometricModel.h"
 #include "ObjectSpace.h"
 #include "csmPointCloud.h"
 #define CSM_OSPC_FAMILY "ObjectSpacePointCloud"
@@ -375,14 +373,12 @@ public:
     //-  [7] = pt1.m2/pt2.m1 covariance
     //-  [8] = pt1.m2/pt2.m2 covariance
     //<
+
     ObjectSpaceType getObjectSpaceDefinition() const;
     //> get the protected data member that defines the specifics
     // of the LSR object space being used by the model.
     //<
-    //
-protected:
-    ObjectSpaceType m_objectSpaceDefinition;
-    void setObjectSpaceDefinition(const ObjectSpaceType& osd);
+    
 };
 
 //*****************************************************************************

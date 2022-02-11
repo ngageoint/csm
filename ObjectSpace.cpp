@@ -27,6 +27,27 @@
 namespace csm
 {
 //*****************************************************************************
+//  ObjectSpaceCoordinate::ObjectSpaceCoordinate (copy constructor)
+//*****************************************************************************
+ObjectSpaceCoordinate::ObjectSpaceCoordinate(const ObjectSpaceCoordinate& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+}
+
+//*****************************************************************************
+// ObjectSpaceCoordinate::operator=
+//*****************************************************************************
+ObjectSpaceCoordinate& ObjectSpaceCoordinate::operator=(const ObjectSpaceCoordinate& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    return *this;
+}
+
+//*****************************************************************************
 //  ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar
 //*****************************************************************************
 ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar()
@@ -76,17 +97,59 @@ ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar(double aX, double aY, dou
 }
 
 //*****************************************************************************
+//  ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar (copy constructor)
+//*****************************************************************************
+ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar(const ObjectSpaceCoordinateCovar& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    std::memcpy(covariance, other.covariance, sizeof(covariance));
+}
+
+//*****************************************************************************
+// ObjectSpaceCoordinateCovar::operator=
+//*****************************************************************************
+ObjectSpaceCoordinateCovar& ObjectSpaceCoordinateCovar::operator=(const ObjectSpaceCoordinateCovar& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    std::memcpy(covariance, other.covariance, sizeof(covariance));   
+    return *this;
+}
+
+
+//*****************************************************************************
+//  ObjectSpaceVector::ObjectSpaceVector (copy constructor)
+//*****************************************************************************
+ObjectSpaceVector::ObjectSpaceVector(const ObjectSpaceVector& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+}
+
+//*****************************************************************************
+// ObjectSpaceVector::operator=
+//*****************************************************************************
+ObjectSpaceVector& ObjectSpaceVector::operator=(const ObjectSpaceVector& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    return *this;
+}
+
+//*****************************************************************************
 //  ObjectSpaceVectorCovar::ObjectSpaceVectorCovar
 //*****************************************************************************
 ObjectSpaceVectorCovar::ObjectSpaceVectorCovar()
 {
     x = 0.0;
     y = 0.0;
-    z = 0.0;
-    for (int i = 0; i < 9; i++)
-    {
-        covariance[i] = 0.0;
-    }
+    z = 0.0; 
+    std::memset(covariance, 0, sizeof(covariance));
 }
 
 //*****************************************************************************
@@ -119,6 +182,70 @@ ObjectSpaceVectorCovar::ObjectSpaceVectorCovar(double aX, double aY, double aZ,
     covariance[5] = covariance[7] = aCovar12;
     covariance[8] = aCovar22;
 
+}
+
+
+//*****************************************************************************
+//  ObjectSpaceVectorCovar::ObjectSpaceVectorCovar (copy constructor)
+//*****************************************************************************
+ObjectSpaceVectorCovar::ObjectSpaceVectorCovar(const ObjectSpaceVectorCovar& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z; 
+    std::memcpy(covariance, other.covariance, sizeof(covariance));
+}
+
+//*****************************************************************************
+// ObjectSpaceVectorCovar::operator=
+//*****************************************************************************
+ObjectSpaceVectorCovar& ObjectSpaceVectorCovar::operator=(const ObjectSpaceVectorCovar& other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z; 
+    std::memcpy(covariance, other.covariance, sizeof(covariance));
+    
+    return *this;
+}
+
+//*****************************************************************************
+//  ObjectSpaceLocus::ObjectSpaceLocus (copy constructor)
+//*****************************************************************************
+ObjectSpaceLocus::ObjectSpaceLocus(const ObjectSpaceLocus& other)
+{
+    point = (other.point);  // use assignment operator of ObjectSpacePoint
+    direction = (other.direction); // use assignment operator of ObjectSpaceVector
+}
+
+//*****************************************************************************
+// ObjectSpaceVector::operator=
+//*****************************************************************************
+ObjectSpaceLocus& ObjectSpaceLocus::operator=(const ObjectSpaceLocus& other)
+{
+    point = (other.point);  // use assignment operator of ObjectSpacePoint
+    direction = (other.direction); // use assignment operator of ObjectSpaceVector
+    return *this;
+}
+
+
+//*****************************************************************************
+//  ObjectSpaceLocusCovar::ObjectSpaceLocusCovar (copy constructor)
+//*****************************************************************************
+ObjectSpaceLocusCovar::ObjectSpaceLocusCovar(const ObjectSpaceLocusCovar& other)
+{
+    point = (other.point);  // use assignment operator of ObjectSpacePoint
+    direction = (other.direction); // use assignment operator of ObjectSpaceVector
+}
+
+//*****************************************************************************
+// ObjectSpaceLocusCovar::operator=
+//*****************************************************************************
+ObjectSpaceLocusCovar& ObjectSpaceLocusCovar::operator=(const ObjectSpaceLocusCovar& other)
+{
+    point = (other.point);  // use assignment operator of ObjectSpacePoint
+    direction = (other.direction); // use assignment operator of ObjectSpaceVector
+    return *this;
 }
 
 }

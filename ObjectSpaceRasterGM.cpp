@@ -38,26 +38,10 @@ std::string ObjectSpaceRasterGM::getFamily()const {
 }
 
 //*****************************************************************************
-// ObjectSpaceRasterGM::getObjectSpaceDefinition
-//*****************************************************************************
-ObjectSpaceType ObjectSpaceRasterGM::getObjectSpaceDefinition() const
-{
-    return m_objectSpaceDefinition;
-}
-
-//*****************************************************************************
-// ObjectSpaceRasterGM::setObjectSpaceDefinition
-//*****************************************************************************
-void ObjectSpaceRasterGM::setObjectSpaceDefinition(const ObjectSpaceType& osd)
-{
-    m_objectSpaceDefinition = osd;
-}
-
-//*****************************************************************************
 // ObjectSpaceRasterGM::computeAllSensorPartials
 //*****************************************************************************
 std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAllSensorPartials(
-    const ObjectSpaceCoordinate& groundPt,
+    const ObjectSpaceCoordinate& objectSpacePt,
     param::Set pSet,
     double desiredPrecision,
     double* achievedPrecision,
@@ -79,13 +63,13 @@ std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAll
         //***
         if (achievedPrecision) *achievedPrecision = 0.0;
 
-        ImageCoord ip = objectSpaceToImage(groundPt);
+        ImageCoord ip = objectSpaceToImage(objectSpacePt);
         for (int i = 0; i < NUM_PARAMS; ++i)
         {
             double prec = 0.0;
             val[i] = computeSensorPartials(indices[i],
                 ip,
-                groundPt,
+                objectSpacePt,
                 desiredPrecision,
                 &prec,
                 warnings);
@@ -104,7 +88,7 @@ std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAll
 //*****************************************************************************
 std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAllSensorPartials(
     const ImageCoord& imagePt,
-    const ObjectSpaceCoordinate& groundPt,
+    const ObjectSpaceCoordinate& objectSpacePt,
     param::Set pSet,
     double desiredPrecision,
     double* achievedPrecision,
@@ -131,7 +115,7 @@ std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAll
             double prec = 0.0;
             val[i] = computeSensorPartials(indices[i],
                 imagePt,
-                groundPt,
+                objectSpacePt,
                 desiredPrecision,
                 &prec,
                 warnings);

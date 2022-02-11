@@ -18,165 +18,164 @@
 #define CSM_LIBRARY
 
 #include "ProjectionParameters.h"
-#include <cmath>
 
 
 namespace csm
 {
 
 //*****************************************************************************
-// range3d::range3d()
+// RangeParameters::RangeParameters()
 //*****************************************************************************
-geometryType3d range3d::getType() const
+ProjectionGeometryType RangeParameters::getType() const
 {
-    return geometryType3d::RANGE;
+    return ProjectionGeometryType::RANGE;
 }
 
 //*****************************************************************************
-// range3d::range3d()
+// RangeParameters::RangeParameters()
 //*****************************************************************************
-range3d::range3d()
+RangeParameters::RangeParameters()
 {
     m_range = 0.0;
 }
 
 //*****************************************************************************
-// range3d::range3d(double range)
+// RangeParameters::RangeParameters(double range)
 //*****************************************************************************
-range3d::range3d(double range)
+RangeParameters::RangeParameters(double range)
 {
     m_range = range;
 }
 
 //*****************************************************************************
-// range3d::getrange
+// RangeParameters::getrange
 //*****************************************************************************
-double range3d::getRange() const
+double RangeParameters::getRange() const
 {
     return m_range;
 }
 
 //*****************************************************************************
-// range3dCovar::getType(()
+// RangeParametersCovar::getType(()
 //*****************************************************************************
-geometryType3d range3dCovar::getType() const
+ProjectionGeometryType RangeParametersCovar::getType() const
 {
-    return geometryType3d::RANGECOVAR;
+    return ProjectionGeometryType::RANGECOVAR;
 }
 
 //*****************************************************************************
-// range3dCovar::range3dCovar()
+// RangeParametersCovar::RangeParametersCovar()
 //*****************************************************************************
-range3dCovar::range3dCovar()
+RangeParametersCovar::RangeParametersCovar()
 {
     m_range = 0.0;
     m_rangeVariance = 0.0;
 }
 
 //*****************************************************************************
-// range3dCovar::range3dCovar(double range, double rangeVar)
+// RangeParametersCovar::RangeParametersCovar(double range, double rangeVar)
 //*****************************************************************************
-range3dCovar::range3dCovar(double range, double rangeVar)
+RangeParametersCovar::RangeParametersCovar(double range, double rangeVar)
 {
     m_range = range;
     m_rangeVariance = rangeVar;
 }
 
 //*****************************************************************************
-// range3dCovar::getrange
+// RangeParametersCovar::getrange
 //*****************************************************************************
-double range3dCovar::getRange() const
+double RangeParametersCovar::getRange() const
 {
     return m_range;
 }
 
 //*****************************************************************************
-// range3dCovar::getrangeVariance
+// RangeParametersCovar::getrangeVariance
 //*****************************************************************************
-double range3dCovar::getRangeVariance() const
+double RangeParametersCovar::getRangeVariance() const
 {
     return m_rangeVariance;
 }
 
 //*****************************************************************************
-// plane3d::getType(()
+// PlaneParameters::getType(()
 //*****************************************************************************
-geometryType3d plane3d::getType() const
+ProjectionGeometryType PlaneParameters::getType() const
 {
-    return geometryType3d::PLANE;
+    return ProjectionGeometryType::PLANE;
 }
 //*****************************************************************************
-// plane3d::plane3d()
+// PlaneParameters::PlaneParameters()
 //*****************************************************************************
-plane3d::plane3d()
+PlaneParameters::PlaneParameters()
 {
     m_point = ObjectSpaceCoordinate();
     m_normal = ObjectSpaceVector();
 }
 
 //*****************************************************************************
-// plane3d::plane3d(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
+// PlaneParameters::PlaneParameters(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
 //******************************************************************************
-plane3d::plane3d(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
+PlaneParameters::PlaneParameters(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
 {
     m_point = coord;
     m_normal = normal;
 }
 //*******************************************************************************
-// plane3d::getPoint()
+// PlaneParameters::getPoint()
 //********************************************************************************
-ObjectSpaceCoordinate plane3d::getPoint() const
+ObjectSpaceCoordinate PlaneParameters::getPoint() const
 {
     return m_point;
 }
 
 //*******************************************************************************
-// plane3d::getNormal()
+// PlaneParameters::getNormal()
 //********************************************************************************
-ObjectSpaceVector plane3d::getNormal() const
+ObjectSpaceVector PlaneParameters::getNormal() const
 {
     return m_normal;
 }
 
 
 //*****************************************************************************
-// plane3dCovar::getType(()
+// PlaneParametersCovar::getType(()
 //*****************************************************************************
-geometryType3d plane3dCovar::getType() const
+ProjectionGeometryType PlaneParametersCovar::getType() const
 {
-    return geometryType3d::PLANECOVAR;
+    return ProjectionGeometryType::PLANECOVAR;
 }
 
 //*******************************************************************************
-// plane3dCovar::plane3dCovar()
+// PlaneParametersCovar::PlaneParametersCovar()
 //********************************************************************************
-plane3dCovar::plane3dCovar()
+PlaneParametersCovar::PlaneParametersCovar()
 {
     m_point = ObjectSpaceCoordinateCovar();
     m_normal = ObjectSpaceVectorCovar();
 }
 
 //*****************************************************************************
-// plane3d::plane3d(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
+// PlaneParameters::PlaneParameters(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal)
 //******************************************************************************
-plane3dCovar::plane3dCovar(const ObjectSpaceCoordinateCovar& coord, const ObjectSpaceVectorCovar& normal)
+PlaneParametersCovar::PlaneParametersCovar(const ObjectSpaceCoordinateCovar& coord, const ObjectSpaceVectorCovar& normal)
 {
     m_point = coord;
     m_normal = normal;
 }
 
 //*******************************************************************************
-// plane3dCovar::getPoint()
+// PlaneParametersCovar::getPoint()
 //********************************************************************************
-ObjectSpaceCoordinateCovar plane3dCovar::getPoint() const
+ObjectSpaceCoordinateCovar PlaneParametersCovar::getPoint() const
 {
     return m_point;
 }
 
 //*******************************************************************************
-// plane3dCovar::getNormal()
+// PlaneParametersCovar::getNormal()
 //********************************************************************************
-ObjectSpaceVectorCovar plane3dCovar::getNormal() const
+ObjectSpaceVectorCovar PlaneParametersCovar::getNormal() const
 {
     return m_normal;
 }

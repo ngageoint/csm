@@ -24,17 +24,15 @@
 #define __CSM_GEOMETRY3D_H
 
 #include "csm.h"
-#include <vector>
-#include <exception>
 #include "ObjectSpace.h"
-#include <map>
-#include <memory>
-#include <utility>
+//>
+// need ObjectSpace.h for ObjectSpaceCoordinate etc.
+//<
 
 namespace csm
 {
     
-enum class geometryType3d
+enum class ProjectionGeometryType
 {
     RANGE,
     PLANE,
@@ -57,7 +55,7 @@ public:
     //> virtual destructor provides something for base class destructors to call on.
     //<
 
-    virtual geometryType3d getType() const = 0;
+    virtual ProjectionGeometryType getType() const = 0;
     //> returns the type enum parameter
     //<
 protected:
@@ -67,7 +65,9 @@ protected:
 
 };
 
-
+// ************************************************************
+// ProjectionParametersCovar virtual base class
+// ************************************************************
 class CSM_EXPORT_API ProjectionParametersCovar
 {
 
@@ -76,7 +76,7 @@ public:
     //> virtual destructor provides something for base class destructors to call on.
     //<
 
-    virtual geometryType3d getType() const = 0;
+    virtual ProjectionGeometryType getType() const = 0;
     //> returns the type enum parameter
     //<
 protected:
@@ -86,21 +86,21 @@ protected:
 
 };
 
-class CSM_EXPORT_API range3d : public ProjectionParameters
+class CSM_EXPORT_API RangeParameters : public ProjectionParameters
 {
 public:
-    range3d();
+    RangeParameters();
     //>
     // default constructor sets range to zero and also
     // sets m_type to RANGE
     //<
 
-    range3d(double range);
+    RangeParameters(double range);
     //>
     // initializes with the given range in meters
     //<
 
-    geometryType3d getType() const;
+    ProjectionGeometryType getType() const;
     //>
     // get the geometry type (enum)
     //<
@@ -112,21 +112,21 @@ private:
     double m_range;
 };
 
-class CSM_EXPORT_API range3dCovar : public ProjectionParametersCovar
+class CSM_EXPORT_API RangeParametersCovar : public ProjectionParametersCovar
 {
 public:
-    range3dCovar();
+    RangeParametersCovar();
     //>
     // default constructor sets range and range variance to zero and also
     // sets m_type to RANGE
     //<
 
-    range3dCovar(double range, double rangeVariance);
+    RangeParametersCovar(double range, double rangeVariance);
     //>
     // initializes with the give values in meters and meters-squared
     //<
 
-    geometryType3d getType() const;
+    ProjectionGeometryType getType() const;
     //>
     // get the geometry type (enum)
     //<
@@ -150,21 +150,21 @@ private:
     //<
 };
 
-class  CSM_EXPORT_API plane3d : public ProjectionParameters
+class  CSM_EXPORT_API PlaneParameters : public ProjectionParameters
 {
 public:
-    plane3d();
+    PlaneParameters();
     //> the default constructor will intialize the point and the vector to
     //  zero.
     // Also sets m_type to PLANE
     //<
 
-    plane3d(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal);
+    PlaneParameters(const ObjectSpaceCoordinate& coord, const ObjectSpaceVector& normal);
             
     //> this constructor will initialize the point and the normal with the give values.
     //<
 
-    geometryType3d getType() const;
+    ProjectionGeometryType getType() const;
     //>
     // get the geometry type (enum)
     //<
@@ -186,20 +186,20 @@ private:
     //<
 };
 
-class  CSM_EXPORT_API plane3dCovar : public ProjectionParametersCovar
+class  CSM_EXPORT_API PlaneParametersCovar : public ProjectionParametersCovar
 {
 public:
-    plane3dCovar();
+    PlaneParametersCovar();
     //> the default constructor will intialize the point and the vector to
     //  zero. Also the point and vector covariances to zero.
     //  Also sets m_type to PLANE
     //<
 
-    plane3dCovar(const ObjectSpaceCoordinateCovar& coord, const ObjectSpaceVectorCovar& normal);			
+    PlaneParametersCovar(const ObjectSpaceCoordinateCovar& coord, const ObjectSpaceVectorCovar& normal);			
     //> this constructor will initialize the point and the normal with the give values.
     //<
 
-    geometryType3d getType() const;
+    ProjectionGeometryType getType() const;
     //>
     // get the geometry type (enum)
     //<
