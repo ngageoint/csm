@@ -82,11 +82,11 @@ public:
     //> This method converts the given objectSpacePt (x,y,z in Object Space meters) to a
     //  returned image coordinate (line, sample in full image space pixels).
     //
-    //  Iterative algorithms will use desiredPrecision, in meters, as the
+    //  Iterative algorithms will use desiredPrecision, in pixels, as the
     //  convergence criterion, otherwise it will be ignored.
     //
     //  If a non-NULL achievedPrecision argument is received, it will be
-    //  populated with the actual precision, in meters, achieved by iterative
+    //  populated with the actual precision, in pixels, achieved by iterative
     //  algorithms and 0.0 for deterministic algorithms.
     //
     //  If a non-NULL warnings argument is received, it will be populated
@@ -102,11 +102,11 @@ public:
     //  image coordinate with covariance (line, sample in full image space
     //  pixels and corresponding 2x2 covariance in pixels squared).
     //
-    //  Iterative algorithms will use desiredPrecision, in meters, as the
+    //  Iterative algorithms will use desiredPrecision, in pixels, as the
     //  convergence criterion, otherwise it will be ignored.
     //
     //  If a non-NULL achievedPrecision argument is received, it will be
-    //  populated with the actual precision, in meters, achieved by iterative
+    //  populated with the actual precision, in pixels, achieved by iterative
     //  algorithms and 0.0 for deterministic algorithms.
     //
     //  If a non-NULL warnings argument is received, it will be populated
@@ -122,11 +122,11 @@ public:
     //  space pixels) and given projection parameters to a returned
     //  object space coordinate (x,y,z in Object Space meters).
     //
-    //  Iterative algorithms will use desiredPrecision, in meters, as the
+    //  Iterative algorithms will use desiredPrecision, in pixels, as the
     //  convergence criterion, otherwise it will be ignored.
     //
     //  If a non-NULL achievedPrecision argument is received, it will be
-    //  populated with the actual precision, in meters, achieved by iterative
+    //  populated with the actual precision, in pixels, achieved by iterative
     //  algorithms and 0.0 for deterministic algorithms.
     //
     //  If a non-NULL warnings argument is received, it will be populated
@@ -144,11 +144,11 @@ public:
     //  coordinate with covariance (x,y,z in Object Space meters and corresponding
     //  3x3 covariance in Object Space meters squared).
     //
-    //  Iterative algorithms will use desiredPrecision, in meters, as the
+    //  Iterative algorithms will use desiredPrecision, in pixels, as the
     //  convergence criterion, otherwise it will be ignored.
     //
     //  If a non-NULL achievedPrecision argument is received, it will be
-    //  populated with the actual precision, in meters, achieved by iterative
+    //  populated with the actual precision, in pixels, achieved by iterative
     //  algorithms and 0.0 for deterministic algorithms.
     //
     //  If a non-NULL warnings argument is received, it will be populated
@@ -279,7 +279,6 @@ public:
     // (x,y,z in Object Space meters) when the pixel at the given imagePt
     // (line, sample in full image space pixels) was captured.
     //
-    // A csm::Error will be thrown if the sensor position is not available.
     //<
 
     virtual ObjectSpaceCoordinate getSensorPosition(double time) const = 0;
@@ -301,8 +300,6 @@ public:
     //  method.
     //<
 
-    /// <summary>
-    
 /// 
 /// *******************************************************************************
     //---

@@ -70,6 +70,11 @@ public:
     // assignment operator
     //<
 
+    void setCoordinate(double x, double y, double z);
+    //>
+    // set all three coordinate values
+    //<
+
 }; // ObjectSpaceCoordinate
 
 //***
@@ -139,6 +144,16 @@ public:
     // assignment operator
     //<
 
+    void setCoordinate(double x, double y, double z);
+    //>
+    // set all three coordinate values
+    //<
+
+    void setCovariance(const double aCovar[9]);
+    //>
+    // set the covariance in an existing object
+    //<
+
 }; // ObjectSpaceCoordinateCovar
 
 //***
@@ -174,6 +189,12 @@ public:
     //>
     // assignment operator
     //<
+
+    void setCoordinate(double x, double y, double z);
+    //>
+    // set all three coordinate values
+    //<
+
 };
 
 //***
@@ -234,6 +255,16 @@ public:
     //>
     // assignment operator
     //<
+
+    void setCoordinate(double x, double y, double z);
+    //>
+    // set all three coordinate values
+    //<
+
+    void setCovariance(const double aCovar[9]);
+    //>
+    // set the covariance in an existing object
+    //<
 };
 
 //***
@@ -285,6 +316,16 @@ public:
     //>
     // assignment operator
     //<
+
+    void setPoint(const ObjectSpaceCoordinate& argPoint);
+    //>
+    // set the point in an existing object
+    //<
+
+    void setVector(const ObjectSpaceVector& argDirection);
+    //>
+    // set the direction in an existing object
+    //<
 };
 
 
@@ -335,6 +376,17 @@ public:
     ObjectSpaceLocusCovar& operator=(const ObjectSpaceLocusCovar& other);
     //>
     // assignment operator
+    //<
+
+
+    void setPoint(const ObjectSpaceCoordinateCovar& argPoint);
+    //>
+    // set the point in an existing object
+    //<
+
+    void setVector(const ObjectSpaceVectorCovar& argDirection);
+    //>
+    // set the direction in an existing object
     //<
 
 };

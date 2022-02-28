@@ -58,7 +58,20 @@ std::vector<ObjectSpacePointCloudGM::SensorPartials> ObjectSpacePointCloudGM::co
         // precision values found for each desired index.
         //***
         if (achievedPrecision) *achievedPrecision = 0.0;
-        ModelCoord mc = objectSpaceToModel(groundPt);
+
+        /*
+        virtual ModelCoord objectSpaceToModel(const ObjectSpaceCoordinate& groundPt,
+        double desiredPrecision = 0.001,
+        double* achievedPrecision = NULL,
+        WarningList* warnings = NULL) const = 0;
+        */
+        double osToMPrecision = 0.0;
+        ModelCoord mc = objectSpaceToModel(groundPt,desiredPrecision,&osToMPrecision);
+        if (achievedPrecision && (osToMPrecision > desiredPrecision))
+        {
+            *achievedPrecision = osToMPrecision;
+        }
+
         for (int i = 0; i < NUM_PARAMS; ++i)
         {
             double prec = 0.0;

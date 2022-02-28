@@ -50,9 +50,17 @@ RangeParameters::RangeParameters(double range)
 //*****************************************************************************
 // RangeParameters::getrange
 //*****************************************************************************
-double RangeParameters::getRange() const
+const double &RangeParameters::getRange() const
 {
     return m_range;
+}
+
+//*****************************************************************************
+// RangeParameters::setrange
+//*****************************************************************************
+void RangeParameters::setRange(double range)
+{
+    m_range = range;
 }
 
 //*****************************************************************************
@@ -98,6 +106,21 @@ double RangeParametersCovar::getRangeVariance() const
 }
 
 //*****************************************************************************
+// RangeParametersCovar::setrange
+//*****************************************************************************
+void RangeParametersCovar::setRange(double range)
+{
+    m_range = range;
+}
+
+//*****************************************************************************
+// RangeParametersCovar::setrangeVariance
+//*****************************************************************************
+void RangeParametersCovar::setRangeVariance(double rangeVar)
+{
+    m_rangeVariance = rangeVar;
+}
+//*****************************************************************************
 // PlaneParameters::getType(()
 //*****************************************************************************
 ProjectionGeometryType PlaneParameters::getType() const
@@ -124,7 +147,7 @@ PlaneParameters::PlaneParameters(const ObjectSpaceCoordinate& coord, const Objec
 //*******************************************************************************
 // PlaneParameters::getPoint()
 //********************************************************************************
-ObjectSpaceCoordinate PlaneParameters::getPoint() const
+const ObjectSpaceCoordinate& PlaneParameters::getPoint() const
 {
     return m_point;
 }
@@ -132,11 +155,26 @@ ObjectSpaceCoordinate PlaneParameters::getPoint() const
 //*******************************************************************************
 // PlaneParameters::getNormal()
 //********************************************************************************
-ObjectSpaceVector PlaneParameters::getNormal() const
+const ObjectSpaceVector& PlaneParameters::getNormal() const
 {
     return m_normal;
 }
 
+//*******************************************************************************
+// PlaneParameters::setPoint()
+//********************************************************************************
+void PlaneParameters::setPoint(const ObjectSpaceCoordinate& pointArg)
+{
+    m_point = pointArg; // assignment operator usage
+}
+
+//*******************************************************************************
+// PlaneParameters::setNormal()
+//********************************************************************************
+void PlaneParameters::setNormal(const ObjectSpaceVector& normalArg)
+{
+    m_normal = normalArg; // assignment operator usage
+}
 
 //*****************************************************************************
 // PlaneParametersCovar::getType(()
@@ -167,7 +205,7 @@ PlaneParametersCovar::PlaneParametersCovar(const ObjectSpaceCoordinateCovar& coo
 //*******************************************************************************
 // PlaneParametersCovar::getPoint()
 //********************************************************************************
-ObjectSpaceCoordinateCovar PlaneParametersCovar::getPoint() const
+const ObjectSpaceCoordinateCovar& PlaneParametersCovar::getPoint() const
 {
     return m_point;
 }
@@ -175,9 +213,25 @@ ObjectSpaceCoordinateCovar PlaneParametersCovar::getPoint() const
 //*******************************************************************************
 // PlaneParametersCovar::getNormal()
 //********************************************************************************
-ObjectSpaceVectorCovar PlaneParametersCovar::getNormal() const
+const ObjectSpaceVectorCovar& PlaneParametersCovar::getNormal() const
 {
     return m_normal;
+}
+
+//*******************************************************************************
+// PlaneParametersCovar::setPoint()
+//********************************************************************************
+void PlaneParametersCovar::setPoint(const ObjectSpaceCoordinateCovar& pointArg)
+{
+    m_point = pointArg; // assignment operator usage
+}
+
+//*******************************************************************************
+// PlaneParametersCovar::setNormal()
+//********************************************************************************
+void PlaneParametersCovar::setNormal(const ObjectSpaceVectorCovar& normalArg)
+{
+    m_normal = normalArg; // assignment operator usage
 }
 
 } // namespace csm

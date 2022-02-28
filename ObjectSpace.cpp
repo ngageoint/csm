@@ -48,6 +48,16 @@ ObjectSpaceCoordinate& ObjectSpaceCoordinate::operator=(const ObjectSpaceCoordin
 }
 
 //*****************************************************************************
+// ObjectSpaceCoordinate::setCoordinate
+//*****************************************************************************
+void ObjectSpaceCoordinate::setCoordinate(double xArg, double yArg, double zArg)
+{
+    x = xArg;
+    y = yArg;
+    z = zArg;
+}
+
+//*****************************************************************************
 //  ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar
 //*****************************************************************************
 ObjectSpaceCoordinateCovar::ObjectSpaceCoordinateCovar()
@@ -119,6 +129,23 @@ ObjectSpaceCoordinateCovar& ObjectSpaceCoordinateCovar::operator=(const ObjectSp
     return *this;
 }
 
+//*****************************************************************************
+// ObjectSpaceCoordinateCovar::setCoordinate
+//*****************************************************************************
+void ObjectSpaceCoordinateCovar::setCoordinate(double xArg, double yArg, double zArg)
+{
+    x = xArg;
+    y = yArg;
+    z = zArg;
+}
+
+//*****************************************************************************
+// ObjectSpaceCoordinateCovar::setCovariance
+//*****************************************************************************
+void ObjectSpaceCoordinateCovar::setCovariance(const double aCovar[9])
+{
+    std::memcpy(covariance, aCovar, sizeof(covariance));
+}
 
 //*****************************************************************************
 //  ObjectSpaceVector::ObjectSpaceVector (copy constructor)
@@ -139,6 +166,16 @@ ObjectSpaceVector& ObjectSpaceVector::operator=(const ObjectSpaceVector& other)
     y = other.y;
     z = other.z;
     return *this;
+}
+
+//*****************************************************************************
+// ObjectSpaceVector::setCoordinate
+//*****************************************************************************
+void ObjectSpaceVector::setCoordinate(double xArg, double yArg, double zArg)
+{
+    x = xArg;
+    y = yArg;
+    z = zArg;
 }
 
 //*****************************************************************************
@@ -210,6 +247,24 @@ ObjectSpaceVectorCovar& ObjectSpaceVectorCovar::operator=(const ObjectSpaceVecto
 }
 
 //*****************************************************************************
+// ObjectSpaceVectorCovar::setCoordinate
+//*****************************************************************************
+void ObjectSpaceVectorCovar::setCoordinate(double xArg, double yArg, double zArg)
+{
+    x = xArg;
+    y = yArg;
+    z = zArg;
+}
+
+//*****************************************************************************
+// ObjectSpaceVectorCovar::setCovariance
+//*****************************************************************************
+void ObjectSpaceVectorCovar::setCovariance(const double aCovar[9])
+{
+    std::memcpy(covariance, aCovar, sizeof(covariance));
+}
+
+//*****************************************************************************
 //  ObjectSpaceLocus::ObjectSpaceLocus (copy constructor)
 //*****************************************************************************
 ObjectSpaceLocus::ObjectSpaceLocus(const ObjectSpaceLocus& other)
@@ -219,7 +274,7 @@ ObjectSpaceLocus::ObjectSpaceLocus(const ObjectSpaceLocus& other)
 }
 
 //*****************************************************************************
-// ObjectSpaceVector::operator=
+// ObjectSpaceLocus::operator=
 //*****************************************************************************
 ObjectSpaceLocus& ObjectSpaceLocus::operator=(const ObjectSpaceLocus& other)
 {
@@ -228,6 +283,21 @@ ObjectSpaceLocus& ObjectSpaceLocus::operator=(const ObjectSpaceLocus& other)
     return *this;
 }
 
+//*****************************************************************************
+// ObjectSpaceLocus::setPoint
+//*****************************************************************************
+void ObjectSpaceLocus::setPoint(const ObjectSpaceCoordinate& argPoint)
+{
+    point = argPoint;
+}
+
+//*****************************************************************************
+// ObjectSpaceLocus::setVector
+//*****************************************************************************
+void ObjectSpaceLocus::setVector(const ObjectSpaceVector& argDirection)
+{
+    direction = argDirection;
+}
 
 //*****************************************************************************
 //  ObjectSpaceLocusCovar::ObjectSpaceLocusCovar (copy constructor)
@@ -246,6 +316,22 @@ ObjectSpaceLocusCovar& ObjectSpaceLocusCovar::operator=(const ObjectSpaceLocusCo
     point = (other.point);  // use assignment operator of ObjectSpacePoint
     direction = (other.direction); // use assignment operator of ObjectSpaceVector
     return *this;
+}
+
+//*****************************************************************************
+// ObjectSpaceLocusCovar::setPoint
+//*****************************************************************************
+void ObjectSpaceLocusCovar::setPoint(const ObjectSpaceCoordinateCovar& argPoint)
+{
+    point = argPoint;
+}
+
+//*****************************************************************************
+// ObjectSpaceLocusCovar::setVector
+//*****************************************************************************
+void ObjectSpaceLocusCovar::setVector(const ObjectSpaceVectorCovar& argDirection)
+{
+    direction = argDirection;
 }
 
 }

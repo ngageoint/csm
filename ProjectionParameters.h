@@ -20,8 +20,8 @@
 //
 //#####################################################################
 
-#ifndef __CSM_GEOMETRY3D_H
-#define __CSM_GEOMETRY3D_H
+#ifndef __PROJECTIONPARAMETERS_H
+#define __PROJECTIONPARAMETERS_H
 
 #include "csm.h"
 #include "ObjectSpace.h"
@@ -52,15 +52,18 @@ class CSM_EXPORT_API ProjectionParameters
 
 public:
     virtual ~ProjectionParameters() {};
-    //> virtual destructor provides something for base class destructors to call on.
+    //> 
+    // virtual destructor provides something for base class destructors to call on.
     //<
 
     virtual ProjectionGeometryType getType() const = 0;
-    //> returns the type enum parameter
+    //> 
+    // returns the type enum parameter
     //<
 protected:
     ProjectionParameters() {};
-    //> the default constructor does nothing
+    //> 
+    // the default constructor does nothing
     //<
 
 };
@@ -73,15 +76,18 @@ class CSM_EXPORT_API ProjectionParametersCovar
 
 public:
     virtual ~ProjectionParametersCovar() {};
-    //> virtual destructor provides something for base class destructors to call on.
+    //> 
+    // virtual destructor provides something for base class destructors to call on.
     //<
 
     virtual ProjectionGeometryType getType() const = 0;
-    //> returns the type enum parameter
+    //> 
+    // returns the type enum parameter
     //<
 protected:
     ProjectionParametersCovar() {};
-    //> the default constructor does nothing
+    //> 
+    // the default constructor does nothing
     //<
 
 };
@@ -105,10 +111,17 @@ public:
     // get the geometry type (enum)
     //<
 
-    double getRange() const;
-    //> return the range value in meters
+    const double &getRange() const;
+    //> 
+    // return the range value in meters
     //<
-private:
+
+    void setRange(double range);
+    //> 
+    // set the range in an existing object
+    //<
+
+protected:
     double m_range;
 };
 
@@ -139,7 +152,19 @@ public:
     //>
     // returns the range variance
     //<
-private:
+
+    void setRange(double range);
+    //> 
+    // set the range in an existing object
+    //<
+
+    void setRangeVariance(double rangeVar);
+    //>
+    // set the range variance in an existing object
+    //<
+
+
+protected:
     double m_range;
     //>
     // range value in meters
@@ -169,14 +194,25 @@ public:
     // get the geometry type (enum)
     //<
 
-    ObjectSpaceCoordinate getPoint() const;
+    const ObjectSpaceCoordinate& getPoint() const;
     //> read the point
     //<
 
-    ObjectSpaceVector getNormal() const;
+    const ObjectSpaceVector& getNormal() const;
     //> read the normal
     //<
-private:
+
+    void setPoint(const ObjectSpaceCoordinate& pointArg);
+    //<
+    // set the point in an existing object
+    //>
+
+    void setNormal(const ObjectSpaceVector& normalArg);
+    //<
+    // set the normal in an existing object
+    //<
+
+protected:
     ObjectSpaceCoordinate m_point;
     //> a point on the plane. 
     //<
@@ -196,7 +232,8 @@ public:
     //<
 
     PlaneParametersCovar(const ObjectSpaceCoordinateCovar& coord, const ObjectSpaceVectorCovar& normal);			
-    //> this constructor will initialize the point and the normal with the give values.
+    //> 
+    // this constructor will initialize the point and the normal with the give values.
     //<
 
     ProjectionGeometryType getType() const;
@@ -204,14 +241,26 @@ public:
     // get the geometry type (enum)
     //<
 
-    ObjectSpaceCoordinateCovar getPoint() const;
-    //> read the point
+    const ObjectSpaceCoordinateCovar &getPoint() const;
+    //> 
+    // read the point
     //<
 
-    ObjectSpaceVectorCovar getNormal() const;
-    //> read the normal
+    const ObjectSpaceVectorCovar &getNormal() const;
+    //> 
+    // read the normal
     //<
-private:
+
+    void setPoint(const ObjectSpaceCoordinateCovar& pointArg);
+    //<
+    // set the point in an existing object
+    //>
+
+    void setNormal(const ObjectSpaceVectorCovar& normalArg);
+    //<
+    // set the normal in an existing object
+    //<
+protected:
     ObjectSpaceCoordinateCovar m_point;
     //> a point on the plane. 
     //<
@@ -222,4 +271,4 @@ private:
 };
 }
 
-#endif // __CSM_GEOMETRY3D_H
+#endif // __PROJECTIONPARAMETERS_H

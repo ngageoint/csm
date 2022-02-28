@@ -42,9 +42,9 @@ std::string ObjectSpaceRasterGM::getFamily()const {
 //*****************************************************************************
 std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAllSensorPartials(
     const ObjectSpaceCoordinate& objectSpacePt,
-    param::Set pSet,
-    double desiredPrecision,
-    double* achievedPrecision,
+    param::Set pSet /* =param::VALID */,
+    double desiredPrecision /* =0.001 */,
+    double* achievedPrecision /* = NULL */,
     WarningList* warnings) const
 {
     const std::vector<int> indices = csm::GeometricModel::getParameterSetIndices(pSet);
@@ -63,7 +63,12 @@ std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAll
         //***
         if (achievedPrecision) *achievedPrecision = 0.0;
 
-        ImageCoord ip = objectSpaceToImage(objectSpacePt);
+        double osToIPrecision = 0.0;
+        ImageCoord ip = objectSpaceToImage(objectSpacePt,desiredPrecision,&osToIPrecision);
+        if (achievedPrecision && (osToIPrecision > desiredPrecision))
+        {
+            *achievedPrecision = osToIPrecision;
+        }
         for (int i = 0; i < NUM_PARAMS; ++i)
         {
             double prec = 0.0;
@@ -89,9 +94,9 @@ std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAll
 std::vector<ObjectSpaceRasterGM::SensorPartials> ObjectSpaceRasterGM::computeAllSensorPartials(
     const ImageCoord& imagePt,
     const ObjectSpaceCoordinate& objectSpacePt,
-    param::Set pSet,
-    double desiredPrecision,
-    double* achievedPrecision,
+    param::Set pSet /* = param::VALID */,
+    double desiredPrecision /* = 0.001 */,
+    double* achievedPrecision /* = NULL */,
     WarningList* warnings) const
 {
     const std::vector<int> indices = csm::GeometricModel::getParameterSetIndices(pSet);
