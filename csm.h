@@ -57,7 +57,7 @@
 
 // The getCsmVersion method should use CURRENT_CSM_VERSION to
 // return the CSM API version that the sensor model/plugin was written to.
-#define CURRENT_CSM_VERSION csm::Version(3, 0, 3);
+#define CURRENT_CSM_VERSION csm::Version(3, 0, 4);
 
 // Common definition for an unknown name, type, node,etc.
 #define CSM_UNKNOWN "UNKNOWN"
