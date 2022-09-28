@@ -15,7 +15,8 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     01Dec-2021   JPK       Adapted from FourParameterCorrelationModel
-//
+//     28Sep-2022   JPK       Updated valid parameter values. Added check
+//                            against "deltaTimeEpsilon"
 //    NOTES:
 //     Refer to FourParameterCorrelationFunction.h for more information.
 //
@@ -59,9 +60,9 @@ FourParameterCorrelationFunction::~FourParameterCorrelationFunction()
 {}
 
 void FourParameterCorrelationFunction::setCorrelationParameters(double a,
-                                                                double alpha,
-                                                                double beta,
-                                                                double tau)
+                                                             double alpha,
+                                                             double beta,
+                                                             double tau)
 {
    setCorrelationParameters(FourParameterCorrelationModel::
                             Parameters(a, alpha, beta, tau));
@@ -81,6 +82,8 @@ double
 FourParameterCorrelationFunction::getCorrelationCoefficient(double deltaTime) const
 {
    // compute the value of the correlation coefficient
+   if ((deltaTime == 0.0) ||
+       (std::fabs(deltaTime) < deltaTimeEpsilon())) return 1.0;
 
    return correlationCoefficientFor(theCorrParams,deltaTime);
 }
@@ -91,29 +94,29 @@ correlationCoefficientFor(const FourParameterCorrelationModel::
                                 Parameters& params,
                           double            deltaTime)
 {
+   
    // compute the value of the correlation coefficient
+   const double adt = std::fabs(deltaTime);
 
-   if (params.a == 0.0)  return 0.0;
-   
-   double corrCoeff = params.a *
-                      (params.alpha +
-                       ((1.0 - params.alpha) *
-                        (1.0 + params.beta) /
-                        (params.beta +
-                         std::exp(std::fabs(deltaTime) /
-                                  params.tau))));
-   
-   // if necessary, clamp the coefficient value to the acceptable range
-   if (corrCoeff < -1.0)
+   if (adt > 0.0)
    {
-      corrCoeff = -1.0;
-   }
-   else if (corrCoeff > 1.0)
-   {
-      corrCoeff = 1.0;
+      double corrCoeff = params.a *
+                         (params.alpha +
+                          ((1.0 - params.alpha) *
+                           (1.0 + params.beta) /
+                           (params.beta +
+                            std::exp(adt / params.tau))));
+      
+      // if necessary, clamp the coefficient value to the acceptable range
+      if (corrCoeff < 0.0) corrCoeff = 0.0;
+      
+      if (corrCoeff < 1.0)
+      {
+         return corrCoeff;
+      }
    }
    
-   return corrCoeff;
+   return 1.0;
 }
 
 void FourParameterCorrelationFunction::
@@ -124,14 +127,14 @@ checkParameters(const FourParameterCorrelationModel::Parameters& params)
 
    // make sure the values of each correlation function parameter fall within
    // acceptable ranges
-   if ((params.a < 0.0) || (params.a > 1.0))
+   if ((params.a <= 0.0) || (params.a > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range [-1, 1].",
                   MODULE);
    }
 
-   if ((params.alpha < 0.0) || (params.alpha > 1.0))
+   if ((params.alpha < 0.0) || (params.alpha >= 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter alpha must be in the range [0, 1].",

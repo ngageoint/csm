@@ -15,6 +15,8 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     22-Nov-2021   JPK      Copied from DampedCosineCorrelationModel
+//     28-Sep-2022   JPK      Updated valid parameter values.Added check
+//                            against "deltaTimeEpsilon"
 //
 //    NOTES:
 //     Refer to DampedCosineCorrelationFunction.h for more information.
@@ -71,21 +73,21 @@ DampedCosineCorrelationFunction::setCorrelationParameters(const Parameters& para
 
    // make sure the values of each correlation function parameter fall within
    // acceptable ranges
-   if ((params.A < 1.0e-6) || (params.A > 1.0))
+   if ((params.A <= 0.0) || (params.A > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range [1.0e-6, 1].",
                   MODULE);
    }
 
-   if (params.T < 1.0e-6)
+   if (params.T <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter T must be >= 1.0e-6.",
                   MODULE);
    }
    
-   if (params.P < 1.0e-6)
+   if (params.P <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter P must be >= 1.0e-6.",
@@ -98,12 +100,16 @@ DampedCosineCorrelationFunction::setCorrelationParameters(const Parameters& para
 double
 DampedCosineCorrelationFunction::getCorrelationCoefficient(double deltaTime) const
 {
+   const double adt = std::fabs(deltaTime);
+
+   if ((adt == 0.0) || (adt < deltaTimeEpsilon())) return 1.0;
+   
    // compute the value of the correlation coefficient
    constexpr double pi = 3.14159265358979323846;
    
    double corrCoeff = theCorrParams.A *
-                      std::exp(-deltaTime/theCorrParams.T)*
-                      cos(2.0 * pi * deltaTime / theCorrParams.P);
+                      std::exp(-adt/theCorrParams.T)*
+                      cos(2.0 * pi * adt / theCorrParams.P);
    
    
    // if necessary, clamp the coefficient value to the acceptable range

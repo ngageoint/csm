@@ -15,6 +15,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     22-Nov-2021   JPK      Initial Coding
+//     28-Sep-2022   JPK      Added "deltaTimeEpsilon"
 //
 //    NOTES:
 //
@@ -37,7 +38,8 @@ public:
    
    explicit SPDCorrelationFunction(const std::string& name)
       :
-      theName (name)
+      theName             (name),
+      theDeltaTimeEpsilon (0.0)
    {}
    
    virtual ~SPDCorrelationFunction() {}
@@ -63,23 +65,47 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
-      
+   double deltaTimeEpsilon() const {return theDeltaTimeEpsilon;}
+      //>  This method returns the delta time epsilon, i.e. the smallest
+      //   value of epsilon for which the correlation function is computed.
+      //   For any non-negative value smaller than this, the correlation
+      //   coefficient is always 1.0 .  Unless explicitly set, this value is
+      //   0.0.
+      //<
+   
+   void setDeltaTimeEpsilon(double deltaTimeEpsilon)
+   {
+      if(deltaTimeEpsilon >= 0.0) theDeltaTimeEpsilon = deltaTimeEpsilon;
+   }
+   //> This method sets the delta time epsilon, i.e. the smallest significant
+   //  delta time for this correlation function.  The argument value should
+   //  be non-negative.  If a negative value is encountered, it it ignored.
+   //  The default value is 0.0 .
+   //<
+   
 protected:
       
    void setName(const std::string& name);
- 
+   
+   
  private:
    SPDCorrelationFunction()
       :
-        theName (CSM_UNKNOWN)
+      theName             (CSM_UNKNOWN),
+      theDeltaTimeEpsilon (0.0)
    {}
    //> This is the default constructor.  It is declared private to prevent
    //  its use.
    //<
-
+      
    std::string theName;
    //> This data member is a string identifying the "name" of the
    //  current derived CorrelationModel.
+   //<
+   double      theDeltaTimeEpsilon;
+   //> This data member represents the smallest "significant" delta time and
+   //  must be >= 0.0.  Any delta time smaller than this value will be treated
+   //  as 0.0, i.e. the returned correlation coefficient will be 1.0 .
    //<
 };
    

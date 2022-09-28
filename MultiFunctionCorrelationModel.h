@@ -18,6 +18,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     22-Nov-2021   JPK      Initial Coding 
+//     28-Sep-2022   JPK      Added support for "deltaTimeEpsilon"
 //
 //    NOTES:
 //
@@ -111,9 +112,14 @@ public:
       //<
 
    void setCorrelationGroupFunction(size_t          cpGroupIndex,
-                                    const SPDCFPtr& corrFunction);
+                                    const SPDCFPtr& corrFunction,
+                                    double          deltaTimeEpsilon = 0.0);
       //> Sets the correlation function for the group given by
-      //  cpGroupIndex.
+      //  cpGroupIndex.  The deltaTimeEpsilone argument is used to set the
+      //  minimum "signficant" delta time for the correlation function and
+      //  should always be a non-negative integer. Any delta time smaller
+      //  than this value is treated as 0.0, thus yielding a correlation
+      //  cofficient of 1.0
       //<
 
 protected:

@@ -15,6 +15,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     21-Now-2021   JPK      Initial Coding
+//     28-Sep-2022   JPK      Added support for "deltaTimeEpsilon"
 //
 //#############################################################################
 
@@ -63,13 +64,18 @@ void MultiFunctionCorrelationModel::setCorrelationParameterGroup(size_t smParamI
 }
 
 void MultiFunctionCorrelationModel::setCorrelationGroupFunction(
-   size_t cpGroupIndex, const SPDCFPtr& corrFunction)
+   size_t cpGroupIndex, const SPDCFPtr& corrFunction, double deltaTimeEpsilon)
 {
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupFunction");
 
    // store the correlation parameter values
    theCorrFunctions[cpGroupIndex] = corrFunction;
+
+   if (theCorrFunctions[cpGroupIndex] && deltaTimeEpsilon >= 0)
+   {
+      theCorrFunctions[cpGroupIndex]->setDeltaTimeEpsilon(deltaTimeEpsilon);
+   }
 }
 
 double MultiFunctionCorrelationModel::getCorrelationCoefficient(
