@@ -29,7 +29,9 @@
 
 #include "csmPointCloud.h"
 #include "RasterGM.h"
+#include "PointCloudGM.h"
 
+#define CSM_MPR_FAMILY "MultiPoint"
 namespace csm
 {
 //***
@@ -144,8 +146,10 @@ using MultiImageCoordPair            = std::vector<ImageCoordPair>;
 using MultiImageEcefCoordPair        = std::vector<ImageEcefCoordPair>;
 
 using SensorPartialsVctr             = std::vector<RasterGM::SensorPartials>;
+using ModelPartialsVctr = std::vector<csm::PointCloudGM::SensorPartials>;
 
 using MultiSensorPartialsVctr        = std::vector<SensorPartialsVctr>;
+using MultiModelSensorPartialsVctr = std::vector<ModelPartialsVctr>;
 
 using ModelCoordPair                 = std::pair<ModelCoord,ModelCoord>;
 

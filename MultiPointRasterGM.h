@@ -26,8 +26,6 @@
 #include "csmMultiPoint.h"
 #include "RasterGM.h"
 
-#define CSM_MPR_FAMILY "MultiPoint"
-
 namespace csm
 {
 class CSM_EXPORT_API MultiPointRasterGM : public RasterGM
@@ -187,7 +185,7 @@ public:
    //<
    
    virtual MultiEcefCoord multiGetSensorPosition(const MultiImageCoord& imagePts) const = 0;
-   //> This method returns the position of the physical sensor
+   //> This method returns the positions of the physical sensor
    // (x,y,z in ECEF meters) when the pixel at the given vector of imagePts
    // (vector of line, sample in full image space pixels) was captured.
    //
