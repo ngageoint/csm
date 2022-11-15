@@ -20,6 +20,7 @@
 //
 //    22FEB2018     JPK       Modified to use existing csm macros (since
 //                            point cloud is no longer in a separate library).
+//    15NOV2022     EJR       Added some typedefs for point clouds
 //    NOTES:
 //
 //#############################################################################
