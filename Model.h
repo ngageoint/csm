@@ -63,7 +63,7 @@ public:
       //  object can be compared to other Version objects with its comparison
       //  operators.  Not to be confused with the CSM API version.
       //<
-
+      
    virtual std::string getModelName() const = 0;
       //> This method returns a string identifying the name of the model.
       //<

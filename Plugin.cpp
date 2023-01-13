@@ -13,6 +13,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     17-Dec-2012   BAH      Documentation updates.
+//     31-Sep-2023   EJR    CSM 4.0. Replace ECEF with ObjectSpace.
 //
 //    NOTES:
 // 
@@ -29,7 +30,7 @@
 
 #ifdef _WIN32          //exports the symbols to be used (KJR)
 # include <windows.h>
-# include "RasterGM.h"
+# include "ObjectSpaceRasterGM.h"
 # include "BytestreamIsd.h"
 # include "NitfIsd.h"
 #else

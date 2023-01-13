@@ -70,6 +70,7 @@
 //                          Moved Parameter struct inside class definition to
 //                          avoid name clashes.
 //     17-Dec-2012   BAH    Documentation updates.
+//     31-Sep-2023   EJR    CSM 4.0. Replace ECEF with ObjectSpace.
 //
 //    NOTES:
 //
@@ -79,6 +80,7 @@
 #define __CSM_GEOMETRICMODEL_H
 
 #include "csm.h"
+#include "ObjectSpace.h"
 #include "Model.h"
 
 #include <vector>
@@ -137,12 +139,12 @@ public:
 
    virtual std::string getFamily() const;
 
-   virtual EcefCoord getReferencePoint() const = 0;
+   virtual ObjectSpaceCoord getReferencePoint() const = 0;
       //> This method returns the ground point indicating the general
       //  location of the image.
       //<
 
-   virtual void setReferencePoint(const EcefCoord& groundPt) = 0;
+   virtual void setReferencePoint(const ObjectSpaceCoord& groundPt) = 0;
       //> This method sets the ground point indicating the general location
       //  of the image.
       //<

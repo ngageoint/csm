@@ -118,7 +118,7 @@ GeometricModel::getParameters(param::Set pSet) const
    
    const std::vector<int>& indices = getParameterSetIndices(pSet);
    
-   const int NUM_PARMS = indices.size();
+   size_t NUM_PARMS = indices.size();
    
    if (NUM_PARMS > 0)
    {
@@ -132,5 +132,10 @@ GeometricModel::getParameters(param::Set pSet) const
    
    return paramVctr;
 }
+//
+//csm::MultipleCorrelationModelsContainer GeometricModel::getMultipleCorrelationModelsContainer()
+//{
+//
+//}
 
 } // namespace csm

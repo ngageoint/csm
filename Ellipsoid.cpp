@@ -13,7 +13,6 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     06-Aug-2016   Krinsky  Initial Coding
-//     03-Sep-2021   SCM      Use cmath.
 //
 //#############################################################################
 
@@ -22,7 +21,7 @@
 #endif
 
 #include "Ellipsoid.h"
-#include <cmath>
+#include <math.h>
 
 namespace csm 
 {
