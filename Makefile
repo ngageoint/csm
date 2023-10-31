@@ -6,7 +6,7 @@ OBJS = Version.o Isd.o Plugin.o GeometricModel.o RasterGM.o FourParameterCorrela
 
 
 LIBNAME=libcsmapi
-LIBVERSION=3.0.3
+LIBVERSION=3.0.4
 
 DOXYGEN_OUT=/programs/origin/html/doxygen/csm3
 DOXYGEN_FILTER=$(PWD)/scripts/doxygen-filter.pl
