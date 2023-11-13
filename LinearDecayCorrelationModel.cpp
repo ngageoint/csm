@@ -22,7 +22,10 @@
 //     18-Feb-2013   JPK      Removed getNumCorrelationParameterGroups,
 //                            now provided on base class.
 //     03-Sep-2021   SCM      Removed IRIX support.
-//     01Dec-2021    JPK      Modified to use LinearDecayCorrelationFunction
+//     01-Dec-2021   JPK      Modified to use LinearDecayCorrelationFunction
+//     12-Nov-2023   JPK      Updated to allow relaxation of strictly
+//                            monotonically decreasing correlation parameters
+//                            for backwards compatibility.
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
 //#############################################################################
@@ -91,8 +94,15 @@ void LinearDecayCorrelationModel::setCorrelationGroupParameters(
 {
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
-
-   LinearDecayCorrelationFunction::checkParameters(params);
+   
+   // Construct a LinearDecayCorrelationFunction but do not enforce
+   // strict monotonicity for backward compatibility.
+   // If parameters are not within expected range, this will cause a csm::Error
+   // to be thrown.
+   
+   LinearDecayCorrelationFunction ldcf(params.theInitialCorrsPerSegment,
+                                       params.theTimesPerSegment,
+                                       false);
    
    // store the correlation parameter values
    theCorrParams[cpGroupIndex] = params;
@@ -104,11 +114,18 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
 {
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
+   
+   const Parameters& params = theCorrParams[cpGroupIndex];
 
+   // Construct a LinearDecayCorrelationFunction but do not enforce
+   // strict monotonicity for backward compatibility.
+   
+   LinearDecayCorrelationFunction ldcf(params.theInitialCorrsPerSegment,
+                                       params.theTimesPerSegment,
+                                       false);
+   
    // compute the value of the correlation coefficient
-   return LinearDecayCorrelationFunction::
-      correlationCoefficientFor(theCorrParams[cpGroupIndex],
-                                deltaTime);
+   return ldcf.getCorrelationCoefficient(deltaTime);
 }
 
 const LinearDecayCorrelationModel::Parameters&

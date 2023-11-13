@@ -16,13 +16,14 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     01-Dec-2021   JPK      Adapted from LinearDecayCorrelationModel
+//     12-Nov-2023   JPK      Updates to simplify acessibility of parameters
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSM_LINEARDECAYCORRELATIONFUNCTION_H_
-#define __CSM_LINEARDECAYCORRELATIONFUNCTION_H_
+#ifndef CSM_LINEARDECAYCORRELATIONFUNCTION_HEADER
+#define CSM_LINEARDECAYCORRELATIONFUNCTION_HEADER
 
 #include "SPDCorrelationFunction.h"
 #include "LinearDecayCorrelationModel.h"
@@ -40,25 +41,19 @@ public:
       //<
       
    LinearDecayCorrelationFunction(const std::vector<double>& initialCorrsPerSegment,
-                                  const std::vector<double>& timesPerSegment);
+                                  const std::vector<double>& timesPerSegment,
+                                  bool   strictlyDecreasing = true,
+                                  double deltaTimeEpsilon   = 0.0);
    //> This constructor instantiates from the provided parameters.
    //<
 
-   LinearDecayCorrelationFunction(const LinearDecayCorrelationModel::
-                                        Parameters& corrParams);
+   LinearDecayCorrelationFunction(const std::vector<double>& params,
+                                  bool   strictlyDecreasing = true,
+                                  double deltaTimeEpsilon   = 0.0);
    //> This constructor instantiates from the provided parameters.
    //<
    
-   virtual ~LinearDecayCorrelationFunction();
-
-   const LinearDecayCorrelationModel::
-         Parameters& getCorrelationParameters() const {return theCorrParams;}
-      //> Returns the values of the correlation parameters for the group
-      //  given by cpGroupIndex.
-      //
-      //  Throws an exception if cpGroupIndex is out of range.
-      //<
-
+   virtual ~LinearDecayCorrelationFunction();   
    virtual double getCorrelationCoefficient(double deltaTime) const;
       //> Computes the correlation coefficient for the correlation parameter
       //  group given by cpGroupIndex for the given deltaTime.
@@ -79,48 +74,31 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
-
-  
-   void setCorrelationParameters(const std::vector<double>& initialCorrsPerSegment,
-                                 const std::vector<double>& timesPerSegment);
-   //> Sets the correlation parameter values.
-   //  The correlations in initialCorrsPerSegment are
-   //  unitless; the times in timesPerSegment are in seconds.
-   //
-   //  Precondition:
-   //  * initialCorrsPerSegment and timesPerSegment are the same size
-   //  * timesPerSegment[i] < timesPerSegment[i+1]
-   //  * initialCorrsPerSegment[i] >= initialCorrsPerSegment[i+1]
-   //  * 1 >= initialCorrsPerSegment[i] >= 0
+   virtual void checkAndSetParameters(const std::vector<double>& params);
+   //> This method validates the provided parameters fall within expected
+   //  ranges.  If the provided vector does not contain exactly four parameters
+   //  of the parameters are out of range, a csm::Error will be thrown.
    //<
    
-   void setCorrelationParameters(const LinearDecayCorrelationModel::
-                                       Parameters& params);
-      //> Sets the values of the correlation parameters in params
-      //  Throws an exception if  any of the correlation parameters
-      //  is out of range.
-      //<
-      
-   static double correlationCoefficientFor(const LinearDecayCorrelationModel::
-                                           Parameters& params,
-                                           double      deltaTime);
-   //> This static method computes the correlation coefficient for the given
-   //  parameters and delta time.
+   void setStrictlyDecreasing(bool strictlyDecreasingFlag)
+   {
+      theStrictlyDecreasingFlag = strictlyDecreasingFlag;
+   }
+   
+   //> This method is used to set whether or not the correlation parameters are
+   //  required to be strictly decreasing for increasing times.
+   //  By default, this is true.
    //<
-   static void checkParameters(const LinearDecayCorrelationModel::
-                                     Parameters& params);
-   //> This static method verifies the given parameters are all within acceptable
-   //  value ranges.  If not, an exception is thrown.
-   //< 
-protected:
+   
+private:
 
-   LinearDecayCorrelationModel::Parameters theCorrParams;
-      //> This data member stores the values of the correlation parameters.
-      //<
-
+   bool theStrictlyDecreasingFlag;
+   //> This flag is used to indicate if the correlation coefficients are
+   //  required to be strictly descreasing (default).
+   //<
 };
 
-typedef std::shared_ptr<LinearDecayCorrelationFunction> LDCFPtr;
+using LDCFPtr  = std::shared_ptr<LinearDecayCorrelationFunction>;
 
 } // namespace csm
 

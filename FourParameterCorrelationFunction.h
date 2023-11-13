@@ -12,9 +12,9 @@
 //
 //    The class is a wrapper around the equation
 //
-//    rho = a * (alpha + ((1 - alpha)*(1 + beta)/(beta + exp(deltaT / tau)))),
+//    rho = A * (alpha + ((1 - alpha)*(1 + beta)/(beta + exp(deltaTime / T))),
 //
-//    where a, alpha, beta, and tau are the correlation parameters, deltaT is
+//    where A, alpha, beta, and T are the correlation parameters, deltaTime is
 //    the difference in time in seconds, and rho is the correlation coefficient.
 //
 //    LIMITATIONS:       None
@@ -24,16 +24,16 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     01-Dec-2021   JPK      Adapted from FourParameterCorrelationModel
+//     12-Nov-2023   JPK      Updates to simplify acessibility of parameters
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSM_FOURPARAMETERCORRELATIONFUNCTION_H_
-#define __CSM_FOURPARAMETERCORRELATIONFUNCTION_H_
+#ifndef CSM_FOURPARAMETERCORRELATIONFUNCTION_HEADER
+#define CSM_FOURPARAMETERCORRELATIONFUNCTION_HEADER
 
 #include "SPDCorrelationFunction.h"
-#include "FourParameterCorrelationModel.h"
 #include <vector>
 
 namespace csm
@@ -43,23 +43,25 @@ class CSM_EXPORT_API FourParameterCorrelationFunction :
                      public SPDCorrelationFunction
 {
 public:
-  
+   
    FourParameterCorrelationFunction();
    //> This is the default constructor
    //<
    
-   FourParameterCorrelationFunction(double a,
-                                    double alpha,
-                                    double beta,
-                                    double tau);
+   FourParameterCorrelationFunction(double argA,
+                                    double argAlpha,
+                                    double argBeta,
+                                    double argT,
+                                    double deltaTimeEpsilon = 0.0);
    //> This constructor instantiates the correlation function with the
-   //  argument parameters.
+   //  argument individual parameters.
    //<
-   FourParameterCorrelationFunction(const FourParameterCorrelationModel::
-                                          Parameters& params);
-   //> This constructor insiantiates the correlation function with the
-   //  argument parameters.
+   FourParameterCorrelationFunction(const std::vector<double>& params,
+                                    double               deltaTimeEpsilon = 0.0);
+   //> This constructor instantiates the correlation function with the
+   //  argument Parameters object.
    //<
+      
    
    virtual ~FourParameterCorrelationFunction();
    //> This is the destructor
@@ -79,59 +81,15 @@ public:
    //  within that range.  For example, if the correlation coefficient
    //  equation evaluates to 1.1 for a given deltaTime,
    //  the value 1.0 will be returned.
-   //<
-   void setCorrelationParameters(double a,
-                                 double alpha,
-                                 double beta,
-                                 double tau);
-   //> Sets the correlation parameter values for the group given by
-   //  cpGroupIndex.  The correlation parameters a, alpha, and beta are
-   //  unitless, and tau is in seconds.
-   //
-   //  Precondition:
-   //  * 0 <= cpGroupIndex < numCPGroups
-   //  * 0.0 <= a <= 1.0
-   //  * 0.0 <= alpha <= 1.0
-   //  * 0.0 <= beta <= 10.0
-   //  * 0.0 < tau
-   //<
-   
-   void setCorrelationParameters(const FourParameterCorrelationModel::
-                                       Parameters& params);
-   //> Sets the values of the correlation parameters in params for the group
-   //  given by cpGroupIndex.
-   //
-   //  Precondition:
-   //  * 0 <= cpGroupIndex < numCPGroups
-   //
-   //  Throws a csm::Error if cpGroupIndex or any of the correlation
-   //  parameters is out of range.
-   //<
-   
-   const FourParameterCorrelationModel::
-         Parameters& getCorrelationParameters() const {return theCorrParams;}
-   //> This method returns the current parameters.
-   //<
-   static double correlationCoefficientFor(const FourParameterCorrelationModel::
-                                           Parameters& params,
-                                           double      deltaTime);
-   //> This static method computes the correlation coefficient for the given
-   //  parameters and delta time.
-   //<
-   static void checkParameters(const FourParameterCorrelationModel::
-                                     Parameters& params);
-   //> This static method verifies the given parameters are all within acceptable
-   //  value ranges.  If not, an exception is thrown.
-   //<
-   
-protected:
-   
-   FourParameterCorrelationModel::Parameters theCorrParams;
-   //> This data member stores the values of the correlation parameters
-   //<
+   //<          
+   virtual void checkAndSetParameters(const std::vector<double>& params);
+   //> This method validates the provided parameters fall within expected
+   //  ranges.  If the provided vector does not contain exactly four parameters
+   //  of the parameters are out of range, a csm::Error will be thrown.
+   //<   
 };
 
-typedef std::shared_ptr<FourParameterCorrelationFunction> FPCFPtr;
+using FPCFPtr = std::shared_ptr<FourParameterCorrelationFunction>;
 
 } // namespace csm
 

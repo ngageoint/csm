@@ -24,13 +24,15 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     22-Nov-2021   JPK      Initial Coding.
+//     12-Nov-2023   JPK      Updates to simplify acessibility of
+//                            parameters.
 //
 //    NOTES:
 //
 //#############################################################################
 
-#ifndef __CSM_DAMPEDCOSINECORRELATIONFUNCTION_H_
-#define __CSM_DAMPEDCOSINECORRELATIONFUNCTION_H_
+#ifndef CSM_DAMPEDCOSINECORRELATIONFUNCTION_HEADER
+#define CSM_DAMPEDCOSINECORRELATIONFUNCTION_HEADER
 
 #include "SPDCorrelationFunction.h"
 
@@ -40,22 +42,9 @@ namespace csm
 {
 
 class CSM_EXPORT_API DampedCosineCorrelationFunction :
-                                                  public SPDCorrelationFunction
+                     public SPDCorrelationFunction
 {
 public:
-   // represents a set of four correlation parameters
-   
-   struct CSM_EXPORT_API Parameters
-   {
-      Parameters() : A(1.0e-6), T(1.0e-6), P(1.0e-6) {}
-      Parameters(double argA, double argT, double argP)
-         : A(argA), T(argT), P(argP) {}
-
-      double A;     // unitless
-      double T;   // seconds
-      double P;     // unitless
-       
-   };
    
    DampedCosineCorrelationFunction();
    //> This is the default constructor
@@ -63,18 +52,18 @@ public:
 
    DampedCosineCorrelationFunction(double argA,
                                    double argT,
-                                   double argP);
+                                   double argP,
+                                   double deltaTimEpsilon = 0.0);
    //> This constructor insiantiates the correlation function with the
    //  argument parameters.
    //<
-   DampedCosineCorrelationFunction(const Parameters& params);
+   DampedCosineCorrelationFunction(const std::vector<double>& params,
+                                      double            deltaTimeEpsilon = 0.0);
    //> This constructor insiantiates the correlation function with the
    //  argument parameters.
    //<
    
    virtual ~DampedCosineCorrelationFunction();
-
- 
    virtual double getCorrelationCoefficient(double deltaTime) const;
       //> Computes the correlation coefficient for the given deltaTime.
       //  The deltaTime argument represents the difference in time, in seconds,
@@ -91,43 +80,12 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
-
-   void setCorrelationParameters(double argA,
-                                 double argT,
-                                 double argP);
-      //> Sets the correlation parameter values for the group given by
-      //  cpGroupIndex.  The correlation parameters a, alpha, and beta are
-      //  unitless, and tau is in seconds.
-      //
-      //  Precondition:
-      //  * 0 <= cpGroupIndex < numCPGroups
-      //  * 0.0 <= a <= 1.0
-      //  * 0.0 <= alpha <= 1.0
-      //  * 0.0 <= beta <= 10.0
-      //  * 0.0 < tau
-      //<
-      
-   void setCorrelationParameters(const Parameters& params);
-      //> Sets the values of the correlation parameters in params for the group
-      //  given by cpGroupIndex.
-      //
-      //  Precondition:
-      //  * 0 <= cpGroupIndex < numCPGroups
-      //
-      //  Throws a csm::Error if cpGroupIndex or any of the correlation
-      //  parameters is out of range.
-      //<
-      
-   const Parameters& getCorrelationParameters() const {return theCorrParams;}
-      
-      
-protected:
-
-   Parameters theCorrParams;
-      //> This data member stores the values of the correlation parameters
-      //<
- };
-
+   virtual void checkAndSetParameters(const std::vector<double>& params);
+       //> This method validates and sets the parameters for the derived correlation
+       //  function.  Derived classes must implement this method since the base class
+       //  does not have knowledge of valid parameters value ranges.
+       //<    
+};
 } // namespace csm
 
 #endif

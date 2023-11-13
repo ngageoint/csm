@@ -17,7 +17,8 @@
 //     22-Nov-2021   JPK      Copied from DampedCosineCorrelationModel
 //     28-Sep-2022   JPK      Updated valid parameter values.Added check
 //                            against "deltaTimeEpsilon"
-//
+//     12-Nov-2023   JPK      More updates to simplify acessibility of
+//                            parameters.
 //    NOTES:
 //     Refer to DampedCosineCorrelationFunction.h for more information.
 //
@@ -27,74 +28,94 @@
 #include "DampedCosineCorrelationFunction.h"
 #include "Error.h"
 #include <cmath>
+#include <sstream>
 
 namespace csm {
      
 DampedCosineCorrelationFunction::DampedCosineCorrelationFunction()
    :
-      SPDCorrelationFunction("DampedCosineCorrelation"),
-      theCorrParams         ()
-{}
+      SPDCorrelationFunction("DampedCosineCorrelation",0.0)
+{
+   std::vector<double> params = {1.0e-6,1.0e-6,1.0e-6};
+   
+   checkAndSetParameters(params);
+}
 
 DampedCosineCorrelationFunction::DampedCosineCorrelationFunction(double argA,
                                                                  double argT,
-                                                                 double argP)
+                                                                 double argP,
+                                                                 double deltaTimeEpsilon)
    :
-      SPDCorrelationFunction("DampedCosineCorrelation"),
-      theCorrParams         ()
+      SPDCorrelationFunction("DampedCosineCorrelation",deltaTimeEpsilon)
 {
-   setCorrelationParameters(argA,argT,argP);
+   std::vector<double> params = {argA,argT,argP};
+   
+   checkAndSetParameters(params);
 }
       
 DampedCosineCorrelationFunction::
-DampedCosineCorrelationFunction(const Parameters& params)
+DampedCosineCorrelationFunction(const std::vector<double>& params,
+                                const             double deltaTimeEpsilon)
    :
-      SPDCorrelationFunction("DampedCosineCorrelation"),
-      theCorrParams         ()
+      SPDCorrelationFunction("DampedCosineCorrelation",deltaTimeEpsilon)
 {
-   setCorrelationParameters(params);
+   checkAndSetParameters(params);
 }
 
 DampedCosineCorrelationFunction::~DampedCosineCorrelationFunction()
 {}
 
-void DampedCosineCorrelationFunction::setCorrelationParameters(double argA,
-                                                               double argT,
-                                                               double argP)
-{
-   setCorrelationParameters(Parameters(argA,argT,argP));
-}
-
 void
-DampedCosineCorrelationFunction::setCorrelationParameters(const Parameters& params)
+DampedCosineCorrelationFunction::
+checkAndSetParameters(const std::vector<double>& params)
 {
-   static const char* const MODULE =
-      "csm::DampedCosineCorrelationFunction::setCorrelationParameters";
+   static const std::string MODULE =
+      "csm::DampedCosineCorrelationFunction::checkAndSetParameters";
+   
+   if (params.size() != 3)
+   {
+      std::stringstream errorStrm;
 
+      errorStrm << "Required 3 Parameters but found : "
+                << params.size();
+      
+      throw Error(Error::INVALID_USE,
+                  errorStrm.str(),
+                  MODULE);
+   }
+   
+   const double A = params[0];
+   
    // make sure the values of each correlation function parameter fall within
    // acceptable ranges
-   if ((params.A <= 0.0) || (params.A > 1.0))
+   if ((A <= 0.0) || (A > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range [1.0e-6, 1].",
                   MODULE);
    }
-
-   if (params.T <= 0.0)
+   
+   const double T = params[1];
+   
+   if (T <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter T must be >= 1.0e-6.",
                   MODULE);
    }
+
+   const double P = params[2];
    
-   if (params.P <= 0.0)
+   if (P <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter P must be >= 1.0e-6.",
                   MODULE);
    }
+   
    // store the correlation parameter values
-   theCorrParams = params;
+   theParams     = {A,T,P};
+   theParamNames = {"A","T","P"};
 }
 
 double
@@ -102,27 +123,21 @@ DampedCosineCorrelationFunction::getCorrelationCoefficient(double deltaTime) con
 {
    const double adt = std::fabs(deltaTime);
 
-   if ((adt == 0.0) || (adt < deltaTimeEpsilon())) return 1.0;
+   if (adt < deltaTimeEpsilon())
+   {
+      return 1.0;
+   }
    
    // compute the value of the correlation coefficient
    constexpr double pi = 3.14159265358979323846;
+
+   const double A = theParams[0];
+   const double T = theParams[1];
+   const double P = theParams[2];
    
-   double corrCoeff = theCorrParams.A *
-                      std::exp(-adt/theCorrParams.T)*
-                      cos(2.0 * pi * adt / theCorrParams.P);
+   const double corrCoeff = A * std::exp(-adt/T)*cos(2.0 * pi * adt / P);
    
-   
-   // if necessary, clamp the coefficient value to the acceptable range
-   if (corrCoeff < -1.0)
-   {
-      corrCoeff = -1.0;
-   }
-   else if (corrCoeff > 1.0)
-   {
-      corrCoeff = 1.0;
-   }
-   
-   return corrCoeff;
+   return clampedCoeff(corrCoeff,true);
 }
 
 } // namespace csm

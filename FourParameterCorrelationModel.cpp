@@ -24,6 +24,8 @@
 //                            now provided on base class.
 //     03-Sep-2021   SCM      Removed IRIX support.
 //     01-Dec-2021   JPK      Modified to use FourParameterCorrelationFunction
+//     12-Nov-2023   JPK      More updates to simplify accessibility of
+//                            parameters
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
 //
@@ -32,6 +34,7 @@
 #define CSM_LIBRARY
 #include "FourParameterCorrelationModel.h"
 #include "FourParameterCorrelationFunction.h"
+#include "ConstantCorrelationFunction.h"
 #include "Error.h"
 
 #include <cmath>
@@ -89,8 +92,28 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
 
-   // make sure the values of each correlation model parameter fall within acceptable ranges
-   FourParameterCorrelationFunction::checkParameters(params);
+   // make sure the values of each correlation model parameter fall within
+   // acceptable ranges.  Previous implementation allowed for A to be 0.0
+   // (i.e. correlation coefficient = 0.0 for all non-zero delta time) and
+   // alpha = 1.0 (i.e. correlation coeeficient = A for all non-zero delta time)
+   // even though the these values are not considered "in range" for the
+   // four parameter correlation function.
+   // Allow these values her for backward compatibility by using the
+   // ConstantCorrelationFunction for these cases.
+   // Attempt to construct the appropriate correlation function.  If parameters
+   //  are out of range, an exception will be thrown.
+   
+   if ((params.a == 0.0) || (params.alpha == 1.0))
+   {
+      ConstantCorrelationFunction ccf(params.a);
+   }
+   else
+   {                        
+      FourParameterCorrelationFunction fpff(params.a,
+                                            params.alpha,
+                                            params.beta,
+                                            params.tau);
+   }
    
    // store the correlation parameter values
    theCorrParams[cpGroupIndex] = params;
@@ -101,11 +124,22 @@ double FourParameterCorrelationModel::getCorrelationCoefficient(
 {
    // make sure the index falls within the acceptable range
    checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
-
+   
+   const Parameters& params = theCorrParams[cpGroupIndex];
+   
    // compute the value of the correlation coefficient
-   return FourParameterCorrelationFunction::
-          correlationCoefficientFor(theCorrParams[cpGroupIndex],
-                                    deltaTime);
+   if ((params.a == 0.0) || (params.alpha == 1.0))
+   {
+      ConstantCorrelationFunction ccf(params.a);
+
+      return ccf.getCorrelationCoefficient(deltaTime);
+   }
+                           
+   FourParameterCorrelationFunction fpcf(params.a,
+                                         params.alpha,
+                                         params.beta,
+                                         params.tau);
+   return fpcf.getCorrelationCoefficient(deltaTime);  
 }
 
 const FourParameterCorrelationModel::Parameters&
