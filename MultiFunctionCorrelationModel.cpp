@@ -16,11 +16,13 @@
 //     -----------   ------   -------
 //     21-Now-2021   JPK      Initial Coding
 //     28-Sep-2022   JPK      Added support for "deltaTimeEpsilon"
+//     12-Nov-2023   JPK      Added use of ConstantCorrelationFunction.
 //
 //#############################################################################
 
 #define CSM_LIBRARY
 #include "MultiFunctionCorrelationModel.h"
+#include "ConstantCorrelationFunction.h"
 #include "Error.h"
 #include <cmath>
 
@@ -70,8 +72,21 @@ void MultiFunctionCorrelationModel::setCorrelationGroupFunction(
    checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupFunction");
 
    // store the correlation parameter values
-   theCorrFunctions[cpGroupIndex] = corrFunction;
-
+   // If passed in object is empty, assign a ConstantCorrelationFunction with
+   // a value of 0.0
+   
+   if (!corrFunction)
+   {
+      SPDCFPtr ccf =
+         std::make_shared<ConstantCorrelationFunction>(0.0,deltaTimeEpsilon);
+      
+      theCorrFunctions[cpGroupIndex] = ccf;
+   }
+   else
+   {
+      theCorrFunctions[cpGroupIndex] = corrFunction;
+   }
+   
    if (theCorrFunctions[cpGroupIndex] && deltaTimeEpsilon >= 0)
    {
       theCorrFunctions[cpGroupIndex]->setDeltaTimeEpsilon(deltaTimeEpsilon);
