@@ -175,8 +175,8 @@ checkAndSetParameters(const std::vector<double>& params)
          const size_t corrIdx = c*2;
          const size_t timeIdx = corrIdx + 1;
       
-         corr = theParams[corrIdx];
-         time = theParams[timeIdx];
+         corr = params[corrIdx];
+         time = params[timeIdx];
          
          if (corr < 0.0 || corr > 1.0)
          {
