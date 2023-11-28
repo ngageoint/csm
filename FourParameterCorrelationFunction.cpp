@@ -19,6 +19,9 @@
 //                            against "deltaTimeEpsilon"
 //     12-Nov-2023  JPK       More updates to simplify acessibility of
 //                            parameters.
+//     21-Nov-2023  JPK       Added correlationCoefficientFor() static method.
+//     22-Nov-2023  JPK       Added checkParameters() static method.
+//
 //    NOTES:
 //     Refer to FourParameterCorrelationFunction.h for more information.
 //
@@ -30,43 +33,38 @@
 #include <cmath>
 #include <sstream>
 
-static const std::string FP_NAME =
-             "Four-parameter function (A, alpha, beta, T)";
-  
 namespace csm {
-     
+
+static const std::string FPCF_NAME =
+             "Four-parameter (A, alpha, beta, T)";
+
+static const std::vector<std::string> FP_PARAM_NAMES = {"A","alpha","beta","T"};
+
 FourParameterCorrelationFunction::FourParameterCorrelationFunction()
    :
-      SPDCorrelationFunction(FP_NAME,0.0)
-{
-   std::vector<double> params = {1.0,0.0,0.0,1.0};
-
-   checkAndSetParameters(params);
-}
+      SPDCorrelationFunction (FPCF_NAME,0.0),
+      theA                   (1.0),
+      theAlpha               (0.0),
+      theBeta                (0.0),
+      theT                   (1.0)
+{}
 
 FourParameterCorrelationFunction::
 FourParameterCorrelationFunction(double argA,
                                  double argAlpha,
                                  double argBeta,
                                  double argT,
-                                 double deltaTimeEpsilon)
+                                 double dtEpsilon)
    :
-      SPDCorrelationFunction(FP_NAME,deltaTimeEpsilon)
+      SPDCorrelationFunction (FPCF_NAME,dtEpsilon),
+      theA                   (argA),
+      theAlpha               (argAlpha),
+      theBeta                (argBeta),
+      theT                   (argT)
 {
-   std::vector<double> params = {argA,argAlpha,argBeta,argT};
-   
-   checkAndSetParameters(params);
+   checkParameters(theA,theAlpha,theBeta,theT);
 }
       
-FourParameterCorrelationFunction::
-FourParameterCorrelationFunction(const std::vector<double>& params,
-                                 double                     deltaTimeEpsilon)
-   :
-      SPDCorrelationFunction(FP_NAME,deltaTimeEpsilon)
-{
-  checkAndSetParameters(params); 
-}
-
 FourParameterCorrelationFunction::~FourParameterCorrelationFunction()
 {}
 
@@ -77,85 +75,115 @@ FourParameterCorrelationFunction::getCorrelationCoefficient(double deltaTime) co
    // absolute delta time of at least deltaTimeEpsilon.  Otherwise, assume
    // correlation coefficient is exactly 1.0.
    
-   const double adt = std::fabs(deltaTime);
-
-   if (adt < deltaTimeEpsilon())
-   {
-      return 1.0;
-   }
-
-   const double A     = theParams[0];
-   const double alpha = theParams[1];
-   const double beta  = theParams[2];
-   const double T     = theParams[3];
+   const double dtEpsilon = deltaTimeEpsilon();
    
-   const double corrCoeff = A *
-                            (alpha +
-                             ((1.0 - alpha) *
-                              (1.0 + beta) /
-                              (beta + std::exp(adt / T))));
-   
-   return clampedCoeff(corrCoeff,false);
+   return correlationCoefficientFor(deltaTime,
+                                    theA,
+                                    theAlpha,
+                                    theBeta,
+                                    theT,
+                                    dtEpsilon);
 }
 
-void FourParameterCorrelationFunction::
-checkAndSetParameters(const std::vector<double>& params)
+std::vector<SPDCorrelationFunction::Parameter>
+FourParameterCorrelationFunction::parameters() const
 {
-   static const std::string MODULE =
+   std::vector<SPDCorrelationFunction::Parameter> paramVctr(4);
+   paramVctr[0] = std::make_pair(FP_PARAM_NAMES[0],theA);
+   paramVctr[1] = std::make_pair(FP_PARAM_NAMES[1],theAlpha);
+   paramVctr[2] = std::make_pair(FP_PARAM_NAMES[2],theBeta);
+   paramVctr[3] = std::make_pair(FP_PARAM_NAMES[3],theT);
+
+   return paramVctr;
+}
+
+void FourParameterCorrelationFunction::setParameters(double argA,
+                                                     double argAlpha,
+                                                     double argBeta,
+                                                     double argT,
+                                                     double dtEpsilon)
+{
+   checkParameters(argA,
+                   argAlpha,
+                   argBeta,
+                   argT);
+
+   theA     = argA;
+   theAlpha = argAlpha;
+   theBeta  = argBeta;
+   theT     = argT;
+   
+   setDeltaTimeEpsilon(dtEpsilon);
+}
+
+void FourParameterCorrelationFunction::checkParameters(double argA,
+                                                       double argAlpha,
+                                                       double argBeta,
+                                                       double argT)
+{
+   static const std::string METHOD_NAME =
       "csm::FourParameterCorrelationFunction::checkParameters";
 
-   if (params.size() != 4)
-   {
-      std::stringstream errorStrm;
-
-      errorStrm << "Required 4 Parameters but found : "
-                << params.size();
-      
-      throw Error(Error::INVALID_USE,
-                  errorStrm.str(),
-                  MODULE);
-   }
-
-   const double A = params[0];
-   
    // make sure the values of each correlation function parameter fall within
    // acceptable ranges
-   if ((A <= 0.0) || (A > 1.0))
+   if ((argA <= 0.0) || (argA > 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter A must be in the range (0, 1].",
-                  MODULE);
+                  METHOD_NAME);
    }
-   
-   const double alpha = params[1];
-   
-   if ((alpha < 0.0) || (alpha >= 1.0))
+    
+   if ((argAlpha < 0.0) || (argAlpha >= 1.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter alpha must be in the range [0, 1).",
-                  MODULE);
+                  METHOD_NAME);
    }
-   
-   const double beta = params[2];
-   
-   if ((beta < 0.0) || (beta > 10.0))
+    
+   if ((argBeta < 0.0) || (argBeta > 10.0))
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter beta must be in the range [0,10]",
-                  MODULE);
+                  METHOD_NAME);
    }
-   
-   const double T = params[3];
-   
-   if (T <= 0.0)
+     
+   if (argT <= 0.0)
    {
       throw Error(Error::BOUNDS,
                   "Correlation parameter tau must be positive.",
-                  MODULE);
+                  METHOD_NAME);
    }
+}
 
-   theParams = {A,alpha,beta,T};
-   theParamNames = {"A","alpha","beta","T"};
+double FourParameterCorrelationFunction::
+       correlationCoefficientFor(double deltaTime,
+                                 double argA,
+                                 double argAlpha,
+                                 double argBeta,
+                                 double argT,
+                                 double dtEpsilon)
+{
+   if (deltaTime != 0.0)
+   {
+      const double adt = std::fabs(deltaTime);
+
+      if (adt >= dtEpsilon)
+      {
+         const double corrCoeff = argA *
+                                  (argAlpha +
+                                   ((1.0 - argAlpha) *
+                                    (1.0 + argBeta) /
+                                    (argBeta + std::exp(adt / argT))));
+         
+         return clampedCoeff(corrCoeff,false);
+         
+      }
+   }
+   
+   //***
+   // if delta time is bounded by epsilon, correlation coefficient is 1.0
+   //***
+   return 1.0;
 }
 
 } // namespace csm

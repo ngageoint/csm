@@ -20,6 +20,9 @@
 //                            against "deltaTimeEpsilon"
 //     12-Nov-2023   JPK      More updates to simplify acessibility of
 //                            parameters.
+//     21-Nov-2023   JPK      Added correlationCoefficientFor() static method.
+//     22-Nov-2023   JPK      Added checkParameters() static method.
+//
 //    NOTES:
 //     Refer to LinearDecayCorrelationFunction.h for more information.
 //#############################################################################
@@ -32,18 +35,15 @@
 
 namespace csm {
 
+static const std::string LDCF_NAME = "LinearDecay";
+
 LinearDecayCorrelationFunction::LinearDecayCorrelationFunction()
    :
-      SPDCorrelationFunction    ("LinearDecayCorrelation",0.0),
+      SPDCorrelationFunction    (LDCF_NAME,0.0),
+      theSegmentRho             (1,0.0),
+      theSegmentTime            (1,1000.0),
       theStrictlyDecreasingFlag (true)
-{
-   std::vector<double> params;
-   
-   params.push_back(0.0);
-   params.push_back(1000.0);
-
-   checkAndSetParameters(params);
-}
+{}
 
 LinearDecayCorrelationFunction::
 LinearDecayCorrelationFunction(const std::vector<double>& initialCorrsPerSegment,
@@ -51,43 +51,12 @@ LinearDecayCorrelationFunction(const std::vector<double>& initialCorrsPerSegment
                                bool                       strictlyDecreasing,
                                double                     deltaTimeEpsilon)
    :
-      SPDCorrelationFunction    ("LinearDecayCorrelation",deltaTimeEpsilon),
+      SPDCorrelationFunction    (LDCF_NAME,deltaTimeEpsilon),
+      theSegmentRho             (initialCorrsPerSegment),
+      theSegmentTime            (timesPerSegment),
       theStrictlyDecreasingFlag (strictlyDecreasing)
 {
-   static const std::string MODULE =
-      "LinearDecayCorrelationFunction::LinearDecayCorrelationFunction";
-   
-    // make sure the values of each correlation model parameter
-   // fall within acceptable ranges
-   size_t NC = initialCorrsPerSegment.size();
-   if (NC != timesPerSegment.size())
-   {
-      throw Error(
-         Error::BOUNDS,
-         "Must have equal number of correlations and times.",
-         MODULE);
-   }
-
-   std::vector<double> params;
-   
-   for (size_t c = 0; c < NC; ++c)
-   {
-      params.push_back(initialCorrsPerSegment[c]);
-      params.push_back(timesPerSegment[c]);
-   }
-
-   checkAndSetParameters(params);
-}
-
-LinearDecayCorrelationFunction::
-LinearDecayCorrelationFunction(const std::vector<double>& params,
-                               bool                       strictlyDecreasing,
-                               double                     deltaTimeEpsilon)
-   :
-      SPDCorrelationFunction    ("LinearDecayCorrelation",deltaTimeEpsilon),
-      theStrictlyDecreasingFlag (strictlyDecreasing)
-{
-   checkAndSetParameters(params);
+   checkParameters(theSegmentRho,theSegmentTime,theStrictlyDecreasingFlag);
 }
 
 LinearDecayCorrelationFunction::~LinearDecayCorrelationFunction()
@@ -96,116 +65,110 @@ LinearDecayCorrelationFunction::~LinearDecayCorrelationFunction()
 double
 LinearDecayCorrelationFunction::getCorrelationCoefficient(double deltaTime) const
 {
-   const double adt = std::fabs(deltaTime);
-   if (adt < deltaTimeEpsilon())
+   const double dtEpsilon = deltaTimeEpsilon();
+
+   return correlationCoefficientFor(deltaTime,
+                                    theSegmentRho,
+                                    theSegmentTime,
+                                    dtEpsilon);
+}
+
+std::vector<SPDCorrelationFunction::Parameter>
+LinearDecayCorrelationFunction::parameters() const
+{
+   std::vector<SPDCorrelationFunction::Parameter> paramVec;
+   
+   const size_t NUM_SEG = theSegmentRho.size();
+
+   if (NUM_SEG > 0)
    {
-      return 1.0;
-   }
-  
-   const size_t NUM_C = theParams.size() / 2;
-   
-   if (NUM_C == 0) return 0.0;
-   
-   double prevCorr = theParams[0];
-   double prevTime = theParams[1];
-   
-   double corrCoeff = prevCorr;
-   
-   for(size_t c = 1; c < NUM_C; ++c)
-   {
-      const size_t corrIdx = c*2;
-      const size_t timeIdx = corrIdx + 1;
+      paramVec.reserve(2*NUM_SEG);
+
+      static const std::string RHO_NAME  = "Rho_";
+      static const std::string TIME_NAME = "Time_";
       
-      const double corr = theParams[corrIdx];
-      const double time = theParams[timeIdx];
-      
-      if (adt <= time)
+      for (size_t seg = 0; seg < NUM_SEG; ++seg)
       {
-         if (time - prevTime != 0.0)
-         {
-            corrCoeff =  prevCorr +
-               (adt - prevTime) / (time - prevTime) * (corr - prevCorr);
-         }
-         break;
+         std::stringstream rhoStrm;
+         rhoStrm << RHO_NAME << seg;
+
+         std::stringstream timeStrm;
+         timeStrm << TIME_NAME << seg;
+         
+         paramVec.push_back(std::make_pair(rhoStrm.str(),theSegmentRho[seg]));
+         paramVec.push_back(std::make_pair(timeStrm.str(),theSegmentTime[seg]));
       }
-      
-      prevCorr  = corr;
-      prevTime  = time;
-      corrCoeff = prevCorr;
    }
-   
-      // if necessary, clamp the coefficient value to the acceptable range
-  return clampedCoeff(corrCoeff,false);    
+
+   return paramVec;
 }
 
 void LinearDecayCorrelationFunction::
-checkAndSetParameters(const std::vector<double>& params)
+checkParameters(const std::vector<double>& initialCorrsPerSegment,
+                const std::vector<double>& timesPerSegment,
+                bool                       strictlyDecreasing)
 {
-   static const char* const MODULE =
+   static const char* const METHOD_NAME =
       "LinearDecayCorrelationFunction::checkAndSetParameters";
-   
-   // make sure the values of each correlation model parameter
-   // fall within acceptable ranges
-   const size_t NUM_P = params.size();
-   theParams.clear();
-   theParamNames.clear();
-   
-   static const std::string CORR_NAME = "rho_";
-   static const std::string TIME_NAME = "time_";
-   
+
+   const size_t NUM_CORR = initialCorrsPerSegment.size();
+   const size_t NUM_TIME = timesPerSegment.size();
+
+   if (NUM_CORR != NUM_TIME)
+   {
+      std::stringstream errStrm;
+      errStrm << "Number of correlations : "
+              << NUM_CORR
+              << " is not equal to number of times : "
+              << NUM_TIME;
+      
+      throw Error(
+         Error::BOUNDS,
+         errStrm.str(),
+         METHOD_NAME);
+   }
+       
    // No parameters implies a correlation coefficient of 0.0 and is a
    // valid case.
-   if (NUM_P > 0)
+   if (NUM_CORR > 0)
    {                  
-      const size_t NUM_C = NUM_P / 2;
-      
-      if (NUM_C * 2 != NUM_P)
-      {
-         throw Error(
-            Error::BOUNDS,
-            "Must have equal number of correlations and times.",
-            MODULE);
-      }
-      
       double corr, prevCorr;
       double time, prevTime;
-    
-      for(size_t c = 0; c < NUM_C; ++c)
+       
+      for(size_t idx = 0; idx < NUM_CORR; ++idx)
       {
-         const size_t corrIdx = c*2;
-         const size_t timeIdx = corrIdx + 1;
-      
-         corr = params[corrIdx];
-         time = params[timeIdx];
+         corr = initialCorrsPerSegment[idx];
+         time = timesPerSegment[idx];
          
          if (corr < 0.0 || corr > 1.0)
          {
             throw Error(
                Error::BOUNDS,
                "Correlation must be in range [0..1].",
-               MODULE);
+               METHOD_NAME);
          }
          
-         if (c > 0)
-         { 
-            prevCorr = params[corrIdx - 2];
-            prevTime = params[corrIdx - 1];
-
+         if (idx > 0)
+         {
+            const size_t prevIdx = idx - 1;
+            
+            prevCorr = initialCorrsPerSegment[prevIdx];
+            prevTime = timesPerSegment[prevIdx];
             
             if (corr > prevCorr)
             {
                throw Error(
                   Error::BOUNDS,
                   "Correlation must not be monotonically non-increasing with time.",
-                  MODULE);
+                  METHOD_NAME);
             }
 
-            if (theStrictlyDecreasingFlag && (corr == prevCorr))
+            if (strictlyDecreasing && (corr == prevCorr))
             {
               throw Error(
                   Error::BOUNDS,
                   "Correlation must be monotonically decreasing with time.",
-                  MODULE);
+                  METHOD_NAME);
             }
             
             if (time <= prevTime)
@@ -213,21 +176,63 @@ checkAndSetParameters(const std::vector<double>& params)
                throw Error(
                   Error::BOUNDS,
                   "Time must be monotomically increasing.",
-                  MODULE);
+                  METHOD_NAME);
             }
          }
-         theParams.push_back(params[corrIdx]);
-         theParams.push_back(params[timeIdx]);
-
-         std::stringstream corrStrm;
-         corrStrm << CORR_NAME << c;
-         theParamNames.push_back(corrStrm.str());
-         
-         std::stringstream timeStrm;
-         timeStrm << TIME_NAME << c;
-         theParamNames.push_back(timeStrm.str());
       }
    }
+}
+
+double LinearDecayCorrelationFunction::
+       correlationCoefficientFor(double                     deltaTime,
+                                 const std::vector<double>& initialCorrsPerSegment,
+                                 const std::vector<double>& timesPerSegment,
+                                 double                     dtEpsilon)
+{
+   if (deltaTime != 0.0)
+   {
+      const double adt = std::fabs(deltaTime);
+ 
+      if (adt >= dtEpsilon)
+      {
+         const size_t NUM_C = initialCorrsPerSegment.size();
+         
+         if (NUM_C == 0) return 0.0;
+         
+         double prevCorr = initialCorrsPerSegment[0];
+         double prevTime = timesPerSegment[0];
+         
+         double corrCoeff = prevCorr;
+         
+         for(size_t idx = 1; idx < NUM_C; ++idx)
+         {
+            const double corr = initialCorrsPerSegment[idx];
+            const double time = timesPerSegment[idx];
+            
+            if (adt <= time)
+            {
+               if (time - prevTime != 0.0)
+               {
+                  corrCoeff =  prevCorr +
+                               (adt - prevTime) /
+                               (time - prevTime) * (corr - prevCorr);
+               }
+               break;
+            }
+            
+            prevCorr  = corr;
+            prevTime  = time;
+            corrCoeff = prevCorr;
+         }
+         
+         // if necessary, clamp the coefficient value to the acceptable range
+         return clampedCoeff(corrCoeff,false);    
+      }
+   }
+   //***
+   // if delta time is bounded by epsilon, correlation coefficient is 1.0
+   //***
+   return 1.0;
 }
 
 } // namespace csm

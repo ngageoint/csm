@@ -25,6 +25,8 @@
 //     -----------   ------   -------
 //     01-Dec-2021   JPK      Adapted from FourParameterCorrelationModel
 //     12-Nov-2023   JPK      Updates to simplify acessibility of parameters
+//     21-Nov-2023  JPK       Added correlationCoefficientFor() static method.
+//     22-Nov-2023   JPK      Added checkParameters() static method.
 //
 //    NOTES:
 //
@@ -52,20 +54,15 @@ public:
                                     double argAlpha,
                                     double argBeta,
                                     double argT,
-                                    double deltaTimeEpsilon = 0.0);
+                                    double dtEpsilon = 0.0);
    //> This constructor instantiates the correlation function with the
-   //  argument individual parameters.
-   //<
-   FourParameterCorrelationFunction(const std::vector<double>& params,
-                                    double               deltaTimeEpsilon = 0.0);
-   //> This constructor instantiates the correlation function with the
-   //  argument Parameters object.
+   //  argument individual parameters and delta time epsilon.
    //<
       
-   
    virtual ~FourParameterCorrelationFunction();
    //> This is the destructor
    //<
+      
    virtual double getCorrelationCoefficient(double deltaTime) const;
    //> Computes the correlation coefficient for the given deltaTime.
    //  The deltaTime argument represents the difference in time, in seconds,
@@ -82,11 +79,47 @@ public:
    //  equation evaluates to 1.1 for a given deltaTime,
    //  the value 1.0 will be returned.
    //<          
-   virtual void checkAndSetParameters(const std::vector<double>& params);
-   //> This method validates the provided parameters fall within expected
-   //  ranges.  If the provided vector does not contain exactly four parameters
-   //  of the parameters are out of range, a csm::Error will be thrown.
-   //<   
+      
+   virtual std::vector<SPDCorrelationFunction::Parameter> parameters() const;
+   //> This method return the parameters for the current function.
+   //<
+      
+   void setParameters(double argA,
+                      double argAlpha,
+                      double argBeta,
+                      double argT,
+                      double dtEpsilon = 0.0);
+   //> This method checks the passed in parameter values.  If valid,
+   //  the internal parameters are set to the argument values.
+   //  Otherwise, a csm::Error is thrown.
+   //<
+   
+   static double correlationCoefficientFor(double deltaTime,
+                                           double argA,
+                                           double argAlpha,
+                                           double argBeta,
+                                           double argT,
+                                           double dtEpsilon);
+   //> This static method computes the correlation coefficent for the given
+   //  arguments
+   //<
+      
+   static void checkParameters(double argA,
+                               double argAlpha,
+                               double argBeta,
+                               double argT);
+   //> This static method checks the argument parameters and throws an exception if
+   //  they are out of range.
+   //<
+      
+private:
+
+   double theA;
+   double theAlpha;
+   double theBeta;
+   double theT;
+   //> This data members are the parameters for the function
+   //<
 };
 
 using FPCFPtr = std::shared_ptr<FourParameterCorrelationFunction>;

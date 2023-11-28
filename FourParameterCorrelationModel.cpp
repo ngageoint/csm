@@ -26,6 +26,10 @@
 //     01-Dec-2021   JPK      Modified to use FourParameterCorrelationFunction
 //     12-Nov-2023   JPK      More updates to simplify accessibility of
 //                            parameters
+//     21-Nov-2023   JPK      Modified to use FourParameterCorrelationFunction::
+//                            correlationCoefficientFor() static method.
+//     22-Nov-2023   JPK      Modified to use FourParameterCorrelationFunction:://                            checkParameters() static method.
+//
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
 //
@@ -41,12 +45,14 @@
 using std::exp;
 using std::fabs;
 
+static const std::string FPCM_NAME = "Four-parameter model (A, alpha, beta, tau)";
+
 namespace csm {
      
 FourParameterCorrelationModel::FourParameterCorrelationModel(size_t numSMParams,
                                                              size_t numCPGroups)
    :
-      CorrelationModel("Four-parameter model (A, alpha, beta, tau)",
+      CorrelationModel(FPCM_NAME,
                        numCPGroups),
       theGroupMapping (numSMParams, -1),
       theCorrParams   (numCPGroups)
@@ -62,8 +68,10 @@ size_t FourParameterCorrelationModel::getNumSensorModelParameters() const
 
 int FourParameterCorrelationModel::getCorrelationParameterGroup(size_t smParamIndex) const
 {
+   static const std::string METHOD_NAME = "getCorrelationParameterGroup";
+   
    // make sure the index falls within the acceptable range
-   checkSensorModelParameterIndex(smParamIndex, "getCorrelationParameterGroup");
+   checkSensorModelParameterIndex(smParamIndex,METHOD_NAME);
 
    // return the correlation parameter group index by reference
    return theGroupMapping[smParamIndex];
@@ -72,9 +80,11 @@ int FourParameterCorrelationModel::getCorrelationParameterGroup(size_t smParamIn
 void FourParameterCorrelationModel::setCorrelationParameterGroup(size_t smParamIndex,
                                                                  size_t cpGroupIndex)
 {
+   static const std::string METHOD_NAME = "setCorrelationParameterGroup";
+   
    // make sure the indices fall within the acceptable ranges
-   checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
+   checkSensorModelParameterIndex(smParamIndex,METHOD_NAME);
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    // set the group index for the given model parameter
    theGroupMapping[smParamIndex] = cpGroupIndex;
@@ -89,8 +99,10 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
 void FourParameterCorrelationModel::setCorrelationGroupParameters(
    size_t cpGroupIndex, const Parameters& params)
 {
+   static const std::string METHOD_NAME = "setCorrelationGroupParameters";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    // make sure the values of each correlation model parameter fall within
    // acceptable ranges.  Previous implementation allowed for A to be 0.0
@@ -105,14 +117,14 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
    
    if ((params.a == 0.0) || (params.alpha == 1.0))
    {
-      ConstantCorrelationFunction ccf(params.a);
+      ConstantCorrelationFunction::checkParameter(params.a);
    }
    else
    {                        
-      FourParameterCorrelationFunction fpff(params.a,
-                                            params.alpha,
-                                            params.beta,
-                                            params.tau);
+      FourParameterCorrelationFunction::checkParameters(params.a,
+                                                        params.alpha,
+                                                        params.beta,
+                                                        params.tau);
    }
    
    // store the correlation parameter values
@@ -122,31 +134,35 @@ void FourParameterCorrelationModel::setCorrelationGroupParameters(
 double FourParameterCorrelationModel::getCorrelationCoefficient(
    size_t cpGroupIndex, double deltaTime) const
 {
+   static const std::string METHOD_NAME = "getCorrelationCoefficient";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
    
    const Parameters& params = theCorrParams[cpGroupIndex];
-   
-   // compute the value of the correlation coefficient
-   if ((params.a == 0.0) || (params.alpha == 1.0))
-   {
-      ConstantCorrelationFunction ccf(params.a);
 
-      return ccf.getCorrelationCoefficient(deltaTime);
-   }
-                           
-   FourParameterCorrelationFunction fpcf(params.a,
-                                         params.alpha,
-                                         params.beta,
-                                         params.tau);
-   return fpcf.getCorrelationCoefficient(deltaTime);  
+   //***
+   // No need to range check values, since they have already been
+   // checked.  Note that params.a = 0 or params.alha = 1 result in
+   // the value params.a being returned, i.e. constant correlation.
+   //***
+   return (FourParameterCorrelationFunction::
+           correlationCoefficientFor(deltaTime,
+                                     params.a,
+                                     params.alpha,
+                                     params.beta,
+                                     params.tau,
+                                     0.0));
+   
 }
 
 const FourParameterCorrelationModel::Parameters&
 FourParameterCorrelationModel::getCorrelationGroupParameters(size_t cpGroupIndex) const
 {
+   static const std::string METHOD_NAME = "getCorrelationGroupParameters";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationGroupParameters");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    return theCorrParams[cpGroupIndex];
 }

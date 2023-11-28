@@ -20,6 +20,10 @@
 //                            and parameter names to simplify queries
 //                            when specific information about the
 //                            derived classes is needed.
+//     22-Nov-2023   JPK      Parameter values/names are now acessed
+//                            via virtual methods on dervied classes to
+//                            remove potential inefficiences populating
+//                            information when not needed.
 //    NOTES:
 //
 //#####################################################################
@@ -30,20 +34,22 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
 
 #include "csm.h"
 
 namespace csm
 {
+
 class CSM_EXPORT_API SPDCorrelationFunction
 {
 public:
-   
+
+   using Parameter = std::pair<std::string,double>;
+
    SPDCorrelationFunction(const std::string& name,
                           double             deltaTimeEpsilon)
       :
-      theParams     (),
-      theParamNames (),
       theName       (name)
    {
       setDeltaTimeEpsilon(deltaTimeEpsilon);
@@ -54,8 +60,6 @@ public:
       //  be called when the base class object is destroyed.
       //<
 
-   const std::string& name() const { return theName; }
-
    virtual double getCorrelationCoefficient(double deltaTime) const = 0;
       //> This method returns the correlation coefficient for the given deltaTime.
       //  The deltaTime argument represents the difference in time, in seconds,
@@ -64,7 +68,12 @@ public:
       //  The deltaTime argument should be positive, but the method uses the
       //  absolute value of the argument, so a negative deltaTime is acceptable.
       //<
-                                                                      
+   virtual std::vector<Parameter> parameters() const = 0;
+      //> This method return the parameters for the current function.
+      //<
+      
+   const std::string& name() const { return theName; }
+  
    double deltaTimeEpsilon() const {return theDeltaTimeEpsilon;}
       //>  This method returns the delta time epsilon, i.e. the smallest
       //   value of epsilon for which the correlation function is computed.
@@ -73,15 +82,7 @@ public:
       //   0.0.  The purpose of this value is to accomodate lack of
       //   precision with respect to the "delta time".
       //<
-      
-   const std::vector<double>& parameters() const {return theParams;}
-   
-      //> This method return the parameters for the current function.
-      //<
-   const std::vector<std::string>& parameterNames() const {return theParamNames;}
-      //> This method returns the parameter names.
-      //<
-      
+         
    void setDeltaTimeEpsilon(double deltaTimeEpsilon)
    {
       theDeltaTimeEpsilon = (deltaTimeEpsilon < 0.0 ? 0.0 : deltaTimeEpsilon);
@@ -92,12 +93,6 @@ public:
    //  value of 0.0 is used.
    //<
       
-    virtual void checkAndSetParameters(const std::vector<double>& params) = 0;
-   //> This method validates and sets the parameters for the derived correlation
-   //  function.  Derived classes must implement this method since the base class
-   //  does not have knowledge of valid parameters value ranges.
-   //<
-   
    static double clampedCoeff(double argValue,bool allowNegative)
    {
       if (allowNegative)
@@ -110,7 +105,7 @@ public:
    //> This static method "clamps" argValue to be in the range
    //  [0,1] ( or [-1,1] if allowNegative is "true").
    //<
-   
+      
 protected:
    
    void setName(const std::string& name) 
@@ -119,20 +114,10 @@ protected:
    }
 
    
-  
-   std::vector<double> theParams;
-   //> This data member holds the parameters for the current correlation function
-   //<
-   std::vector<std::string> theParamNames;
-   //> This data member holds the names of the parameters for the current
-   //  correlation function.
-   //<
- private:
+private:
    
    SPDCorrelationFunction()
       :
-      theParams           (),
-      theParamNames       (),
       theName             (CSM_UNKNOWN),
       theDeltaTimeEpsilon (0.0)
    {}

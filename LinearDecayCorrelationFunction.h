@@ -17,7 +17,8 @@
 //     -----------   ------   -------
 //     01-Dec-2021   JPK      Adapted from LinearDecayCorrelationModel
 //     12-Nov-2023   JPK      Updates to simplify acessibility of parameters
-//
+//     21-Nov-2023   JPK      Added correlationCoefficientFor() static method.
+//     22-Nov-2023   JPK      Added checkParameters() static method.
 //    NOTES:
 //
 //#############################################################################
@@ -46,13 +47,7 @@ public:
                                   double deltaTimeEpsilon   = 0.0);
    //> This constructor instantiates from the provided parameters.
    //<
-
-   LinearDecayCorrelationFunction(const std::vector<double>& params,
-                                  bool   strictlyDecreasing = true,
-                                  double deltaTimeEpsilon   = 0.0);
-   //> This constructor instantiates from the provided parameters.
-   //<
-   
+      
    virtual ~LinearDecayCorrelationFunction();   
    virtual double getCorrelationCoefficient(double deltaTime) const;
       //> Computes the correlation coefficient for the correlation parameter
@@ -74,24 +69,34 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
-   virtual void checkAndSetParameters(const std::vector<double>& params);
-   //> This method validates the provided parameters fall within expected
-   //  ranges.  If the provided vector does not contain exactly four parameters
-   //  of the parameters are out of range, a csm::Error will be thrown.
-   //<
+   virtual std::vector<SPDCorrelationFunction::Parameter> parameters() const;
+      //> This method return the parameters for the current function.
+      //<
+
+   void setParameters(const std::vector<double>& initialCorrsPerSegment,
+                      const std::vector<double>& timesPerSegment,
+                      bool   strictlyDecreasing = true,
+                      double deltaTimeEpsilon   = 0.0);
    
-   void setStrictlyDecreasing(bool strictlyDecreasingFlag)
-   {
-      theStrictlyDecreasingFlag = strictlyDecreasingFlag;
-   }
-   
-   //> This method is used to set whether or not the correlation parameters are
-   //  required to be strictly decreasing for increasing times.
-   //  By default, this is true.
+     
+   static void checkParameters(const std::vector<double>& initialCorrsPerSegment,
+                               const std::vector<double>& timesPerSegment,
+                               bool                       strictlyDecreasing);
+      
+                                           
+   static double correlationCoefficientFor(double                     deltaTime,
+                                           const std::vector<double>& initialCorrsPerSegment,
+                                           const std::vector<double>& timesPerSegment,
+                                           double                     dtEpsilon);
+   //> This static method computes the correlation coefficent from the
+   //  passed in arguments without performing any range checking.
    //<
    
 private:
 
+   std::vector<double> theSegmentRho;
+   std::vector<double> theSegmentTime;
+   
    bool theStrictlyDecreasingFlag;
    //> This flag is used to indicate if the correlation coefficients are
    //  required to be strictly descreasing (default).

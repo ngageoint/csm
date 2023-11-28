@@ -26,6 +26,10 @@
 //     12-Nov-2023   JPK      Updated to allow relaxation of strictly
 //                            monotonically decreasing correlation parameters
 //                            for backwards compatibility.
+//     21-Nov-2023  JPK       Modified to use LinearDecayCorrelationFunction::
+//                            correlationCoefficientFor() static method.
+//     22-Nov-2023  JPK       Modified to use LinearDecayCorrelationFunction::
+//                            checkParameters()
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.
 //#############################################################################
@@ -38,12 +42,14 @@
 using std::exp;
 using std::fabs;
 
+static const std::string LDCM_NAME = "LinearDecayCorrelation";
+
 namespace csm {
 
 LinearDecayCorrelationModel::LinearDecayCorrelationModel(size_t numSMParams,
                                                          size_t numCPGroups)
    :
-      CorrelationModel ("LinearDecayCorrelation",
+      CorrelationModel (LDCM_NAME,
                         numCPGroups),
       theGroupMapping  (numSMParams, -1),
       theCorrParams    (numCPGroups)
@@ -71,9 +77,11 @@ void LinearDecayCorrelationModel::setCorrelationParameterGroup(
    size_t smParamIndex,
    size_t cpGroupIndex)
 {
+   static const std::string METHOD_NAME = "setCorrelationParameterGroup";
+   
    // make sure the indices fall within the acceptable ranges
-   checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
+   checkSensorModelParameterIndex(smParamIndex,METHOD_NAME);
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    // set the group index for the given model parameter
    theGroupMapping[smParamIndex] = cpGroupIndex;
@@ -92,17 +100,20 @@ void LinearDecayCorrelationModel::setCorrelationGroupParameters(
    size_t            cpGroupIndex,
    const Parameters& params)
 {
-   // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupParameters");
+   static const std::string METHOD_NAME = "setCorrelationGroupParameters";
    
-   // Construct a LinearDecayCorrelationFunction but do not enforce
+   // make sure the index falls within the acceptable range
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
+   
+   // Check parameters using LinearDecayCorrelationFunction but do not enforce
    // strict monotonicity for backward compatibility.
    // If parameters are not within expected range, this will cause a csm::Error
    // to be thrown.
    
-   LinearDecayCorrelationFunction ldcf(params.theInitialCorrsPerSegment,
-                                       params.theTimesPerSegment,
-                                       false);
+   LinearDecayCorrelationFunction::
+      checkParameters(params.theInitialCorrsPerSegment,
+                      params.theTimesPerSegment,
+                      false);
    
    // store the correlation parameter values
    theCorrParams[cpGroupIndex] = params;
@@ -112,28 +123,28 @@ double LinearDecayCorrelationModel::getCorrelationCoefficient(
    size_t cpGroupIndex,
    double deltaTime) const
 {
+   static const std::string METHOD_NAME = "getCorrelationCoefficient";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
    
    const Parameters& params = theCorrParams[cpGroupIndex];
 
-   // Construct a LinearDecayCorrelationFunction but do not enforce
-   // strict monotonicity for backward compatibility.
-   
-   LinearDecayCorrelationFunction ldcf(params.theInitialCorrsPerSegment,
-                                       params.theTimesPerSegment,
-                                       false);
-   
-   // compute the value of the correlation coefficient
-   return ldcf.getCorrelationCoefficient(deltaTime);
+   return (LinearDecayCorrelationFunction::
+           correlationCoefficientFor(deltaTime,
+                                     params.theInitialCorrsPerSegment,
+                                     params.theTimesPerSegment,
+                                     0.0));
 }
 
 const LinearDecayCorrelationModel::Parameters&
 LinearDecayCorrelationModel::getCorrelationGroupParameters(
    size_t cpGroupIndex) const
 {
+   static const std::string METHOD_NAME  = "getCorrelationGroupParameters";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationGroupParameters");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    return theCorrParams[cpGroupIndex];
 }

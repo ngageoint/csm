@@ -26,7 +26,8 @@
 //     22-Nov-2021   JPK      Initial Coding.
 //     12-Nov-2023   JPK      Updates to simplify acessibility of
 //                            parameters.
-//
+//     22-Nov-2023   JPK      Added static methods checkParameters() and
+//                            correlationCoefficientFor().
 //    NOTES:
 //
 //#############################################################################
@@ -53,16 +54,11 @@ public:
    DampedCosineCorrelationFunction(double argA,
                                    double argT,
                                    double argP,
-                                   double deltaTimEpsilon = 0.0);
+                                   double dtEpsilon = 0.0);
    //> This constructor insiantiates the correlation function with the
    //  argument parameters.
    //<
-   DampedCosineCorrelationFunction(const std::vector<double>& params,
-                                      double            deltaTimeEpsilon = 0.0);
-   //> This constructor insiantiates the correlation function with the
-   //  argument parameters.
-   //<
-   
+
    virtual ~DampedCosineCorrelationFunction();
    virtual double getCorrelationCoefficient(double deltaTime) const;
       //> Computes the correlation coefficient for the given deltaTime.
@@ -80,12 +76,33 @@ public:
       //  equation evaluates to 1.1 for a given deltaTime,
       //  the value 1.0 will be returned.
       //<
-   virtual void checkAndSetParameters(const std::vector<double>& params);
-       //> This method validates and sets the parameters for the derived correlation
-       //  function.  Derived classes must implement this method since the base class
-       //  does not have knowledge of valid parameters value ranges.
-       //<    
+   virtual std::vector<SPDCorrelationFunction::Parameter> parameters() const;
+      //> This method return the parameters for the current function.
+      //<
+   void setParameters(double argA,
+                      double argT,
+                      double argP,
+                      double deltaTimEpsilon = 0.0);
+
+   static void checkParameters(double argA,
+                               double argT,
+                               double argP);
+
+   static double correlationCoefficientFor(double deltaTime,
+                                           double argA,
+                                           double argT,
+                                           double argP,
+                                           double dtEpsilon);
+   
+private:
+
+   double theA;
+   double theT;
+   double theP;
+   //> These data members are the parameters for the correlation function.
+   //<
 };
+   
 } // namespace csm
 
 #endif

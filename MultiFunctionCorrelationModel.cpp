@@ -17,7 +17,9 @@
 //     21-Now-2021   JPK      Initial Coding
 //     28-Sep-2022   JPK      Added support for "deltaTimeEpsilon"
 //     12-Nov-2023   JPK      Added use of ConstantCorrelationFunction.
-//
+//     22-Nov-2023   JPK      Modified various strings being passed to be
+//                            static (since they never change) to improve
+//                            efficiency.
 //#############################################################################
 
 #define CSM_LIBRARY
@@ -26,12 +28,14 @@
 #include "Error.h"
 #include <cmath>
 
+static const std::string MFCM_NAME = "Multi-FunctionCorrelation";
+
 namespace csm {
      
 MultiFunctionCorrelationModel::MultiFunctionCorrelationModel(size_t numSMParams,
                                                              size_t numCPGroups)
    :
-      CorrelationModel("Multi-FunctionCorrelation",
+      CorrelationModel(MFCM_NAME,
                        numCPGroups),
       theGroupMapping  (numSMParams, -1),
       theCorrFunctions (numCPGroups)
@@ -47,8 +51,10 @@ size_t MultiFunctionCorrelationModel::getNumSensorModelParameters() const
 
 int MultiFunctionCorrelationModel::getCorrelationParameterGroup(size_t smParamIndex) const
 {
+   static const std::string METHOD_NAME = "getCorrelationParameterGroup";
+   
    // make sure the index falls within the acceptable range
-   checkSensorModelParameterIndex(smParamIndex, "getCorrelationParameterGroup");
+   checkSensorModelParameterIndex(smParamIndex,METHOD_NAME);
 
    // return the correlation parameter group index by reference
    return theGroupMapping[smParamIndex];
@@ -57,9 +63,11 @@ int MultiFunctionCorrelationModel::getCorrelationParameterGroup(size_t smParamIn
 void MultiFunctionCorrelationModel::setCorrelationParameterGroup(size_t smParamIndex,
                                                                  size_t cpGroupIndex)
 {
+   static const std::string METHOD_NAME = "setCorrelationParameterGroup";
+   
    // make sure the indices fall within the acceptable ranges
-   checkSensorModelParameterIndex(smParamIndex, "setCorrelationParameterGroup");
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationParameterGroup");
+   checkSensorModelParameterIndex(smParamIndex,METHOD_NAME);
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    // set the group index for the given model parameter
    theGroupMapping[smParamIndex] = cpGroupIndex;
@@ -68,8 +76,10 @@ void MultiFunctionCorrelationModel::setCorrelationParameterGroup(size_t smParamI
 void MultiFunctionCorrelationModel::setCorrelationGroupFunction(
    size_t cpGroupIndex, const SPDCFPtr& corrFunction, double deltaTimeEpsilon)
 {
+   static const std::string METHOD_NAME = "setCorrelationGroupFunction";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "setCorrelationGroupFunction");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    // store the correlation parameter values
    // If passed in object is empty, assign a ConstantCorrelationFunction with
@@ -96,8 +106,10 @@ void MultiFunctionCorrelationModel::setCorrelationGroupFunction(
 double MultiFunctionCorrelationModel::getCorrelationCoefficient(
    size_t cpGroupIndex, double deltaTime) const
 {
+   static const std::string METHOD_NAME = "getCorrelationCoefficient";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationCoefficient");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
    
    if (!theCorrFunctions[cpGroupIndex]) return 0.0;
    
@@ -107,8 +119,10 @@ double MultiFunctionCorrelationModel::getCorrelationCoefficient(
 const SPDCFPtr&
 MultiFunctionCorrelationModel::getCorrelationGroupFunction(size_t cpGroupIndex) const
 {
+   static const std::string METHOD_NAME = "getCorrelationGroupFunction";
+   
    // make sure the index falls within the acceptable range
-   checkParameterGroupIndex(cpGroupIndex, "getCorrelationGroupFunction");
+   checkParameterGroupIndex(cpGroupIndex,METHOD_NAME);
 
    return theCorrFunctions[cpGroupIndex];
 }

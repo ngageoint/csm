@@ -6,7 +6,7 @@
 //
 //    DESCRIPTION:
 //
-//    Header the constant correlation function class derived from
+//    The constant correlation function class is derived from
 //    the SPDCorrelationFunction base class.  This class is used to represent
 //    a correlation function which has a value of 1.0 for deltaTime within
 //    "delta time epsilon" of 0.0, and a user defined constant value elsewhere.
@@ -22,6 +22,7 @@
 //     Date          Author   Comment
 //     -----------   ------   -------
 //     12-Nov-2023   JPK      Initial Coding
+//     22-Nov-2023   JPK      Added checkParameter() static method.
 //
 //    NOTES:
 //
@@ -33,37 +34,25 @@
 #include <cmath>
 #include <sstream>
 
-static const std::string CONSTANT_NAME = "Constant";
-static const std::string PARAM_NAME    = "A";
-
 namespace csm
 {
-     
+static const std::string CCF_NAME   = "Constant";
+static const std::string PARAM_NAME = "Rho";
+    
 ConstantCorrelationFunction::ConstantCorrelationFunction()
    :
-      SPDCorrelationFunction (CONSTANT_NAME,0.0)
-{
-   std::vector<double> params(1,0.0);
-   checkAndSetParameters(params);
-}
+      SPDCorrelationFunction (CCF_NAME,0.0),
+      theRho                 (0.0)
+{}
 
 ConstantCorrelationFunction::
 ConstantCorrelationFunction(double corrCoeff,
                             double deltaTimeEpsilon)
    :
-      SPDCorrelationFunction (CONSTANT_NAME,deltaTimeEpsilon)
+      SPDCorrelationFunction (CCF_NAME,deltaTimeEpsilon),
+      theRho                 (corrCoeff)
 { 
-   std::vector<double> params(1,corrCoeff);
-   checkAndSetParameters(params);
-}
-
-ConstantCorrelationFunction::
-ConstantCorrelationFunction(const std::vector<double>& params,
-                            double                     deltaTimeEpsilon)
-   :
-      SPDCorrelationFunction (CONSTANT_NAME,deltaTimeEpsilon)
-{
-   checkAndSetParameters(params);
+   checkParameter(theRho);
 }
 
 ConstantCorrelationFunction::~ConstantCorrelationFunction()
@@ -72,47 +61,45 @@ ConstantCorrelationFunction::~ConstantCorrelationFunction()
 double ConstantCorrelationFunction::
        getCorrelationCoefficient(double deltaTime) const
 {
-   if (std::fabs(deltaTime) < deltaTimeEpsilon())
+   if (deltaTime != 0.0)
    {
-      return 1.0;
+      if (std::fabs(deltaTime) >= deltaTimeEpsilon())
+      {
+         return theRho;   
+      }
    }
-   
-   return theParams[0];
+   //***
+   // if delta time is bounded by epsilon, correlation coefficient is 1.0
+   //***
+   return 1.0;
 }
 
-void ConstantCorrelationFunction::
-     checkAndSetParameters(const std::vector<double>& params)
+std::vector<SPDCorrelationFunction::Parameter>
+ConstantCorrelationFunction::parameters() const
 {
-   static const std::string MODULE =
-      "ConstantCorrelationFunction::checkAndSetParameters";
-   
-   const double A = (params.empty() ? 0.0 : params[0]);
-   
-   if (fabs(A) > 1.0)
-   {
-     std::stringstream errorStrm;
+   return std::vector<SPDCorrelationFunction::
+                      Parameter>(1,
+                                 std::make_pair(PARAM_NAME,theRho));
+}
 
+void ConstantCorrelationFunction::checkParameter(double corrCoeff)
+{
+   static const std::string METHOD_NAME =
+      "ConstantCorrelationFunction::checkParameter";
+   
+   if (fabs(corrCoeff) > 1.0)
+   {
+      std::stringstream errorStrm;
+      
       errorStrm << "Provided correlation coefficient : "
-                << theParams[0]
+                << corrCoeff
                 << " is outside the valid range [-1.0,1.0]";
       
       throw Error(
          Error::INVALID_USE,
          errorStrm.str(),
-         MODULE);
-   }  
-  
-   std::stringstream nameStr;
-   nameStr << CONSTANT_NAME
-           << "-"
-           << A;
-   
-   std::string functionName = nameStr.str();
-   
-   setName(functionName);
-
-   theParams     = {A};
-   theParamNames = {"A"};      
+         METHOD_NAME);
+   }     
 }
 } // namespace csm
    
