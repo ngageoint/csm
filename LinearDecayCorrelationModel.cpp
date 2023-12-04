@@ -26,9 +26,9 @@
 //     12-Nov-2023   JPK      Updated to allow relaxation of strictly
 //                            monotonically decreasing correlation parameters
 //                            for backwards compatibility.
-//     21-Nov-2023  JPK       Modified to use LinearDecayCorrelationFunction::
+//     21-Nov-2023   JPK      Modified to use LinearDecayCorrelationFunction::
 //                            correlationCoefficientFor() static method.
-//     22-Nov-2023  JPK       Modified to use LinearDecayCorrelationFunction::
+//     22-Nov-2023   JPK      Modified to use LinearDecayCorrelationFunction::
 //                            checkParameters()
 //    NOTES:
 //     Refer to LinearDecayCorrelationModel.h for more information.

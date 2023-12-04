@@ -63,6 +63,8 @@ private:
    //  in the range [-1.0,1.0]
    //<
 };
+using COCFPtr = std::shared_ptr<ConstantCorrelationFunction>;
+
 } // namespace csm
 
 #endif

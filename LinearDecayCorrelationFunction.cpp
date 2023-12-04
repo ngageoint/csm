@@ -159,7 +159,7 @@ checkParameters(const std::vector<double>& initialCorrsPerSegment,
             {
                throw Error(
                   Error::BOUNDS,
-                  "Correlation must not be monotonically non-increasing with time.",
+                  "Correlation must not be increasing with time.",
                   METHOD_NAME);
             }
 

@@ -36,12 +36,12 @@
 
 namespace csm
 {
-static const std::string CCF_NAME   = "Constant";
+static const std::string COCF_NAME  = "Constant";
 static const std::string PARAM_NAME = "Rho";
     
 ConstantCorrelationFunction::ConstantCorrelationFunction()
    :
-      SPDCorrelationFunction (CCF_NAME,0.0),
+      SPDCorrelationFunction (COCF_NAME,0.0),
       theRho                 (0.0)
 {}
 
@@ -49,10 +49,17 @@ ConstantCorrelationFunction::
 ConstantCorrelationFunction(double corrCoeff,
                             double deltaTimeEpsilon)
    :
-      SPDCorrelationFunction (CCF_NAME,deltaTimeEpsilon),
+      SPDCorrelationFunction (COCF_NAME,deltaTimeEpsilon),
       theRho                 (corrCoeff)
 { 
    checkParameter(theRho);
+}
+
+void ConstantCorrelationFunction::setCorrelationCoefficient(double argRho)
+{
+   theRho = argRho;
+
+   checkParameters(theRho);
 }
 
 ConstantCorrelationFunction::~ConstantCorrelationFunction()

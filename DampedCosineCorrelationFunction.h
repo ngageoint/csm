@@ -102,6 +102,7 @@ private:
    //> These data members are the parameters for the correlation function.
    //<
 };
+using DCCFPtr = std::shared_ptr<DampedCosineCorrelationFunction>;
    
 } // namespace csm
 

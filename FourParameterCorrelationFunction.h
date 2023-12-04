@@ -25,7 +25,7 @@
 //     -----------   ------   -------
 //     01-Dec-2021   JPK      Adapted from FourParameterCorrelationModel
 //     12-Nov-2023   JPK      Updates to simplify acessibility of parameters
-//     21-Nov-2023  JPK       Added correlationCoefficientFor() static method.
+//     21-Nov-2023   JPK      Added correlationCoefficientFor() static method.
 //     22-Nov-2023   JPK      Added checkParameters() static method.
 //
 //    NOTES:

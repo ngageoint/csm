@@ -28,7 +28,8 @@
 //                            parameters
 //     21-Nov-2023   JPK      Modified to use FourParameterCorrelationFunction::
 //                            correlationCoefficientFor() static method.
-//     22-Nov-2023   JPK      Modified to use FourParameterCorrelationFunction:://                            checkParameters() static method.
+//     22-Nov-2023   JPK      Modified to use FourParameterCorrelationFunction::
+//                            checkParameters() static method.
 //
 //    NOTES:
 //     Refer to FourParameterCorrelationModel.h for more information.
