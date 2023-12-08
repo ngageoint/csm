@@ -59,7 +59,7 @@ void ConstantCorrelationFunction::setCorrelationCoefficient(double argRho)
 {
    theRho = argRho;
 
-   checkParameters(theRho);
+   checkParameter(theRho);
 }
 
 ConstantCorrelationFunction::~ConstantCorrelationFunction()

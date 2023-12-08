@@ -53,14 +53,34 @@ public:
    
    void setFunctions(const std::vector<WeightedFunction>& funcs,
                      double                               dtEpsilon);
-
+   
+   bool addFunction(const WeightedFunction& argFunc,
+                    double                  weightTolerance = 2.0e-3);
+   //> This method will attempt to add a weighted function the currently owned
+   //  vector of functions.  If the sum of the weights would significantly exceed
+   //  1.0, the function will not be added, and "false" is returned.  Otherwise,
+   //  the function will be added and if the sum of the weights is within the
+   //  argument weight tolerance, the weights will be scaled as necessary.
+   //<
+   
    size_t numberOfFunctions() const {return theFunctions.size();}
 
    const WeightedFunction& function(size_t index) const;
+
+protected:
+
+   static double sumOfWeights(const std::vector<WeightedFunction>& funcs);
+   //> This method computes the sum of the weights of the argument functions
+   //<
    
-   static void checkFunctions(const std::vector<WeightedFunction>& funcs);
-   //> This static method verifies the sum of the weighted functions is
-   //  not greater than 1.0
+   static void checkAndScaleWeights(std::vector<WeightedFunction>& funcs,
+                                    double weightTolerance = 2.0e-3);
+   //> This static method checks the sum of the weights for the provided functions.
+   //  If the passed in "weightTolerance" is negative or 0.0, no scaling will be
+   //  performed.  If the sum is within "weightTolerance" of 1.0, the weights for the
+   //  provided functions will be scaled so that their sum is 1.0.  Otherwise,
+   //  if the sum is significantly larger than 1.0, a csm::Error is returned.
+   //  If the sum is significantly less than 1.0, no scaling will occur.
    //<
    static double correlationCoefficentFor(double deltaTime,
                                           const std::vector<WeightedFunction>& funcs,
@@ -69,10 +89,7 @@ public:
    //  wirghted functions.
    //<
    
-private:
-
    std::vector<WeightedFunction> theFunctions;
-   
 };
 } // namespace csm
 
