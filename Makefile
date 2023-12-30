@@ -1,6 +1,6 @@
 
 
-HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h MultiNitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h SPDCorrelationFunction.h ConstantCorrelationFunction.h FourParameterCorrelationFunction.h LinearDecayCorrelationFunction.h DampedCosineCorrelationFunction.h WeightedsumCorrelationFunction.h CorrelationModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h MultiFunctionCorrelationModel.h csmPointCloud.h PointCloudIsd.h PointCloudGM.h ModelIdentifier.h BundleGM.h Ellipsoid.h SettableEllipsoid.h
+HEADERS = csm.h Error.h Warning.h Version.h Isd.h BytestreamIsd.h NitfIsd.h MultiNitfIsd.h Plugin.h Model.h GeometricModel.h RasterGM.h SPDCorrelationFunction.h ConstantCorrelationFunction.h FourParameterCorrelationFunction.h LinearDecayCorrelationFunction.h DampedCosineCorrelationFunction.h WeightedSumCorrelationFunction.h CorrelationModel.h FourParameterCorrelationModel.h LinearDecayCorrelationModel.h MultiFunctionCorrelationModel.h csmPointCloud.h PointCloudIsd.h PointCloudGM.h ModelIdentifier.h BundleGM.h Ellipsoid.h SettableEllipsoid.h
 
 OBJS = Version.o Isd.o Plugin.o GeometricModel.o RasterGM.o ConstantCorrelationFunction.o FourParameterCorrelationFunction.o LinearDecayCorrelationFunction.o DampedCosineCorrelationFunction.o WeightedSumCorrelationFunction.o CorrelationModel.o FourParameterCorrelationModel.o LinearDecayCorrelationModel.o MultiFunctionCorrelationModel.o csmPointCloud.o PointCloudIsd.o PointCloudGM.o ModelIdentifier.o BundleGM.o Ellipsoid.o SettableEllipsoid.o MultiNitfIsd.o
 
