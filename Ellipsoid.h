@@ -39,26 +39,26 @@
 #define CSM_WGS84_SEMI_MAJOR_AXIS 6378137.000
 #define CSM_WGS84_SEMI_MINOR_AXIS 6356752.3142451794975639665996337
 
-namespace csm
+namespace csm 
 {
    class CSM_EXPORT_API Ellipsoid
    {
 
    public:
-
+   
       Ellipsoid();
-      //> This constructor defaults to the WGS-84 ellipsoid.
-      //<
+	  //> This constructor defaults to the WGS-84 ellipsoid.
+	  //<
 
       Ellipsoid(
          double semiMajorRadius,
          double semiMinorRadius);
-      //> This constructor sets the ellipsoid to that specified.
-      //<
+	  //> This constructor sets the ellipsoid to that specified.
+	  //<
 
       virtual ~Ellipsoid();
-      //> Virtual destructor allows for inheritance.
-      //<
+	  //> Virtual destructor allows for inheritance.
+	  //<
 
       virtual double getSemiMajorRadius() const
       {
@@ -80,7 +80,7 @@ namespace csm
          const csm::EcefCoord& geocentric,
          double                desiredPrecision = 0.0001,
          double*               achievedPrecision = NULL,
-         csm::WarningList*     warnings = NULL) const;
+         csm::WarningList*     warnings = NULL ) const;
       //> This method determines the height above the planetary
       //  ellipsoid of the input ground point.  Note that while 
       //  the input point uses an ECEF coordinate, the point is
@@ -97,7 +97,7 @@ namespace csm
       //> This method sets the semi-major and semi-minor 
       //  radii describing the planetary ellipsoid.
       //<
-
+ 
    protected:
 
       double mSemiMajorAxis;
@@ -107,4 +107,3 @@ namespace csm
 } // namespace csm
 
 #endif
-
