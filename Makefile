@@ -58,4 +58,3 @@ doxygen::
 	echo "INPUT_FILTER           = $(DOXYGEN_FILTER)" >> $(DOXYFILE)
 	rm -rf $(DOXYGEN_OUT)
 	cd $(dir $(DOXYFILE)) && doxygen
-
