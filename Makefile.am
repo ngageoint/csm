@@ -69,7 +69,7 @@ csminclude_HEADERS = \
 
 noinst_HEADERS = contrib/CSMRasterWithRangeGM.h
 
-dist_doc_DATA = AGENTS.md LICENSE README
+dist_doc_DATA = LICENSE README
 
 EXTRA_DIST = \
   Doxyfile \
