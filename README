@@ -5,7 +5,7 @@ Compilation
 The repository now uses GNU autotools for Unix-like builds.  Generate the
 build system, configure an install prefix, and build with:
 
-  ./autogen.sh
+  ./autogen.sh    (if building from a Git clone)
   ./configure --prefix=/path/to/csm3/install/dir
   make
   make install
