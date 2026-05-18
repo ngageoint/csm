@@ -10,6 +10,10 @@ build system, configure an install prefix, and build with:
   make
   make install
 
+To compile 32 bit, set the CXXFLAGS environment variable to include "-m32" when running configure:
+
+  CXXFLAGS=-m32 ./configure --prefix=/path/to/csm3/install_32/dir
+
 To stage into a temporary directory instead of the default `/usr/local`, use
 the standard `DESTDIR` mechanism during install:
 
