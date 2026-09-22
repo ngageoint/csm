@@ -1,2 +1,4 @@
 # Keep this directory so aclocal has a stable macro path.
 !.gitignore
+
+*.m4

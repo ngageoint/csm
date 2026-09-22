@@ -32,6 +32,6 @@ If you need ABI compatibility with the historical Linux build that defined
 
 Windows
 -------
-Windows compilation requires the use of Cygwin to provide tools like 'make' and 'perl'.  You should also be sure that Microsoft's Visual C++'s "cl.exe" is in your $PATH and that $INCLUDE and $LIB are set appropriately.  When compiling on Windows, the "all" target does not do the right thing.  Instead build with:
+Windows compilation requires the use of Cygwin to provide tools like 'make' and 'perl'.  You should also be sure that Microsoft's Visual C++'s "cl.exe" is in your $PATH and that $INCLUDE and $LIB are set appropriately.  Then build with:
 
-  make -f Makefile.win32 csmapi.dll install clean
+  make -f Makefile.win32 all install clean
