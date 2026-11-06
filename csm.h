@@ -32,7 +32,7 @@
 //     10-Sep-2013   SCM      Added std namespace to memory function calls.
 //     22-Feb-2018   JPK      Updated version to 3.0.3
 //     08-Dec-2023   JPK      Updated version to 3.1.0
-//     05-Nov-2026   SCM      Updated version to 3.2.0
+//     05-Nov-2026   SCM      Updated version to 3.2.0, added bistatic type.
 //    NOTES:
 //
 //#############################################################################
@@ -70,6 +70,7 @@
 #define CSM_SENSOR_TYPE_MWIR          "MWIR"
 #define CSM_SENSOR_TYPE_LWIR          "LWIR"
 #define CSM_SENSOR_TYPE_SAR           "SAR"
+#define CSM_SENSOR_TYPE_BISTATID_SAR  "BISTATIC_SAR"
 #define CSM_SENSOR_TYPE_EOIRSC        "EO_IR_SPECIAL_CASE"
 
 // Common sensor modes returned from the csm::Model::getSensorMode method.
